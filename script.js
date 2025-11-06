@@ -1,6 +1,4 @@
 // --- General LocalStorage Functions (Shared access) ---
-// NOTE: These are defined here as a fallback, but rely on item.js and customer.js for data.
-
 function getFromStorage(key, defaultValue = []) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : defaultValue;
@@ -415,29 +413,6 @@ function checkout() {
 }
 
 
-// Initial Load on Page
-document.addEventListener('DOMContentLoaded', () => {
-    // Check if we are on the sales page
-    if (document.getElementById('salesItemsContainer')) {
-        // Assuming other functions like populateSalesFilters() are defined elsewhere or loaded
-        if (typeof populateSalesFilters === 'function') {
-            populateSalesFilters(); 
-        }
-        // CRITICAL: Load customers on sales page startup
-        if (typeof populateCustomerDropdown === 'function') {
-            populateCustomerDropdown(); 
-        }
-        displaySalesItems();
-        updateCartDisplay(); 
-    }
-    
-    // لێرەوە لۆجیکی Identity Widget دەست پێدەکات
-    if (window.netlifyIdentity) {
-        netlifyIdentity.init();
-    }
-});
-
-
 // ==========================================================
 // --- Netlify Identity (Authentication) Logic) ---
 // ==========================================================
@@ -456,9 +431,6 @@ async function fetchAndDisplayUserID() {
 
     if (response.status === 200) {
         const result = await response.json();
-        console.log("✅ سەرکەوتوو بوو. ئەمە IDـی تایبەتە بۆ جیاکردنەوەی داتاکانت:", result.user_id);
-        
-        // نیشاندانی ID لەسەر شاشە
         const idDisplay = document.getElementById('user-id-display');
         if (idDisplay) idDisplay.textContent = `IDـی تایبەت بە تۆ: ${result.user_id}`;
     } else {
@@ -468,24 +440,40 @@ async function fetchAndDisplayUserID() {
 }
 
 
-// ************ لۆجیکی سەرەکی Identity Widget ************
-
-if (window.netlifyIdentity) {
-    
-    // کاتێک یوزەرێک لۆگین دەکات:
-    netlifyIdentity.on('login', () => {
-        netlifyIdentity.close();
-        fetchAndDisplayUserID(); // بانگکردنی فەنکشنی پارێزراو
-    });
-    
-    // کاتێک یوزەرێک لۆگئاوتی دەکات:
-    netlifyIdentity.on('logout', () => {
-        const idDisplay = document.getElementById('user-id-display');
-        if (idDisplay) idDisplay.textContent = 'تکایە لۆگین بکە بۆ بینینی IDـی تایبەت بە خۆت.';
-    });
-
-    // کاتێک ماڵپەڕ بار دەکرێت و یوزەر لۆگینی کردووە:
-    if (netlifyIdentity.currentUser()) {
-        fetchAndDisplayUserID();
+// Initial Load on Page AND Netlify Identity Activation
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. لۆجیکی باری سەرەتایی پڕۆژەی خۆت (Sales)
+    if (document.getElementById('salesItemsContainer')) {
+        if (typeof populateSalesFilters === 'function') {
+            populateSalesFilters(); 
+        }
+        if (typeof populateCustomerDropdown === 'function') {
+            populateCustomerDropdown(); 
+        }
+        displaySalesItems();
+        updateCartDisplay(); 
     }
-}
+    
+    // 2. ✅ لۆجیکی Identity Widget (یەکخراو)
+    if (window.netlifyIdentity) {
+        
+        // 🚨 چالاککردنی سەرەتا (یەکەم و کۆتا جار)
+        netlifyIdentity.init(); 
+
+        // 3. پەیوەستکردنی ڕووداوەکان
+        netlifyIdentity.on('login', () => {
+            netlifyIdentity.close();
+            fetchAndDisplayUserID();
+        });
+        
+        netlifyIdentity.on('logout', () => {
+            const idDisplay = document.getElementById('user-id-display');
+            if (idDisplay) idDisplay.textContent = 'تکایە لۆگین بکە بۆ بینینی IDـی تایبەت بە خۆت.';
+        });
+
+        // 4. پشکنینی باری ئێستا
+        if (netlifyIdentity.currentUser()) {
+            fetchAndDisplayUserID();
+        }
+    }
+});
