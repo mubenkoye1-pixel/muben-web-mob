@@ -185,7 +185,7 @@ function addToCart(itemId) {
     }
     
     if (typeof salesCart === 'undefined') {
-         salesCart = [];
+           salesCart = [];
     }
 
 
@@ -286,13 +286,13 @@ function updateCartDisplay() {
                 <span style="font-weight: bold;">= ${itemTotal.toLocaleString()}</span>
                 
                 <input type="text" 
-                       value="${currentSalePrice}" 
-                       data-item-id="${item.id}"
-                       onblur="manualPriceEdit(this)"
-                       class="cart-item-price-input"
-                       pattern="[0-9]*" 
-                       inputmode="numeric"> 
-                       
+                        value="${currentSalePrice}" 
+                        data-item-id="${item.id}"
+                        onblur="manualPriceEdit(this)"
+                        class="cart-item-price-input"
+                        pattern="[0-9]*" 
+                        inputmode="numeric"> 
+                         
                 <button class="remove-btn" onclick="removeFromCart(${item.id})">لابردن</button>
             </div>
         `;
@@ -421,48 +421,47 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('salesItemsContainer')) {
         // Assuming other functions like populateSalesFilters() are defined elsewhere or loaded
         if (typeof populateSalesFilters === 'function') {
-             populateSalesFilters(); 
+            populateSalesFilters(); 
         }
         // CRITICAL: Load customers on sales page startup
         if (typeof populateCustomerDropdown === 'function') {
-             populateCustomerDropdown(); 
+            populateCustomerDropdown(); 
         }
         displaySalesItems();
         updateCartDisplay(); 
     }
+    
+    // لێرەوە لۆجیکی Identity Widget دەست پێدەکات
+    if (window.netlifyIdentity) {
+        netlifyIdentity.init();
+    }
 });
 
 
-// لەناو فایلی script.js:
+// ==========================================================
+// --- Netlify Identity (Authentication) Logic) ---
+// ==========================================================
 
-// فەنکشنی سەرەکی بۆ بانگکردنی Functionـی پارێزراو (پاسەوانەکە)
+// فەنکشنی بانگکردنی Functionـی پارێزراو (پاسەوانەکە)
 async function fetchAndDisplayUserID() {
     const user = netlifyIdentity.currentUser();
-    if (!user) {
-        // ئەمە دەبێت ڕوونادات ئەگەر لۆجیکی 'login' کار بکات
-        console.log("پێویستە یوزەر لۆگین بکات.");
-        return; 
-    }
+    if (!user) { return; }
 
     // 🚩 بانگکردنی Functionـی پارێزراو: /.netlify/functions/get-user-id
     const response = await fetch('/.netlify/functions/get-user-id', {
         headers: {
-            // ناردنی تۆکێنی لۆگین بۆ Functionـەکە، کە وەک 'کلیل'ی گەیشتن وایە
             'Authorization': `Bearer ${user.token.access_token}`
         }
     });
 
     if (response.status === 200) {
-        // وەڵامی سەرکەوتوو
         const result = await response.json();
         console.log("✅ سەرکەوتوو بوو. ئەمە IDـی تایبەتە بۆ جیاکردنەوەی داتاکانت:", result.user_id);
         
         // نیشاندانی ID لەسەر شاشە
         const idDisplay = document.getElementById('user-id-display');
         if (idDisplay) idDisplay.textContent = `IDـی تایبەت بە تۆ: ${result.user_id}`;
-        
     } else {
-        // وەڵامی ٤٠١ (Unauthorized) ئەگەر Functionـەکە ڕێگەی نەدات
         const error = await response.json();
         console.error("❌ هەڵە لە وەرگرتنی داتای پارێزراو:", error.message);
     }
@@ -472,18 +471,15 @@ async function fetchAndDisplayUserID() {
 // ************ لۆجیکی سەرەکی Identity Widget ************
 
 if (window.netlifyIdentity) {
-    // Identity widget کارپێبکە
-    netlifyIdentity.init();
     
     // کاتێک یوزەرێک لۆگین دەکات:
     netlifyIdentity.on('login', () => {
         netlifyIdentity.close();
-        fetchAndDisplayUserID(); // 💡 بانگکردنی فەنکشنی پارێزراو
+        fetchAndDisplayUserID(); // بانگکردنی فەنکشنی پارێزراو
     });
     
     // کاتێک یوزەرێک لۆگئاوتی دەکات:
     netlifyIdentity.on('logout', () => {
-        console.log("بەکارهێنەر لۆگئاوتی کرد.");
         const idDisplay = document.getElementById('user-id-display');
         if (idDisplay) idDisplay.textContent = 'تکایە لۆگین بکە بۆ بینینی IDـی تایبەت بە خۆت.';
     });
