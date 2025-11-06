@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="expenses.css"> <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەڕێوەبردنی خەرجییەکان</title> 
+</head>
+<body>
+    <div class="all-div">
+        
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="sales.html" class="btn-head">فرۆشتن</a>
+                <a href="loan.html" class="btn-head">قەرز</a>
+                <a href="expenses.html" class="btn-head active">خەرجی</a> <a href="customer.html" class="btn-head">کریار</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">🧾</span> سیستەم - خەرجییەکان
+            </a>
+        </div>
+
+        <div class="main-div expenses-layout">
+            
+            <div class="summary-bar-container">
+                <div class="summary-card">
+                    <h3>کۆی گشتی خەرجییەکان</h3>
+                    <p class="summary-value" id="kpi-total-expenses">0 IQD</p>
+                </div>
+            </div>
+            
+            <div class="form-and-list-wrapper">
+                
+                <div class="expense-form-container">
+                    <h1>➕ تۆمارکردنی خەرجی نوێ</h1>
+                    
+                    <form id="expenseForm" onsubmit="addExpense(event)">
+                        <div class="form-group">
+                            <label for="expenseDescription">پێناسەی خەرجی (بۆچی؟):</label>
+                            <input type="text" id="expenseDescription" placeholder="نموونە: کرێی دوکان، مووچەی کارمەند" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expenseAmount">بڕی خەرجکراو (IQD):</label>
+                            <input type="number" id="expenseAmount" min="1" placeholder="نموونە: 500000" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="expenseCategory">جۆری خەرجی:</label>
+                            <select id="expenseCategory">
+                                <option value="operational">کارپێکردن (Operational)</option>
+                                <option value="salary">مووچە (Salary)</option>
+                                <option value="rent">کرێ (Rent)</option>
+                                <option value="utility">خزمەتگوزاری (Utility)</option>
+                                <option value="other">هی دیکە</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="submit-btn">✅ تۆمارکردن</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="expense-list-container">
+                    <h1>لیستی خەرجییە تۆمارکراوەکان</h1>
+                    <div id="expenseList" class="list-table-container">
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="item.js"></script> 
+    <script src="expenses.js"></script> 
+</body>
+</html>

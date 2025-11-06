@@ -1,0 +1,198 @@
+
+*{
+  padding: 0;
+  margin: 0;
+}
+
+.head-div {
+  padding: 0 30px; 
+  background-color: #007bff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 60px; 
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  color: white;
+}
+
+.logo-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none; 
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; 
+  align-items: center;
+}
+
+.btn-head {
+  font-size: 18px; 
+  font-weight: 500;
+  color: white;
+  text-decoration: none; 
+  padding: 5px 0; 
+  transition: color 0.3s ease; 
+  position: relative;
+}
+
+.btn-head:hover {
+  color: #ffc107; 
+}
+
+.btn-head::after {
+  content: '';
+  position: absolute;
+  right: 0; 
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+  width: 100%;
+  right: 0; 
+}
+
+
+
+
+
+
+
+
+
+
+
+/* --- CUSTOMER PAGE LAYOUT --- */
+.customer-layout {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row-reverse; /* Form on the right, list on the left */
+    padding: 30px;
+    gap: 30px;
+    background-color: #f4f7f6; /* پاشبنەمای سادە */
+}
+
+/* --- Customer Form Area (40% wide) --- */
+
+.customer-form-area {
+    width: 40%;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    height: fit-content;
+}
+
+.customer-form-area h1 {
+    font-size: 1.4em;
+    color: #007bff; 
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Input Styles */
+.customer-form-area .form-group {
+    margin-bottom: 15px;
+}
+
+.customer-form-area label {
+    font-weight: 600;
+    color: #555;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.customer-form-area input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: border-color 0.2s;
+}
+
+.customer-form-area input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Form Actions (Submit Button) */
+.customer-form-area .form-actions {
+    margin-top: 25px;
+    text-align: left; 
+}
+
+.customer-form-area .submit-btn {
+    background-color: #28a745; 
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.customer-form-area .submit-btn:hover {
+    background-color: #218838;
+}
+
+/* --- Customer List Area (60% wide) --- */
+
+.customer-list-area {
+    width: 60%;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.customer-list-area h1 {
+    font-size: 1.4em;
+    color: #333;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Customer Table Styles */
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.customer-table th, .customer-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: right;
+    font-size: 0.9em;
+}
+
+.customer-table th {
+    background-color: #f0f7ff;
+    color: #333;
+}
+
+.customer-table .delete-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.customer-table .delete-btn:hover {
+    background-color: #c82333;
+}

@@ -1,0 +1,149 @@
+/* --- REPORTS PAGE STYLES --- */
+
+.reports-layout {
+    display: block;
+    padding: 40px 20px; /* Padding on the sides */
+    width: 100%; /* Take full width */
+    max-width: none; /* Remove max-width constraint */
+    margin: 0 auto;
+    background-color: #fcfcfc;
+}
+
+.reports-layout h1 {
+    font-size: 2.2em;
+    color: #004d99; 
+    border-bottom: 4px solid #007bff;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+    font-weight: 800;
+}
+
+/* --- Section 1: KPI Cards (Top Line Metrics) --- */
+
+.kpi-reports-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; 
+    margin-bottom: 50px;
+    justify-content: space-between;
+}
+
+.kpi-card {
+    flex: 1;
+    min-width: 250px;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+    border-left: 5px solid; 
+}
+
+.kpi-value {
+    font-size: 3.2em; 
+    font-weight: 900;
+}
+
+/* Specific KPI Colors */
+.report-total-revenue { border-color: #007bff; }
+.report-net-profit { border-color: #28a745; } 
+.report-total-expense { border-color: #dc3545; } 
+
+
+/* --- Section 2 & 3: Detailed Tables --- */
+
+.report-section {
+    margin-bottom: 40px;
+}
+
+.report-section h2 {
+    font-size: 1.8em;
+    color: #34495e;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+/* Profit Analysis Table (Full Width) */
+.report-analysis-table {
+    width: 100%; /* Ensure table takes full container width */
+    border-collapse: collapse;
+    font-size: 0.95em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.report-analysis-table th {
+    background-color: #343a40; /* Dark header */
+    color: white;
+    padding: 12px 15px;
+}
+
+.report-analysis-table td {
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    text-align: right;
+}
+
+/* Grouping Cell */
+.type-group-cell {
+    background-color: #f0f7ff !important; 
+    color: #004d99;
+    font-weight: 700 !important;
+    border-right: 4px solid #007bff;
+}
+
+/* --- Inventory Valuation Summary Section --- */
+
+.inventory-summary-section {
+    margin-top: 40px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+}
+
+.inventory-summary-section h2 {
+    font-size: 1.6em;
+    color: #343a40;
+    margin-bottom: 20px;
+}
+
+/* Specific Table Design for Valuation */
+.inventory-valuation-table {
+    width: 100%;
+    max-width: 550px; /* Keep it compact */
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden; /* Ensures borders are contained */
+}
+
+.inventory-valuation-table th {
+    background-color: #f8f8f8; /* Light gray header */
+    color: #343a40;
+    padding: 12px 15px;
+    font-weight: 700;
+    text-align: right;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.inventory-valuation-table td {
+    padding: 15px 15px;
+    border-right: 1px solid #f1f1f1;
+    background-color: #ffffff;
+}
+
+/* Row for Total Value */
+.inventory-valuation-table tr.total-row td {
+    font-size: 1.2em;
+    font-weight: 800;
+}
+
+/* Style for the Total Value Amount */
+.inventory-valuation-table .value-amount {
+    color: #007bff; /* Blue color for Total Value */
+    font-size: 1.4em;
+    font-weight: 900;
+    background-color: #e3f2fd; /* Light blue background for emphasis */
+}
+
+.profit-positive{
+    color: green;
+}

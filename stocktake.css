@@ -1,0 +1,208 @@
+*{
+  padding: 0;
+  margin: 0;
+}
+/* --- STOCKTAKE PAGE STYLES --- */
+.head-div {
+  padding: 0 30px; 
+  background-color: #007bff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 60px; 
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  color: white;
+}
+
+.logo-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none; 
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; 
+  align-items: center;
+}
+
+.btn-head {
+  font-size: 18px; 
+  font-weight: 500;
+  color: white;
+  text-decoration: none; 
+  padding: 5px 0; 
+  transition: color 0.3s ease; 
+  position: relative;
+}
+
+.btn-head:hover {
+  color: #ffc107; 
+}
+
+.btn-head::after {
+  content: '';
+  position: absolute;
+  right: 0; 
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+  width: 100%;
+  right: 0; 
+}
+
+/* Layout Container */
+.stocktake-layout {
+    display: block;
+    padding: 35px; /* پانتایی زیاتر */
+    max-width: 1100px; /* پانی زیاتر بۆ خشتە */
+    margin: 30px auto;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* سێبەرێکی دیارتر */
+}
+
+.stocktake-layout h1 {
+    font-size: 2em;
+    color: #34495e;
+    border-bottom: 3px solid #007bff; /* شین بۆ سەرنجڕاکێشان */
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+/* --- Summary Bar (KPIs) --- */
+
+.stocktake-summary-bar {
+    display: flex;
+    justify-content: space-around;
+    background-color: #f8f9fa; /* Light background */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    border: 1px solid #eee;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.stocktake-summary-bar p {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 500;
+    flex-basis: 30%;
+}
+
+.stocktake-summary-bar strong {
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+#itemCount {
+    color: #007bff; /* Blue for total count */
+    font-size: 1.8em;
+}
+
+#varianceCount {
+    color: #dc3545; /* Red for variance */
+    font-size: 1.8em;
+}
+
+/* --- Table Styles --- */
+.stocktake-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stocktake-table th, .stocktake-table td {
+    padding: 14px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
+    font-size: 0.95em;
+}
+
+.stocktake-table th {
+    background-color: #e6f7ff;
+    color: #333;
+    font-weight: 700;
+}
+
+.stocktake-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+/* Input for Stock Count */
+.stocktake-table input[type="number"] {
+    width: 90px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 600;
+    transition: border-color 0.2s;
+}
+
+.stocktake-table input[type="number"]:focus {
+    border-color: #28a745; /* Green focus */
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+    outline: none;
+}
+
+/* Variance Cells */
+.variance-positive {
+    color: #1abc9c; /* Teal/Soft Green for Overstocked */
+    font-weight: 700;
+    background-color: #f1fdfb;
+}
+
+.variance-negative {
+    color: #e74c3c; /* Bright Red for Understocked/Loss */
+    font-weight: 700;
+    background-color: #fef7f7;
+}
+
+/* --- Action Buttons --- */
+.form-actions {
+    text-align: left; /* Button to the left (end of RTL) */
+    margin-top: 40px;
+}
+
+.form-actions .submit-btn {
+    background-color: #007bff; /* Blue */
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.form-actions .submit-btn:hover {
+    background-color: #0056b3;
+}
+
+
+.action-btn{
+    background-color: #007bff; /* Blue */
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .action-btn:hover{
+    background-color: #1abc9c;
+  }

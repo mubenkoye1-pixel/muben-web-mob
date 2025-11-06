@@ -1,0 +1,495 @@
+/* --- NEW SUMMARY BAR STYLES (KPIs under header) --- */
+*{
+  padding: 0;
+  margin: 0;
+
+}
+.summary-bar-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #f8f9fa; /* Light background */
+    padding: 10px 30px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #eee;
+}
+
+.summary-card {
+    text-align: center;
+    padding: 5px 15px;
+    flex-basis: 30%;
+}
+
+.summary-card h3 {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-bottom: 5px;
+}
+
+.summary-value {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #007bff;
+}
+
+/* --- TRANSACTION LIST STYLES --- */
+
+.data-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    background-color: #fff;
+}
+
+.data-layout h1 {
+    color: #004d99;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.transaction-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.transaction-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #e9ecef; /* Header background */
+    border-bottom: 1px solid #ddd;
+    font-size:1em;
+}
+
+.transaction-header .total-profit {
+    font-weight: bold;
+    color: #28a745; /* Green for profit */
+}
+
+/* List of items inside the transaction */
+.item-sold-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.item-sold-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 15px;
+    border-bottom: 1px dashed #f1f1f1;
+    font-size:1.1em;
+}
+
+.item-sold-list li:last-child {
+    border-bottom: none;
+}
+
+.item-sold-list .item-name-details {
+    font-weight: 600;
+    flex-basis: 60%;
+}
+.item-sold-list .item-qty {
+    color: #007bff;
+}
+
+
+
+.head-div {
+  padding: 0 30px; 
+  background-color: #007bff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 60px; 
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  color: white;
+}
+
+.logo-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none; 
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; 
+  align-items: center;
+}
+
+.btn-head {
+  font-size: 18px; 
+  font-weight: 500;
+  color: white;
+  text-decoration: none; 
+  padding: 5px 0; 
+  transition: color 0.3s ease; 
+  position: relative;
+}
+
+.btn-head:hover {
+  color: #ffc107; 
+}
+
+.btn-head::after {
+  content: '';
+  position: absolute;
+  right: 0; 
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+  width: 100%;
+  right: 0; 
+}
+
+
+/* --- TRANSACTION CARD ACTION BUTTONS --- */
+
+.transaction-header .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.action-btn:hover {
+    opacity: 0.8;
+}
+
+.edit-trans-btn {
+    background-color: #ffc107; /* Yellow */
+    color: #333;
+}
+
+.delete-trans-btn {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+
+/* --- MODAL STYLES (Window container) --- */
+
+.modal {
+    display: none; /* Hidden by default - controlled by JS */
+    position: fixed;
+    z-index: 1000; /* Sit on top of everything */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
+    padding-top: 50px; /* Space from the top */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto; /* Centered with a bit of space from top */
+    padding: 25px;
+    border: 1px solid #ddd;
+    width: 90%; 
+    max-width: 650px; /* Max width for a clean look */
+    border-radius: 12px; /* Rounded corners */
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    font-size: 1.5em;
+    color: #007bff;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+/* Close button (x) */
+.close-btn {
+    color: #aaa;
+    float: left; /* Aligned to the left in RTL */
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 1;
+    margin-right: -5px; /* Pull it slightly to the left */
+    transition: color 0.2s;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: #dc3545; /* Red on hover */
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Alert Message (for validation errors) */
+#modalAlert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    background-color: #f8d7da; /* Light red background for errors */
+    color: #721c24; /* Dark red text */
+    font-weight: 600;
+    border: 1px solid #f5c6cb;
+    display: block; /* Ensures it takes full width */
+}
+
+/* Date and ID Info */
+#edit-date {
+    font-weight: 700;
+    color: #333;
+    display: block;
+    margin-bottom: 15px;
+}
+
+/* --- ITEM EDITING CONTAINER --- */
+
+#edit-items-container {
+    max-height: 250px;
+    overflow-y: auto; /* Makes the item list scrollable */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.edit-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px dashed #e0e0e0;
+    font-size: 0.95em;
+}
+
+.edit-item-row:last-child {
+    border-bottom: none;
+}
+
+.edit-item-row span {
+    flex-grow: 1;
+    color: #333;
+    font-weight: 500;
+}
+
+.edit-item-row input[type="number"] {
+    width: 70px;
+    padding: 6px;
+    text-align: center;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+
+
+.modal-content .form-actions {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-content .submit-btn,
+.modal-content .cancel-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.modal-content .submit-btn {
+    background-color: #28a745; 
+    color: white;
+}
+
+.modal-content .submit-btn:hover {
+    background-color: #218838;
+}
+
+.modal-content .cancel-btn {
+    background-color: #6c757d; 
+    color: white;
+}
+
+.modal-content .cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+/* --- DATA TAB STYLES --- */
+
+.tab-controls {
+    display: flex;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+}
+
+.tab-btn {
+    padding: 10px 15px;
+    margin-left: 5px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: color 0.2s;
+    border-bottom: 3px solid transparent;
+}
+
+.tab-btn:hover {
+    color: #007bff;
+}
+
+.tab-btn.active {
+    color: #dc3545; /* Red for active loan/transaction tab */
+    border-bottom: 3px solid #dc3545;
+}
+
+/* New KPI Color for Loan */
+#kpi-total-loan-due .summary-value {
+    color: #dc3545; /* Red for amount due */
+}
+
+/* --- LOAN CARD STYLES (Reusing transaction-card structure) --- */
+
+.loan-card {
+    background-color: #fffaf0; /* Light yellow background for loans */
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.loan-card .loan-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px;
+    background-color: #fff3cd; /* Darker yellow header */
+    border-bottom: 1px solid #ffc107;
+    font-size: 0.95em;
+    font-weight: 700;
+    color: #856404; /* Dark text */
+}
+
+.loan-card .loan-amount {
+    font-size: 1.1em;
+    color: #dc3545; /* Amount due in red */
+}
+
+
+
+
+/* --- NEW ACTION BUTTON FOR LOAN PAGE --- */
+
+.pay-loan-btn {
+    background-color: #28a745; /* Green color for Payment/Closing */
+    color: white;
+    padding: 5px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: opacity 0.2s;
+    margin-right: 5px;
+}
+
+.pay-loan-btn:hover {
+    background-color: #218838;
+}
+
+/* Make actions display flex in loan header if you didn't already */
+.loan-card .actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+/* --- Loan Search Styling (Reusing search-input style) --- */
+.search-loan-area {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.search-loan-area .search-input {
+    /* Reuses the style from the sales page search input */
+    width: 100%;
+    max-width: 400px;
+    margin: 0;
+}
+
+/* --- Loan Search Styling --- */
+
+/* بەشی گشتی کۆنتەینەر */
+.search-loan-area {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0; /* سنووری جیاکەرەوەی کاڵ */
+    padding-top: 10px;
+}
+
+/* Inputـی گەڕان */
+.search-loan-area .search-input {
+    width: 100%;
+    max-width: 450px; /* دانانی گەورەترین پانتایی بۆ Input */
+    
+    /* شێوازدانان */
+    padding: 10px 15px;
+    border: 1px solid #ffc107; /* سنووری زەرد بۆ دیارکردن کە ئەمە گەڕانی قەرزە */
+    border-radius: 8px; 
+    font-size: 1em;
+    font-weight: 500;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #fffde7; /* پاشبنەمای زەردی زۆر کاڵ */
+}
+
+/* کاریگەری کاتێک ماوس دەبرێتە سەر/کلیک دەکرێت */
+.search-loan-area .search-input:focus {
+    border-color: #dc3545; /* سوور دەبێت لەکاتی نووسین (گرنگی قەرز) */
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1); 
+    outline: none;
+}
+
+.search-loan-area .search-input::placeholder {
+    color: #999;
+}
+
+
+/* --- LOAN TRANSACTION HIGHLIGHT --- */
+
+.transaction-card.transaction-is-loan {
+    /* Highlight the border and background lightly */
+    border: 2px solid #ffc107; /* Orange/Yellow border */
+    background-color: #000000; /* Very light yellow background */
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
+}
+
+.transaction-card.transaction-is-loan .transaction-header {
+    /* Make the header stand out slightly more */
+    background-color: #ffc10740; /* 40% transparent yellow */
+}

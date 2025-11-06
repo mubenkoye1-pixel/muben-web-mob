@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="reports.css"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ڕاپۆرتی گشتی و شیکار</title> 
+</head>
+<body>
+    <div class="all-div">
+        
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="sales.html" class="btn-head">فرۆشتن</a>
+                <a href="loan.html" class="btn-head">قەرز</a>
+                <a href="expenses.html" class="btn-head">خەرجی</a>
+                <a href="customer.html" class="btn-head">کریار</a>
+                <a href="reports.html" class="btn-head active">ڕاپۆرت</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">📊</span> سیستەم - ڕاپۆرت
+            </a>
+        </div>
+
+        <div class="main-div reports-layout">
+            
+            <h1>شیکاری دارایی و قازانجی پڕۆژە</h1>
+
+            <div class="kpi-reports-container">
+                <div class="kpi-card report-total-revenue">
+                    <h3>داهاتی خاوێن (Net Sales)</h3>
+                    <p class="kpi-value" id="report-revenue">0 IQD</p>
+                </div>
+                <div class="kpi-card report-total-expense">
+                    <h3>کۆی گشتی خەرجییەکان</h3>
+                    <p class="kpi-value" id="report-expense">0 IQD</p>
+                </div>
+                <div class="kpi-card report-net-profit">
+                    <h3>قازانجی کۆتایی (Net Profit)</h3>
+                    <p class="kpi-value" id="report-profit">0 IQD</p>
+                </div>
+            </div>
+
+            <div class="report-section full-width-section">
+                <h2>ڕاپۆرتی وردی قازانج بەپێی جۆر و براند</h2>
+                <div id="profitAnalysisContainer" class="data-table-container">
+                    <p>لۆدکردنی خشتەی شیکار...</p>
+                </div>
+            </div>
+
+            <div class="report-section inventory-summary-section">
+                <h2>وردەکاری بەهای عەمبار و ستۆک</h2>
+                <div id="inventorySummaryContainer" class="data-table-container">
+                    <p>لۆدکردنی بەهای عەمبار...</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    
+    <script src="item.js"></script> 
+    <script src="data.js"></script>
+    <script src="reports.js"></script> 
+</body>
+</html>

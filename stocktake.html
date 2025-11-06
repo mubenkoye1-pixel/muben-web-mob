@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="stylesheet" href="stocktake.css"> 
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جەرد و وردبینی عەمبار</title> 
+
+
+
+</head>
+<body>
+    <div class="all-div">
+        
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="expenses.html" class="btn-head active">خەرجی</a>
+                <a href="QARZ.HTML" class="btn-head">قەرز</a>
+                <a href="customer.html" class="btn-head">کریار</a>
+                <a href="reports.html" class="btn-head">راپۆرت</a>
+                <a href="stocktake.html" class="btn-head">جەرد</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">🔍</span> سیستەم - جەرد
+            </a>
+        </div>
+
+        <div class="main-div stocktake-layout">
+            
+            <h1>پشکنین و جەردی عەمبار</h1>
+
+            <div class="stocktake-summary-bar">
+                <p><strong>ژمارەی کۆی ئایتمە جیاوازەکان:</strong> <span id="itemCount">0</span></p>
+                <p><strong>گۆڕانکاری پێویست:</strong> <span id="varianceCount">0</span></p>
+            </div>
+
+            <div class="stocktake-list-container">
+                <table id="stocktakeTable" class="stocktake-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">ناوی ئایتم / براند</th>
+                            <th style="width: 15%;">بڕی تۆمارکراو (سیستەم)</th>
+                            <th style="width: 15%;">بڕی ژمێردراو (جەرد)</th>
+                            <th style="width: 15%;">جیاوازی</th>
+                            <th style="width: 25%;">کردار</th>
+                        </tr>
+                    </thead>
+                    <tbody id="stocktakeBody">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="form-actions" style="margin-top: 30px;">
+                <button onclick="commitStocktake()" class="submit-btn">✅ تۆمارکردنی کۆتایی جەرد</button>
+            </div>
+            
+        </div>
+    </div>
+    
+
+
+
+
+
+<script src="customer.js"></script>
+<script src="sales.js"></script>
+<script src="data.js"></script>
+
+
+    <script src="item.js"></script> 
+    <script src="stocktake.js"></script> 
+</body>
+</html>

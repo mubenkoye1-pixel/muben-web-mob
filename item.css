@@ -1,0 +1,260 @@
+/* ... [هەمان شێوازی گشتی بۆ body, all-div, head-div, btn-head] ... */
+*{
+  padding: 0;
+  margin: 0;
+}
+/* Main Content Layout (Two Columns) */
+.main-div {
+  display: flex;
+  min-height: calc(100vh - 60px);
+  flex-direction: row; /* Default: RTL means side-panel is right, form is left */
+  /* We want side panel (Brand/Quality) on the left, and Item Form on the right (RTL logic) */
+  /* So, we use row-reverse to swap their display order visually */
+  flex-direction: row-reverse; 
+  background-color: #f4f7f6;
+}
+
+/* --------------------
+   Right Side: Item Form Container (Wider)
+   -------------------- */
+.item-form-container {
+  width: 75%; 
+  padding: 30px;
+  background-color: white;
+  border-left: 1px solid #ddd;
+}
+
+.item-form-container h1 {
+    color: #007bff;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for inputs */
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #555;
+    display: block;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.submit-btn { background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+.cancel-btn { background-color: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+
+/* --------------------
+   Left Side: Side Panel (Narrower)
+   -------------------- */
+.side-panel {
+  width: 25%; 
+  padding: 20px;
+  background-color: #e9ecef; /* Light gray background */
+}
+
+.component-box {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.component-box h3 {
+    color: #dc3545;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed #dc3545;
+    padding-bottom: 5px;
+}
+
+.add-form {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.add-form input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.component-list {
+    list-style: none;
+    padding: 0;
+}
+
+.component-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px dotted #ddd;
+}
+
+.component-list li:last-child {
+    border-bottom: none;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+/* --------------------
+   Item Table Styles 
+   -------------------- */
+.item-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.item-table th, .item-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: right;
+}
+
+.item-table th {
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.action-btns {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+.edit-btn, .delete-item-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+}
+
+.edit-btn { background-color: #ffc107; }
+.delete-item-btn { background-color: #dc3545; }
+
+
+.head-div {
+  padding: 0 30px; 
+  background-color: #007bff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 60px; 
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  color: white;
+}
+
+.logo-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none; 
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; 
+  align-items: center;
+}
+
+.btn-head {
+  font-size: 18px; 
+  font-weight: 500;
+  color: white;
+  text-decoration: none; 
+  padding: 5px 0; 
+  transition: color 0.3s ease; 
+  position: relative;
+}
+
+.btn-head:hover {
+  color: #ffc107; 
+}
+
+.btn-head::after {
+  content: '';
+  position: absolute;
+  right: 0; 
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+  width: 100%;
+  right: 0; 
+}
+
+/* ... [هەموو ستایلەکانی پێشوو] ... */
+
+/* Style adjustment for Type Form (to align text input, color picker, and button) */
+.type-form-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.type-form-group input[type="color"] {
+    width: 30px; /* Smaller color picker */
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 4px;
+}
+
+/* Style for Type List item to show the color */
+.component-list li span.type-color-indicator {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    margin-left: 10px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    vertical-align: middle;
+}

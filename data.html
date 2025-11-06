@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="data.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شیکار و داتا</title> 
+</head>
+<body>
+    <div class="all-div">
+        
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head active">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="sales.html" class="btn-head">فرۆشتن</a>
+                <a href="" class="btn-head">قەرز</a>
+                <a href="" class="btn-head">کریار</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">📈</span> سیستەم - داتا
+            </a>
+        </div>
+
+
+        <div class="summary-bar-container">
+            <div class="summary-card">
+                <h3>کۆی گشتی فرۆش</h3>
+                <p class="summary-value" id="kpi-total-revenue">0 IQD</p>
+            </div>
+            <div class="summary-card">
+                <h3>کۆی گشتی قازانج</h3>
+                <p class="summary-value" id="kpi-total-profit">0 IQD</p>
+            </div>
+            <div class="summary-card">
+                <h3>کۆی گشتی قەرز (نەگەڕاوە)</h3>
+                <p class="summary-value" id="kpi-total-loan-due">0 IQD</p>
+            </div>
+        </div>
+        
+        <div class="main-div data-layout">
+    
+    <div id="transactionsListContainer" class="list-group">
+        <h1>لیستی هەموو مامەڵە تەواوکراوەکان</h1>
+        <p class="no-data">هیچ فرۆشتنێک تۆمار نەکراوە.</p>
+    </div>
+    
+    </div>
+    </div>
+
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h2>دەستکاریکردنی مامەڵە (Transaction)</h2>
+        
+        <div class="alert-message" id="modalAlert"></div> 
+        
+        <form id="modalForm" onsubmit="saveEditedTransaction(event)">
+            
+            <input type="hidden" id="edit-transaction-id"> 
+            
+            <p><strong>بەروار:</strong> <span id="edit-date"></span></p> 
+            
+            <div id="edit-items-container">
+                </div>
+            
+            </form>
+    </div>
+</div>
+    
+    <script src="customer.js"></script>
+    <script src="script.js"></script>
+    <script src="LOAN.JS"></script>
+      <script src="data.js"></script>
+    <script src="item.js"></script>
+</body>
+</html>

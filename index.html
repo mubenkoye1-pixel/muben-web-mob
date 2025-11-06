@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستەمی کارگێڕی - فرۆشتن</title>
+</head>
+<body>
+    <div class="all-div">
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="loan.html" class="btn-head active">قەرز</a>
+                <a href="reports.html" class="btn-head active">راپۆرت</a>
+
+
+                <a href="expenses.html" class="btn-head active">خەرجی</a>
+                <a href="customer.html" class="btn-head">کریار</a>
+
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">💰</span> سیستەم - فرۆشتن
+            </a>
+        </div>
+        <div class="main-div sales-layout">
+            
+            <div class="left-div cart-div">
+                <h2>🛒 سەبەتەی کڕین</h2>
+                <div id="cartItems" class="cart-items-list">
+                    <p class="empty-cart">سەبەتەکە بەتاڵە.</p>
+                </div>
+                
+                <div class="cart-summary">
+                    <div class="loan-toggle-area">
+                        <label>
+                            <input type="checkbox" id="isLoanSale" onchange="toggleCustomerInput()"> فرۆشتن بە قەرز
+                        </label>
+                        <input type="text" id="customerNameInput" placeholder="ناوی کریار..." class="customer-input" style="display: none;" required list="customerDatalist">
+                    </div>
+
+                    <div class="discount-area">
+                        <label for="discountInput">داشکاندن (IQD):</label>
+                        <input type="number" id="discountInput" value="0" min="0" oninput="updateCartDisplay()" class="discount-input">
+                    </div>
+
+                    <p class="sub-total-line">کۆی گشتی (بێ داشکاندن): <span id="sub-total-price">0</span> IQD</p>
+                    <p class="final-total-line"><strong>کۆی کۆتایی: <span id="final-total-price">0</span> IQD</strong></p>
+
+                    <button class="checkout-btn" onclick="checkout()">تەواوکردنی فرۆشتن</button>
+                </div>
+            </div>
+
+            <div class="right-div item-list-div">
+                <div class="filters-and-search">
+                    <input type="text" id="searchInput" placeholder="گەڕان بە ناوی ئایتم، براند یان جۆر..." oninput="displaySalesItems()" class="search-input">
+
+                    <select id="filterType" onchange="displaySalesItems()" class="filter-select">
+                        <option value="all">هەموو جۆرەکان</option>
+                    </select>
+                    <select id="filterBrand" onchange="displaySalesItems()" class="filter-select">
+                        <option value="all">هەموو براندەکان</option>
+                    </select>
+                </div>
+                <p id="user-id-display">تکایە لۆگین بکە بۆ بینینی IDـی تایبەت بە خۆت.</p>
+                <div id="salesItemsContainer" class="items-grid">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <datalist id="customerDatalist"></datalist>
+    
+        <script src="customer.js"></script>
+    <script src="script.js"></script>
+    <script src="LOAN.JS"></script>
+      <script src="data.js"></script>
+    <script src="item.js"></script> 
+<link rel="stylesheet" href="https://unpkg.com/netlify-identity-widget@1.9.2/styles.css" />
+    
+    <div data-netlify-identity-widget></div>
+
+    <script src="https://unpkg.com/netlify-identity-widget@1.9.2/netlify-identity.js"></script>
+
+     
+
+</body>
+</html>

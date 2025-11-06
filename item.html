@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="item.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بەڕێوەبردنی ئایتمەکان</title> 
+</head>
+<body>
+    <div class="all-div">
+        
+        <div class="head-div">
+            <nav class="nav-links">
+                <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head active">ئایتم</a>
+                <a href="" class="btn-head">قەرز</a>
+                <a href="" class="btn-head">کریار</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">📦</span> سیستەم - ئایتم
+            </a>
+        </div>
+
+        <div class="main-div">
+            
+            <div class="side-panel">
+                
+                <div class="component-box">
+                    <h3>ناوەکانی براند</h3>
+                    <form onsubmit="addBrand(event)" class="add-form">
+                        <input type="text" id="newBrand" placeholder="براندێکی نوێ بنووسە" required>
+                        <button type="submit" class="add-btn">زیادکردن</button>
+                    </form>
+                    <ul id="brandList" class="component-list">
+                        </ul>
+                </div>
+
+                <div class="component-box">
+                    <h3>جۆر (Type)</h3>
+                    <form onsubmit="addType(event)" class="add-form type-form-group">
+                        <input type="text" id="newType" placeholder="جۆرێکی نوێ بنووسە (نموونە: شاشە)" required>
+                        <input type="color" id="newTypeColor" value="#007bff" title="ڕەنگی جۆر">
+                        <button type="submit" class="add-btn">زیادکردن</button>
+                    </form>
+                    <ul id="typeList" class="component-list">
+                        </ul>
+                </div>
+                
+                <div class="component-box">
+                    <h3>جۆرایەتی (کوالێتی)</h3>
+                    <form onsubmit="addQuality(event)" class="add-form">
+                        <input type="text" id="newQuality" placeholder="کوالێتییەکی نوێ بنووسە" required>
+                        <button type="submit" class="add-btn">زیادکردن</button>
+                    </form>
+                    <ul id="qualityList" class="component-list">
+                        </ul>
+                </div>
+
+            </div>
+            
+            <div class="item-form-container">
+                <h1 id="formTitle">زیادکردنی ئایتمی نوێ</h1>
+                
+                <form id="itemForm" onsubmit="saveOrUpdateItem(event)">
+                    <input type="hidden" id="itemId" value="">
+
+                    <div class="form-grid">
+                        
+                        <div class="form-group">
+                            <label for="itemName">ناوی ئایتم:</label>
+                            <input type="text" id="itemName" required placeholder="نموونە: شاشەی A50">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemType">جۆر:</label>
+                            <select id="itemType" required onchange="setItemColorByType()">
+                                </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="itemBrand">براند:</label>
+                            <select id="itemBrand" required>
+                                </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="itemQuality">کوالێتی:</label>
+                            <select id="itemQuality" required>
+                                </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemPurchasePrice">نرخی کڕین (دینار):</label>
+                            <input type="number" id="itemPurchasePrice" min="0" required placeholder="نموونە: 15000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemSalePrice">نرخی فرۆشتن (دینار):</label>
+                            <input type="number" id="itemSalePrice" min="0" required placeholder="نموونە: 20000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="itemQuantity">ژمارەی بەردەست (عدد):</label>
+                            <input type="number" id="itemQuantity" min="1" required placeholder="نموونە: 10">
+                        </div>
+                        
+                        <input type="hidden" id="itemColor" value="#007bff"> 
+
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="submitBtn" class="submit-btn">✅ زیادکردن</button>
+                        <button type="button" onclick="resetForm()" class="cancel-btn">سڕینەوەی فۆڕم</button>
+                    </div>
+                </form>
+
+                <h2 style="margin-top: 40px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">لیستی ئایتمە بەردەستەکان</h2>
+                <div id="itemListTableContainer">
+                    </div>
+
+            </div>
+
+        </div>
+    </div>
+    
+     <script src="customer.js"></script>
+    <script src="script.js"></script>
+    <script src="LOAN.JS"></script>
+      <script src="data.js"></script>
+    <script src="item.js"></script>
+</body>
+</html>

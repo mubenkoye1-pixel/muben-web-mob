@@ -1,0 +1,99 @@
+/* --- EXPENSES PAGE STYLES --- */
+
+.expenses-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.form-and-list-wrapper {
+    display: flex;
+    gap: 30px;
+    flex-direction: row-reverse; /* Form on the right, list on the left */
+}
+
+.expense-form-container {
+    width: 40%;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.expense-list-container {
+    width: 60%;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.expense-form-container h1, .expense-list-container h1 {
+    font-size: 1.4em;
+    color: #dc3545; /* Red color for expenses */
+    border-bottom: 2px solid #dc3545;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* --- KPI Bar for Expenses (Customized) --- */
+.summary-bar-container {
+    display: flex;
+    justify-content: flex-start;
+    padding: 10px 20px;
+    background-color: #fff0f0; /* Light red/pink background */
+    border-left: 5px solid #dc3545;
+    margin-bottom: 20px;
+}
+
+.summary-card {
+    text-align: right; 
+    padding: 5px 15px;
+    flex-basis: 300px;
+}
+
+.summary-card h3 {
+    color: #dc3545;
+}
+
+.summary-value {
+    font-size: 1.8em;
+    font-weight: 900;
+    color: #dc3545;
+}
+
+/* Input & Button Styles (from previous step) */
+.expense-form-container .submit-btn {
+    background-color: #dc3545; /* Red */
+    color: white;
+}
+
+/* Table Style */
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.expense-table th, .expense-table td {
+    padding: 10px;
+    border: 1px solid #eee;
+}
+
+.expense-table th {
+    background-color: #f8d7da; 
+    color: #333;
+}
+
+.expense-table .amount-col {
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.expense-table .delete-btn {
+    background-color: #6c757d;
+    color: white;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+}
