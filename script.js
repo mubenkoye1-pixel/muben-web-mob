@@ -3,13 +3,14 @@
 // 🔴 ناونیشانی کۆن (هەڵە بۆ Frontend): postgresql://postgres:MuBenkoye1@db.iidyoxulomjnbgyjvkou.supabase.co:5432/postgres
 
 // ✅ ناونیشانی نوێ و دروست بۆ Frontend:
+// 🚨 گرنگ: ناونیشانی خۆت و کلیلی خۆت دابنێ!
+// لە سەرەتای فایلی script.js دایبنێ:
+let supabase; // ✅ Supabase وەک گۆڕاوێکی جیهانی دیاری دەکەین
+
 const SUPABASE_URL = 'https://iidyoxulomjnbgyjvkou.supabase.co'; 
-
-// کلیلی گشتی (Public Key) - ئەمە دروستە
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHlveHVsb21qbmJneWp2a291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTk3NTgsImV4cCI6MjA3ODAzNTc1OH0.Y6Owu8_eDS8gvixh8Cx3mg4OWgyp1EZz--NgNy-V2RM'; 
-
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-// ...
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHlveHVsb21qbmJneWp2a291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTk3NTgsImV4cCI6MjA3ODAzNTc1OH0.Y6Owu8_eDS8gvixh8Cx3mg4OWgyp1EZz--NgNy-V2RM';
+// 🛑 ئەم هێڵە بسڕەوە:
+// const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);// ...
 // Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن
 async function handleLogin() {
     // دەستبەجێ یوزەر دەنێرین بۆ پەڕەیەکی لۆگینی Supabase
@@ -51,16 +52,25 @@ async function handleLogout() {
     window.location.reload(); 
 }
 
-// چالاککردنی سەرەتا
 document.addEventListener('DOMContentLoaded', () => {
     // ... هەموو لۆجیکی پڕۆژەکەی خۆت لێرەدایە
     
-    // چالاککردنی لۆگین (لە کۆتاییدا)
-    checkUserStatus(); 
+    // ✅ دروستکردنی کڵایێنتی Supabase پاش دڵنیابوونەوە لە بارکردنی کتێبخانە
+    // 🚨 تەنها ئەم بەشە بگۆڕە بۆ دڵنیابوونەوە لە بەردەستی Supabase
+    if (typeof window.createClient !== 'undefined' && typeof window.supabase !== 'undefined') {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else if (typeof window.createClient !== 'undefined') {
+        supabase = window.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // هەوڵدان بە گۆڕاوێکی دیکە
+    }
+    
+    // 🛑 زۆر گرنگە: دڵنیابوونەوە لە دروستبوونی supabase
+    if (supabase) {
+        // چالاککردنی لۆگین (لە کۆتاییدا)
+        checkUserStatus(); 
+    } else {
+        console.error("Fatal Error: Supabase client could not be created. Is the script tag correct in index.html?");
+    }
 });
-
-
-
 
 
 
