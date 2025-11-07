@@ -1,4 +1,85 @@
-// --- General LocalStorage Functions (Shared access) ---
+// لە سەرەتای فایلی script.js دایبنێ
+
+// 🔴 ناونیشانی کۆن (هەڵە بۆ Frontend): postgresql://postgres:MuBenkoye1@db.iidyoxulomjnbgyjvkou.supabase.co:5432/postgres
+
+// ✅ ناونیشانی نوێ و دروست بۆ Frontend:
+const SUPABASE_URL = 'https://iidyoxulomjnbgyjvkou.supabase.co'; 
+
+// کلیلی گشتی (Public Key) - ئەمە دروستە
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHlveHVsb21qbmJneWp2a291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTk3NTgsImV4cCI6MjA3ODAzNTc1OH0.Y6Owu8_eDS8gvixh8Cx3mg4OWgyp1EZz--NgNy-V2RM'; 
+
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// ...
+// Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن
+async function handleLogin() {
+    // دەستبەجێ یوزەر دەنێرین بۆ پەڕەیەکی لۆگینی Supabase
+    const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google', // یان 'email' ئەگەر تەنها لۆگین بە ئیمەیڵ دەکەیت
+        options: {
+            redirectTo: window.location.origin, // دوای لۆگین بگەڕێتەوە بۆ هەمان پەڕە
+        },
+    });
+    if (error) console.error("Login Error:", error.message);
+}
+
+// Function بۆ پشکنینی باری لۆگین
+async function checkUserStatus() {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    const loginButton = document.getElementById('login-button');
+    const authUi = document.getElementById('auth-ui');
+    
+    if (user) {
+        // یوزەر لۆگینی کردووە
+        loginButton.textContent = `چوونە دەرەوە (${user.email})`;
+        loginButton.onclick = handleLogout;
+        
+        // 🚨 بانگکردنی فەنکشنی گواستنەوە (تەنها بۆ یەکەم جار)
+        // پێشنیار دەکرێت ئەمە لە دوگمەیەکی جیاواز دابنێیت بۆ Migration
+        // migrateLocalStorageData(); 
+
+    } else {
+        // یوزەر لۆگینی نەکردووە
+        loginButton.textContent = 'چوونە ژوورەوە / تۆمارکردن';
+        loginButton.onclick = handleLogin;
+    }
+}
+
+// Function بۆ چوونە دەرەوە
+async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.reload(); 
+}
+
+// چالاککردنی سەرەتا
+document.addEventListener('DOMContentLoaded', () => {
+    // ... هەموو لۆجیکی پڕۆژەکەی خۆت لێرەدایە
+    
+    // چالاککردنی لۆگین (لە کۆتاییدا)
+    checkUserStatus(); 
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function getFromStorage(key, defaultValue = []) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : defaultValue;
