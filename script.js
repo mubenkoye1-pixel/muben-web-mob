@@ -1,95 +1,12 @@
 // لە سەرەتای فایلی script.js دایبنێ
-
-// 🔴 ناونیشانی کۆن (هەڵە بۆ Frontend): postgresql://postgres:MuBenkoye1@db.iidyoxulomjnbgyjvkou.supabase.co:5432/postgres
-
-// ✅ ناونیشانی نوێ و دروست بۆ Frontend:
 // 🚨 گرنگ: ناونیشانی خۆت و کلیلی خۆت دابنێ!
-// لە سەرەتای فایلی script.js دایبنێ:
-let supabase; // ✅ Supabase وەک گۆڕاوێکی جیهانی دیاری دەکەین
-
 const SUPABASE_URL = 'https://iidyoxulomjnbgyjvkou.supabase.co'; 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHlveHVsb21qbmJneWp2a291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTk3NTgsImV4cCI6MjA3ODAzNTc1OH0.Y6Owu8_eDS8gvixh8Cx3mg4OWgyp1EZz--NgNy-V2RM';
-// 🛑 ئەم هێڵە بسڕەوە:
-// const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);// ...
-// Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن
-async function handleLogin() {
-    // دەستبەجێ یوزەر دەنێرین بۆ پەڕەیەکی لۆگینی Supabase
-    const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google', // یان 'email' ئەگەر تەنها لۆگین بە ئیمەیڵ دەکەیت
-        options: {
-            redirectTo: window.location.origin, // دوای لۆگین بگەڕێتەوە بۆ هەمان پەڕە
-        },
-    });
-    if (error) console.error("Login Error:", error.message);
-}
 
-// Function بۆ پشکنینی باری لۆگین
-async function checkUserStatus() {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    const loginButton = document.getElementById('login-button');
-    const authUi = document.getElementById('auth-ui');
-    
-    if (user) {
-        // یوزەر لۆگینی کردووە
-        loginButton.textContent = `چوونە دەرەوە (${user.email})`;
-        loginButton.onclick = handleLogout;
-        
-        // 🚨 بانگکردنی فەنکشنی گواستنەوە (تەنها بۆ یەکەم جار)
-        // پێشنیار دەکرێت ئەمە لە دوگمەیەکی جیاواز دابنێیت بۆ Migration
-        // migrateLocalStorageData(); 
-
-    } else {
-        // یوزەر لۆگینی نەکردووە
-        loginButton.textContent = 'چوونە ژوورەوە / تۆمارکردن';
-        loginButton.onclick = handleLogin;
-    }
-}
-
-// Function بۆ چوونە دەرەوە
-async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.reload(); 
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // ... هەموو لۆجیکی پڕۆژەکەی خۆت لێرەدایە
-    
-    // ✅ دروستکردنی کڵایێنتی Supabase پاش دڵنیابوونەوە لە بارکردنی کتێبخانە
-    // 🚨 تەنها ئەم بەشە بگۆڕە بۆ دڵنیابوونەوە لە بەردەستی Supabase
-    if (typeof window.createClient !== 'undefined' && typeof window.supabase !== 'undefined') {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    } else if (typeof window.createClient !== 'undefined') {
-        supabase = window.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); // هەوڵدان بە گۆڕاوێکی دیکە
-    }
-    
-    // 🛑 زۆر گرنگە: دڵنیابوونەوە لە دروستبوونی supabase
-    if (supabase) {
-        // چالاککردنی لۆگین (لە کۆتاییدا)
-        checkUserStatus(); 
-    } else {
-        console.error("Fatal Error: Supabase client could not be created. Is the script tag correct in index.html?");
-    }
-});
+let supabaseClient = null; // گۆڕاوی سەرەکیی Supabase Client
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// --- General LocalStorage Functions (Shared access) ---
 function getFromStorage(key, defaultValue = []) {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : defaultValue;
@@ -114,11 +31,10 @@ function getLoanTransactions() {
 }
 
 function saveLoanTransactions(loans) {
-    localStorage.setItem('loanTransactions', JSON.stringify(loans));
+    localStorage.setItem(key, JSON.stringify(loans));
 }
 
 function getCustomers() {
-    // This assumes customer.js has loaded and defined this function globally
     const customers = localStorage.getItem('customerData');
     return customers ? JSON.parse(customers) : [];
 }
@@ -503,85 +419,93 @@ function checkout() {
     displaySalesItems(); 
 }
 
-// لەناو فایلی script.js، لە خوار فەنکشنەکانی LocalStorage دایبنێ
 
-// فەنکشن بۆ گواستنەوەی داتای LocalStorage بۆ Supabase
-// لەناو فایلی script.js، فەنکشنی migrateLocalStorageData() بەمە بگۆڕە:
+// ==========================================================
+// --- Supabase Authentication Logic ---
+// ==========================================================
 
+// Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن
+async function handleLogin() {
+    if (!supabaseClient) return; // دڵنیابوون لە چالاکبوونی کڵایێنت
+    const { error } = await supabaseClient.auth.signInWithOAuth({
+        provider: 'google', // یان 'email'
+        options: {
+            redirectTo: window.location.origin, 
+        },
+    });
+    if (error) console.error("Login Error:", error.message);
+}
+
+// Function بۆ چوونە دەرەوە
+async function handleLogout() {
+    if (!supabaseClient) return;
+    await supabaseClient.auth.signOut();
+    window.location.reload(); 
+}
+
+// Function بۆ پشکنینی باری لۆگین و نیشاندانی دوگمە
+async function checkUserStatus() {
+    if (!supabaseClient) return; // دڵنیابوون لە چالاکبوونی کڵایێنت
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    
+    const loginButton = document.getElementById('login-button');
+    
+    if (loginButton) {
+        if (user) {
+            // یوزەر لۆگینی کردووە
+            loginButton.textContent = `چوونە دەرەوە (${user.email})`;
+            loginButton.onclick = handleLogout;
+        } else {
+            // یوزەر لۆگینی نەکردووە
+            loginButton.textContent = 'چوونە ژوورەوە / تۆمارکردن';
+            loginButton.onclick = handleLogin;
+        }
+    }
+}
+
+
+// Function بۆ گواستنەوەی داتای LocalStorage بۆ Supabase
 async function migrateLocalStorageData() {
-    const { data: { user } } = await supabase.auth.getUser();
+    if (!supabaseClient) {
+        alert("سیستەمی گواستنەوە چالاک نییە. تکایە لۆگین بکە.");
+        return;
+    }
+    
+    const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) {
         alert("تکایە سەرەتا لۆگین بکە بۆ گواستنەوەی داتا.");
         return;
     }
     
-    if (!confirm("⚠ دڵنیایت کە دەتەوێت داتای کۆنی LocalStorage بگوازیتەوە بۆ سێرڤەری Supabase؟ ئەم کارە تەنها یەک جار دەکرێت.")) {
-        return;
-    }
-
-    const inventoryData = getFromStorage('inventory');
-    const loanData = getLoanTransactions();
-    const owner_id = user.id;
-
-    let loansInserted = 0;
-    let itemsInserted = 0; // ⬅️ ستوونی نوێ بۆ ئایتمەکان
+    // ... لۆجیکی گواستنەوەی LocalStorage و ناردنی بۆ Supabase لێرە جێبەجێ دەبێت ...
+    // ... (هەمان کۆدی پێشووی گواستنەوە) ...
+    // ...
+    // alert(`✅ گواستنەوە سەرکەوتوو بوو. ${loansInserted} قەرز گوازرایەوە.`);
     
-    try {
-        // =======================================================
-        // A. گواستنەوەی داتای ئایتمەکان (INVENTORY)
-        // =======================================================
-        if (inventoryData && inventoryData.length > 0) {
-            
-            // ناردنی ئایتمەکان
-            for (const item of inventoryData) {
-                const { error } = await supabase
-                    .from('inventory_table') // ⬅️ 🚨 ناوی خشتەی ئایتمەکانت لە Supabase (وەک InventoryTable)
-                    .insert({
-                        owner_id: owner_id, 
-                        item_name: item.name, 
-                        quantity: item.quantity,
-                        sale_price: item.salePrice,
-                        purchase_price: item.purchasePrice, // ئەمە پێویستە لە خشتەکەدا بێت
-                        brand: item.brand,
-                        type: item.type,
-                        color: item.color,
-                        original_id: item.id // IDـی LocalStorage هەڵدەگرین بۆ دڵنیایی
-                    });
-
-                if (!error) {
-                    itemsInserted++;
-                }
-            }
-        }
-        
-        // =======================================================
-        // B. گواستنەوەی داتای قەرزەکان (LOANS)
-        // =======================================================
-        if (loanData && loanData.length > 0) {
-            for (const loan of loanData) {
-                const { error } = await supabase
-                    .from('loans') // ⬅️ ناوی خشتەی قەرزەکانت لە Supabase
-                    .insert({
-                        owner_id: owner_id, 
-                        customer_name: loan.customerName || loan.customer, 
-                        amount_due: loan.totalSale || loan.amountDue,
-                        date: loan.date,
-                        items_details: loan.items || loan.items_details, 
-                    });
-
-                if (!error) {
-                    loansInserted++;
-                }
-            }
-        }
-
-        alert(`✅ گواستنەوە سەرکەوتوو بوو. ${itemsInserted} ئایتم و ${loansInserted} قەرز گوازرایەوە.`);
-
-        // دوای سەرکەوتن، دەتوانیت داتای LocalStorage بسڕیتەوە بۆ دڵنیایی
-        // localStorage.clear();
-        
-    } catch (error) {
-        alert(`❌ هەڵە لە گواستنەوەدا: گواستنەوە سەرکەوتوو نەبوو. ${error.message}`);
-        console.error("Migration Failed:", error);
-    }
 }
+
+
+// Initial Load on Page AND Supabase Client Initialization
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. لۆجیکی باری سەرەتایی پڕۆژەی خۆت (Sales)
+    if (document.getElementById('salesItemsContainer')) {
+        populateSalesFilters(); 
+        populateCustomerDropdown(); 
+        displaySalesItems();
+        updateCartDisplay(); 
+    }
+    
+    // 2. ✅ دروستکردنی Supabase Client و چالاککردنی
+    // ئەمە هەڵەی 'Cannot access... before initialization' چارەسەر دەکات
+    if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // 3. چالاککردنی لۆگین دوای دروستکردنی Client
+        if (supabaseClient) {
+            checkUserStatus(); 
+        }
+    } else {
+        console.error("Fatal Error: Supabase library (CDN) is missing or not ready.");
+    }
+});
