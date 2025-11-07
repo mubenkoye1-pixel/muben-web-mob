@@ -437,10 +437,28 @@ async function handleLogin() {
 }
 
 // Function بۆ چوونە دەرەوە
-async function handleLogout() {
+// Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن (بۆ لۆگینی ئیمەیڵ)
+async function handleLogin() {
     if (!supabaseClient) return;
-    await supabaseClient.auth.signOut();
-    window.location.reload(); 
+
+    // داواکردنی ئیمەیڵی یوزەر بۆ ناردنی لینکی لۆگین
+    const email = prompt("تکایە ئیمەیڵی خۆت بنووسە بۆ لۆگین/تۆمارکردن:");
+    if (!email) return;
+
+    // بەکارهێنانی signInWithOtp (Magic Link)
+    const { data, error } = await supabaseClient.auth.signInWithOtp({
+        email: email,
+        options: {
+            emailRedirectTo: window.location.origin, // دوای کلیککردن لەسەر لینکەکە بگەڕێتەوە بۆ ماڵپەڕی ئێستا
+        },
+    });
+    
+    if (error) {
+        console.error("Login Error:", error.message);
+        alert(`هەڵە: ${error.message}`);
+    } else {
+        alert("✅ نامەیەکی لۆگین نێردرا بۆ ئیمەیڵەکەت. تکایە بۆ تەواوکردنی پرۆسەی لۆگین، کرتە لەسەر لینکەکە بکە.");
+    }
 }
 
 // Function بۆ پشکنینی باری لۆگین و نیشاندانی دوگمە
