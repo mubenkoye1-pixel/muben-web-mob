@@ -41,10 +41,10 @@ async function fetchDataFromSupabase(tableName) {
 async function getFromStorage(key) {
     // 🚨 ئێستا سەرەتا لە Supabase دەهێنێت
     if (key === 'inventory') {
-        return await fetchDataFromSupabase('Inventory Table'); // ⬅️ ناوی ڕاستەقینەی خشتەکەت بە سپەیس
+        return await fetchDataFromSupabase('Inventory'); // ⬅️ ناوی ڕاستەقینەی خشتەکەت بە سپەیس
     }
     if (key === 'loanTransactions') {
-        return await fetchDataFromSupabase('Loans Table'); // ⬅️ ناوی خشتەی قەرزەکانت بە سپەیس
+        return await fetchDataFromSupabase('Loans'); // ⬅️ ناوی خشتەی قەرزەکانت بە سپەیس
     }
     
     // بۆ customerData و brands و types (ئەگەر لە LocalStorage مابن)
