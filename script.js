@@ -353,8 +353,93 @@ async function checkUserStatus() {
 
 
 // Function بۆ گواستنەوەی داتای LocalStorage بۆ Supabase
+// لەناو فایلی script.js، فەنکشنی migrateLocalStorageData() بەمە بگۆڕە:
+
 async function migrateLocalStorageData() {
-    // ... لۆجیکی گواستنەوەی تەواو لێرەدایە ...
+    if (!supabaseClient) {
+        alert("سیستەمی گواستنەوە چالاک نییە. تکایە لۆگین بکە.");
+        return;
+    }
+    
+    // 1. پشکنینی یوزەر
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        alert("تکایە سەرەتا لۆگین بکە بۆ گواستنەوەی داتا.");
+        return;
+    }
+    
+    if (!confirm("⚠ دڵنیایت کە دەتەوێت داتای کۆنی LocalStorage بگوازیتەوە بۆ سێرڤەری Supabase؟ ئەم کارە تەنها یەک جار دەکرێت.")) {
+        return;
+    }
+
+    // 2. وەرگرتنی داتا (دەبێت await بەکار بهێنێت)
+    const inventoryData = await getFromStorage('inventory'); // 🚨 await
+    const loanData = await getLoanTransactions(); // 🚨 await
+    // 🚨 ناوی خشتەکان بە پیتی بچووک بۆ گونجاندن لەگەڵ ڕێکخستنی کۆتایی
+    const INVENTORY_TABLE_NAME = 'inventory'; 
+    const LOANS_TABLE_NAME = 'loans';
+    const owner_id = user.id; 
+
+    let loansInserted = 0;
+    let itemsInserted = 0; 
+    
+    try {
+        // =======================================================
+        // A. گواستنەوەی داتای ئایتمەکان (INVENTORY)
+        // =======================================================
+        if (inventoryData && inventoryData.length > 0) {
+            for (const item of inventoryData) {
+                const { error } = await supabaseClient
+                    .from(INVENTORY_TABLE_NAME) 
+                    .insert({
+                        owner_id: owner_id, 
+                        item_name: item.name, 
+                        quantity: item.quantity,
+                        sale_price: item.salePrice,
+                        purchase_price: item.purchasePrice, 
+                        brand: item.brand,
+                        type: item.type,
+                        color: item.color,
+                        original_id: item.id 
+                    });
+
+                if (!error) {
+                    itemsInserted++;
+                } else {
+                    throw new Error(`هەڵە لە تۆمارکردنی ئایتمەکان: ${error.message}`);
+                }
+            }
+        }
+        
+        // =======================================================
+        // B. گواستنەوەی داتای قەرزەکان (LOANS)
+        // =======================================================
+        if (loanData && loanData.length > 0) {
+            for (const loan of loanData) {
+                const { error } = await supabaseClient
+                    .from(LOANS_TABLE_NAME) 
+                    .insert({
+                        owner_id: owner_id, 
+                        customer_name: loan.customerName || loan.customer, 
+                        amount_due: loan.totalSale || loan.amountDue,
+                        date: loan.date,
+                        items_details: loan.items || loan.items_details, 
+                    });
+
+                if (!error) {
+                    loansInserted++;
+                } else {
+                    throw new Error(`هەڵە لە تۆمارکردنی قەرزەکان: ${error.message}`);
+                }
+            }
+        }
+
+        alert(`✅ گواستنەوە سەرکەوتوو بوو. ${itemsInserted} ئایتم و ${loansInserted} قەرز گوازرایەوە.`);
+        
+    } catch (error) {
+        alert(`❌ هەڵە لە گواستنەوەدا. تکایە سەیری کۆنسۆڵ بکە بۆ زانیاری وردتر.`);
+        console.error("Migration Failed:", error);
+    }
 }
 
 
