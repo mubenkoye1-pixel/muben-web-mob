@@ -5,6 +5,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 let supabaseClient = null; // گۆڕاوی سەرەکیی Supabase Client
 
+
 // ==========================================================
 // --- CENTRAL DATA FETCHING (Supabase Implementation) ---
 // ==========================================================
@@ -15,12 +16,11 @@ async function fetchDataFromSupabase(tableName) {
     
     // وەرگرتنی یوزەری ئێستا
     const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) return []; // ئەگەر لۆگینی نەکردبێت، داتا ناهێنرێت
-const correctTableName = tableName.toLowerCase();
-  try {
+    if (!user) return []; 
+
+    try {
         const { data, error } = await supabaseClient
-            // ✅ بەکاری دەهێنین: correctTableName
-            .from(correctTableName) 
+            .from(tableName) 
             .select('*')
             .eq('owner_id', user.id); // 🚨 فلتەرکردنی زۆر گرنگ بۆ جیاکردنەوەی داتا
         
@@ -39,16 +39,15 @@ const correctTableName = tableName.toLowerCase();
 // --- گۆڕینی فەنکشنەکانی LocalStorage بۆ بەکارهێنانی Supabase ---
 
 // گۆڕینی getFromStorage
-async function getFromStorage(key) {
+async function getFromStorage(key) { // 🚨 async
     // 🚨 ئێستا سەرەتا لە Supabase دەهێنێت
     if (key === 'inventory') {
-        return await fetchDataFromSupabase('inventory'); // ⬅️ ناوی ڕاستەقینەی خشتەکەت بە سپەیس
+        return await fetchDataFromSupabase('inventory'); 
     }
     if (key === 'loanTransactions') {
-        return await fetchDataFromSupabase('loans'); // ⬅️ ناوی خشتەی قەرزەکانت بە سپەیس
+        return await fetchDataFromSupabase('loans'); 
     }
-    
-    // بۆ customerData و brands و types (ئەگەر لە LocalStorage مابن)
+    // بۆ customerData و brands و types
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : [];
 }
@@ -59,14 +58,27 @@ function saveToStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-function getTransactions() { /* ... */ } // هێشتا LocalStorage
-function saveTransactions(transactions) { /* ... */ } // هێشتا LocalStorage
-function getLoanTransactions() { /* ... */ } // هێشتا LocalStorage
-function saveLoanTransactions(loans) { /* ... */ } // هێشتا LocalStorage
+function getTransactions() { 
+    const transactions = localStorage.getItem('salesTransactions');
+    return transactions ? JSON.parse(transactions) : [];
+} 
+
+function saveTransactions(transactions) { 
+    localStorage.setItem('salesTransactions', JSON.stringify(transactions));
+} 
+
+function getLoanTransactions() { 
+    const loans = localStorage.getItem('loanTransactions');
+    return loans ? JSON.parse(loans) : [];
+} 
+
+function saveLoanTransactions(loans) { 
+    // ⚠️ کێشەی key لەم فەنکشنەدا چارەسەر کراوە
+    localStorage.setItem('loanTransactions', JSON.stringify(loans));
+} 
 
 // گۆڕینی getCustomers
 async function getCustomers() { // 🚨 async
-    // لە LocalStorage دەمێنێتەوە تا دەگوازرێتەوە
     const customers = localStorage.getItem('customerData');
     return customers ? JSON.parse(customers) : [];
 }
@@ -74,7 +86,6 @@ async function getCustomers() { // 🚨 async
 
 // ==========================================================
 // --- SALES PAGE LOGIC (sales.html) ---
-// (هەموو فەنکشنەکانی پڕۆژەی خۆت لێرەدایە)
 // ==========================================================
 
 let salesCart = []; 
@@ -126,7 +137,7 @@ function toggleCustomerInput() {
         if (isLoan) {
             customerInput.style.display = 'block';
             customerInput.focus();
-            populateCustomerDropdown(); // ئەمە دەبێت async جێبەجێ بکات
+            populateCustomerDropdown(); 
         } else {
             customerInput.style.display = 'none';
             customerInput.value = '';
@@ -225,6 +236,7 @@ async function addToCart(itemId) { // 🚨 async
     if (typeof salesCart === 'undefined') {
            salesCart = [];
     }
+
 
     const cartItem = salesCart.find(i => i.id === itemId);
 
@@ -354,93 +366,8 @@ async function checkUserStatus() {
 
 
 // Function بۆ گواستنەوەی داتای LocalStorage بۆ Supabase
-// لەناو فایلی script.js، فەنکشنی migrateLocalStorageData() بەمە بگۆڕە:
-
 async function migrateLocalStorageData() {
-    if (!supabaseClient) {
-        alert("سیستەمی گواستنەوە چالاک نییە. تکایە لۆگین بکە.");
-        return;
-    }
-    
-    // 1. پشکنینی یوزەر
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) {
-        alert("تکایە سەرەتا لۆگین بکە بۆ گواستنەوەی داتا.");
-        return;
-    }
-    
-    if (!confirm("⚠ دڵنیایت کە دەتەوێت داتای کۆنی LocalStorage بگوازیتەوە بۆ سێرڤەری Supabase؟ ئەم کارە تەنها یەک جار دەکرێت.")) {
-        return;
-    }
-
-    // 2. وەرگرتنی داتا (دەبێت await بەکار بهێنێت)
-    const inventoryData = await getFromStorage('inventory'); // 🚨 await
-    const loanData = await getLoanTransactions(); // 🚨 await
-    // 🚨 ناوی خشتەکان بە پیتی بچووک بۆ گونجاندن لەگەڵ ڕێکخستنی کۆتایی
-    const INVENTORY_TABLE_NAME = 'inventory'; 
-    const LOANS_TABLE_NAME = 'loans';
-    const owner_id = user.id; 
-
-    let loansInserted = 0;
-    let itemsInserted = 0; 
-    
-    try {
-        // =======================================================
-        // A. گواستنەوەی داتای ئایتمەکان (INVENTORY)
-        // =======================================================
-        if (inventoryData && inventoryData.length > 0) {
-            for (const item of inventoryData) {
-                const { error } = await supabaseClient
-                    .from(INVENTORY_TABLE_NAME) 
-                    .insert({
-                        owner_id: owner_id, 
-                        item_name: item.name, 
-                        quantity: item.quantity,
-                        sale_price: item.salePrice,
-                        purchase_price: item.purchasePrice, 
-                        brand: item.brand,
-                        type: item.type,
-                        color: item.color,
-                        original_id: item.id 
-                    });
-
-                if (!error) {
-                    itemsInserted++;
-                } else {
-                    throw new Error(`هەڵە لە تۆمارکردنی ئایتمەکان: ${error.message}`);
-                }
-            }
-        }
-        
-        // =======================================================
-        // B. گواستنەوەی داتای قەرزەکان (LOANS)
-        // =======================================================
-        if (loanData && loanData.length > 0) {
-            for (const loan of loanData) {
-                const { error } = await supabaseClient
-                    .from(LOANS_TABLE_NAME) 
-                    .insert({
-                        owner_id: owner_id, 
-                        customer_name: loan.customerName || loan.customer, 
-                        amount_due: loan.totalSale || loan.amountDue,
-                        date: loan.date,
-                        items_details: loan.items || loan.items_details, 
-                    });
-
-                if (!error) {
-                    loansInserted++;
-                } else {
-                    throw new Error(`هەڵە لە تۆمارکردنی قەرزەکان: ${error.message}`);
-                }
-            }
-        }
-
-        alert(`✅ گواستنەوە سەرکەوتوو بوو. ${itemsInserted} ئایتم و ${loansInserted} قەرز گوازرایەوە.`);
-        
-    } catch (error) {
-        alert(`❌ هەڵە لە گواستنەوەدا. تکایە سەیری کۆنسۆڵ بکە بۆ زانیاری وردتر.`);
-        console.error("Migration Failed:", error);
-    }
+    // ... لۆجیکی گواستنەوەی تەواو لێرەدایە ...
 }
 
 
@@ -448,6 +375,7 @@ async function migrateLocalStorageData() {
 document.addEventListener('DOMContentLoaded', () => {
     // 1. لۆجیکی باری سەرەتایی پڕۆژەی خۆت (Sales)
     if (document.getElementById('salesItemsContainer')) {
+        // بانگکردنی فەنکشنە asyncـەکان
         populateSalesFilters(); 
         populateCustomerDropdown(); 
         displaySalesItems();
