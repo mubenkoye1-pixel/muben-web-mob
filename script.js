@@ -16,10 +16,11 @@ async function fetchDataFromSupabase(tableName) {
     // وەرگرتنی یوزەری ئێستا
     const { data: { user } } = await supabaseClient.auth.getUser();
     if (!user) return []; // ئەگەر لۆگینی نەکردبێت، داتا ناهێنرێت
-
-    try {
+const correctTableName = tableName.toLowerCase();
+  try {
         const { data, error } = await supabaseClient
-            .from(tableName) 
+            // ✅ بەکاری دەهێنین: correctTableName
+            .from(correctTableName) 
             .select('*')
             .eq('owner_id', user.id); // 🚨 فلتەرکردنی زۆر گرنگ بۆ جیاکردنەوەی داتا
         
@@ -41,10 +42,10 @@ async function fetchDataFromSupabase(tableName) {
 async function getFromStorage(key) {
     // 🚨 ئێستا سەرەتا لە Supabase دەهێنێت
     if (key === 'inventory') {
-        return await fetchDataFromSupabase('Inventory'); // ⬅️ ناوی ڕاستەقینەی خشتەکەت بە سپەیس
+        return await fetchDataFromSupabase('inventory'); // ⬅️ ناوی ڕاستەقینەی خشتەکەت بە سپەیس
     }
     if (key === 'loanTransactions') {
-        return await fetchDataFromSupabase('Loans'); // ⬅️ ناوی خشتەی قەرزەکانت بە سپەیس
+        return await fetchDataFromSupabase('loans'); // ⬅️ ناوی خشتەی قەرزەکانت بە سپەیس
     }
     
     // بۆ customerData و brands و types (ئەگەر لە LocalStorage مابن)
