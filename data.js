@@ -28,7 +28,7 @@ function getInventory() { return getFromStorage('inventory', []); }
 
 
 // ==========================================================
-// --- CORE FUNCTIONALITY (Must be at the top) ---
+// --- DATA PAGE LOGIC (data.html) ---
 // ==========================================================
 
 let currentTransactionBeingEdited = null; 
@@ -56,16 +56,6 @@ function showTab(tabId, clickedButton) {
          analyzeInventory(); // Load general data and KPIs
     } else if (tabId === 'motherboard-management') {
          displayBoardManagement(); // 👈 چالاککردنی لۆجیکی خەریتە
-    }
-}
-
-
-// Initial Load Dispatcher (Must be defined early)
-function loadDataPage() {
-    analyzeInventory(); 
-    const defaultTabButton = document.querySelector('.tab-btn');
-    if (defaultTabButton) {
-        showTab('all-transactions', defaultTabButton);
     }
 }
 
@@ -169,10 +159,6 @@ function displayTransactions(transactions) {
 
 // لە data.js زیاد بکە (لە خوار displayTransactions)
 
-// ==========================================================
-// --- LOAN DISPLAY AND ACTIONS (From Loan.js) ---
-// ==========================================================
-
 function displayLoanTransactionsWithSearch() {
     const loans = getLoanTransactions();
     const container = document.getElementById('loanListContainer');
@@ -229,6 +215,8 @@ function displayLoanTransactionsWithSearch() {
     });
 }
 
+
+
 // --- DELETE LOGIC (سڕینەوە) ---
 function deleteTransaction(transactionId) {
     if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم مامەڵەیە؟ ژمارەی ئایتمەکان دەگەڕێنرێنەوە بۆ ئینڤێنتۆری.')) {
@@ -246,7 +234,7 @@ function deleteTransaction(transactionId) {
         
         // 1. Restore items to inventory (Reverse the sale)
         transactionToDelete.items.forEach(soldItem => {
-            // ✅ FIX: دۆزینەوە بەپێی ID
+            // FIX: دۆزینەوە بەپێی ID
             const inventoryItemIndex = inventory.findIndex(item => item.id === soldItem.id); 
             
             if (inventoryItemIndex !== -1) {
