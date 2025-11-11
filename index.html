@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
 <head>
-
-
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,22 +13,16 @@
                 <a href="index.html" class="btn-head">سەرەکی</a>
                 <a href="data.html" class="btn-head">داتا</a>
                 <a href="item.html" class="btn-head">ئایتم</a>
-                <a href="loan.html" class="btn-head active">قەرز</a>
-                <a href="reports.html" class="btn-head active">راپۆرت</a>
-
-
-                <a href="expenses.html" class="btn-head active">خەرجی</a>
+                <a href="reports.html" class="btn-head">راپۆرت</a>
+                <a href="QARZ.HTML" class="btn-head">قەرز</a>
                 <a href="customer.html" class="btn-head">کریار</a>
-<div id="auth-ui">
-    <button id="login-button">چوونە ژوورەوە / تۆمارکردن</button>
-    <button onclick="migrateLocalStorageData()">گواستنەوەی داتای کۆن</button>
-</div>
-<p id="user-id-display">تکایە لۆگین بکە بۆ بینینی IDـی تایبەت بە خۆت.</p>
+
             </nav>
             <a href="index.html" class="logo-title">
                 <span style="font-size: 30px;">💰</span> سیستەم - فرۆشتن
             </a>
         </div>
+
         <div class="main-div sales-layout">
             
             <div class="left-div cart-div">
@@ -70,6 +62,7 @@
                         <option value="all">هەموو براندەکان</option>
                     </select>
                 </div>
+                
                 <div id="salesItemsContainer" class="items-grid">
                 </div>
             </div>
@@ -77,21 +70,11 @@
         </div>
     </div>
     <datalist id="customerDatalist"></datalist>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script src="customer.js"></script>
-    <script src="LOAN.JS"></script>
-    <script src="data.js"></script>
-    <script src="item.js"></script> 
-
+    
+        <script src="customer.js"></script>
     <script src="script.js"></script>
-    
+    <script src="LOAN.JS"></script>
+      <script src="data.js"></script>
+    <script src="item.js"></script> 
 </body>
-</html>
-    </body>
-</html>
-    
-
-    
 </html>

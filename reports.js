@@ -1,188 +1,197 @@
-// reports.js - FINANCIAL REPORTING LOGIC (Synchronous Local Storage)
+// reports.js - FINAL FIREBASE FIRESTORE VERSION (ASYNC & COMPLETE)
 
-// NOTE: We assume getTransactions, getExpenses, and getInventory are defined globally (e.g., in item.js or data.js).
+// ⚠️ تێبینی: ئەم فایلە پشت دەبەستێت بە فەنکشنە گشتییەکان کە لە 'script.js'ـدا گۆڕدراون بۆ async.
 
-// --- Storage Access Helpers (Defined here for independence) ---
-function getFromStorage(key, defaultValue = []) {
-    const data = localStorage.getItem(key);
-    try {
-        const parsed = JSON.parse(data);
-        return parsed || defaultValue;
-    } catch (e) {
-        return defaultValue;
+// --- Shared Storage Access ---
+async function getTransactions() { return await getFromStorage('salesTransactions', []); } 
+async function getExpenses() { return await getFromStorage('expensesData', []); } 
+async function getInventory() { return await getFromStorage('inventory', []); } 
+async function getLoanTransactions() { return await getFromStorage('loanTransactions', []); } 
+
+
+// Function to calculate start/end timestamps based on the preset filter
+function calculateDateRange(preset) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0); 
+    let startDate, endDate;
+
+    switch (preset) {
+        case 'today':
+            startDate = now;
+            endDate = new Date(now.getTime() + 24 * 60 * 60 * 1000); 
+            break;
+        case 'last7':
+            startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            endDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            break;
+        case 'last30':
+            startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+            endDate = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            break;
+        case 'currentMonth':
+            startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+            endDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+            break;
+        case 'all':
+        default:
+            return { startTime: null, endTime: null };
     }
-}
-function getTransactions() { return getFromStorage('salesTransactions', []); }
-function getExpenses() { return getFromStorage('expensesData', []); }
-function getInventory() { return getFromStorage('inventory', []); } 
 
-
-// Function to calculate all financial metrics and group profits
-function calculateAllMetrics() {
-    const transactions = getTransactions();
-    const expenses = getExpenses();
-    const inventory = getInventory(); 
-
-    let totalGrossRevenue = 0;
-    let totalCostOfSales = 0;
-    let totalDiscount = 0;
-    let totalExpense = 0;
-    let totalCurrentInventoryValue = 0;
-    
-    let groupedProfit = {}; 
-
-    // 1. Process Transactions
-    transactions.forEach(t => {
-        totalGrossRevenue += t.subTotalSale || 0;
-        totalDiscount += t.discount || 0;
-        
-        (t.items || []).forEach(item => {
-            const cost = item.purchasePrice || 0;
-            const revenue = item.salePrice || 0;
-            const quantity = item.quantity || 0;
-            
-            totalCostOfSales += (cost * quantity); 
-            const itemProfit = (revenue - cost) * quantity;
-
-            const typeName = item.type || 'Undefined Type';
-            const brandName = item.brand || 'Undefined Brand';
-
-            if (!groupedProfit[typeName]) groupedProfit[typeName] = {};
-            if (!groupedProfit[typeName][brandName]) {
-                groupedProfit[typeName][brandName] = { profit: 0, itemsSold: 0 };
-            }
-            
-            groupedProfit[typeName][brandName].profit += itemProfit;
-            groupedProfit[typeName][brandName].itemsSold += quantity;
-        });
-    });
-
-    // 2. Process Expenses
-    expenses.forEach(e => {
-        totalExpense += e.amount || 0;
-    });
-
-    // 3. Inventory Valuation 
-    inventory.forEach(item => {
-         totalCurrentInventoryValue += (item.purchasePrice || 0) * (item.quantity || 0);
-    });
-
-
-    // 4. Final Calculations
-    const finalRevenue = totalGrossRevenue - totalDiscount; // Net Sales
-    const grossProfit = finalRevenue - totalCostOfSales;    // Gross Profit (before expenses)
-    const netProfit = grossProfit - totalExpense;           // Net Profit (the bottom line)
-
-    return {
-        totalRevenue: finalRevenue,
-        totalGrossProfit: grossProfit,
-        totalExpense: totalExpense,
-        netProfit: netProfit,
-        inventoryValue: totalCurrentInventoryValue,
-        groupedProfit: groupedProfit
+    return { 
+        startTime: startDate.getTime(), 
+        endTime: endDate.getTime() 
     };
 }
 
-// Function to display metrics in the HTML
-function displayReportMetrics() {
-    const metrics = calculateAllMetrics();
 
-    // 1. Display KPIs 
-    document.getElementById('report-revenue').textContent = metrics.totalRevenue.toLocaleString() + ' IQD';
-    document.getElementById('report-expense').textContent = metrics.totalExpense.toLocaleString() + ' IQD';
-    
-    const profitElement = document.getElementById('report-profit');
-    if (profitElement) {
-        profitElement.textContent = metrics.netProfit.toLocaleString() + ' IQD';
-        profitElement.style.color = metrics.netProfit >= 0 ? '#28a745' : '#dc3545';
+// Function to convert date input to timestamp for filtering
+function getTimestamp(dateString) {
+    if (!dateString) return null;
+    return new Date(dateString).getTime(); 
+}
+
+// Main function to load and calculate all report data
+async function loadReportData() { // 🚨 async
+    // 1. Get Filters from Dropdown
+    const presetSelect = document.getElementById('datePreset');
+    const customDatesDiv = document.getElementById('customDates');
+    const selectedPreset = presetSelect ? presetSelect.value : 'all';
+
+    let startTime, endTime;
+
+    if (selectedPreset === 'custom') {
+        customDatesDiv.style.display = 'flex';
+        startTime = getTimestamp(document.getElementById('startDate').value);
+        endTime = getTimestamp(document.getElementById('endDate').value);
+    } else {
+        customDatesDiv.style.display = 'none';
+        const range = calculateDateRange(selectedPreset);
+        startTime = range.startTime;
+        endTime = range.endTime;
     }
     
-    // 2. Display Detailed Profit Table
-    displayProfitAnalysis(metrics.groupedProfit);
-    
-    // 3. Display Inventory Summary
-    displayInventoryValuation(metrics.inventoryValue);
-}
-
-// NEW FUNCTION: Inventory Valuation Summary
-function displayInventoryValuation(totalValue) {
-    const container = document.getElementById('inventorySummaryContainer');
-    if (!container) return;
-    
-    container.innerHTML = `
-        <table class="report-analysis-table">
-            <thead>
-                <tr>
-                    <th>کۆی بەهای کڕینی عەمبار</th>
-                    <th>وردەکاری</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="profit-positive">${totalValue.toLocaleString()} IQD</td>
-                    <td>ئەمە کۆی نرخی کڕینی ئەو ئایتمانەیە کە ئێستا لە ستۆکدان.</td>
-                </tr>
-            </tbody>
-        </table>
-    `;
-}
-
-// Function to display detailed profit table by Type and Brand
-function displayProfitAnalysis(groupedProfit) {
-    const container = document.getElementById('profitAnalysisContainer');
-    if (!container) return;
-
-    const types = Object.keys(groupedProfit);
-    if (types.length === 0) {
-        container.innerHTML = '<p>هیچ داتایەکی فرۆشتن نییە بۆ شیکارکردن.</p>';
+    // Validate dates
+    if ((startTime && endTime && startTime >= endTime)) {
+        alert("⚠️ بەرواری سەرەتا ناتوانێت لە بەرواری کۆتایی درەنگتر بێت.");
         return;
     }
 
-    let tableHTML = `
-        <table class="report-analysis-table">
-            <thead>
-                <tr class="table-header">
-                    <th style="width: 20%;">جۆر (Type)</th>
-                    <th style="width: 20%;">براند (Brand)</th>
-                    <th style="width: 30%;">کۆی قازانج (IQD)</th>
-                    <th style="width: 30%;">یەکەی فرۆشراو</th>
-                </tr>
-            </thead>
-            <tbody>
-    `;
-
-    types.forEach(type => {
-        const brands = Object.keys(groupedProfit[type]);
-        let firstRow = true;
-
-        brands.forEach(brand => {
-            const data = groupedProfit[type][brand]; 
-            const profitClass = data.profit >= 0 ? 'profit-positive' : 'profit-negative';
-            const rowSpan = brands.length;
-
-            tableHTML += `
-                <tr>
-                    ${firstRow ? `<td rowspan="${rowSpan}" class="type-group-cell">${type}</td>` : ''}
-                    <td>${brand}</td>
-                    <td class="${profitClass}">${data.profit.toLocaleString()}</td>
-                    <td>${data.itemsSold.toLocaleString()}</td>
-                </tr>
-            `;
-            firstRow = false;
-        });
+    // 2. Fetch Data (Optimized Parallel Fetching)
+    const [transactions, expenses] = await Promise.all([
+        getTransactions(),
+        getExpenses()
+    ]);
+    
+    // 3. Filter Transactions and Expenses by Date Range
+    const filteredTransactions = transactions.filter(t => {
+        const transactionTimestamp = t.id; 
+        const isAfterStart = !startTime || transactionTimestamp >= startTime;
+        const isBeforeEnd = !endTime || transactionTimestamp <= endTime; 
+        return isAfterStart && isBeforeEnd;
     });
 
-    tableHTML += `
-            </tbody>
-        </table>
-    `;
+    const filteredExpenses = expenses.filter(e => {
+        const expenseTimestamp = new Date(e.date).getTime(); 
+        const isAfterStart = !startTime || expenseTimestamp >= startTime;
+        const isBeforeEnd = !endTime || expenseTimestamp <= endTime;
+        return isAfterStart && isBeforeEnd;
+    });
+    
+    
+    // 4. Calculate KPIs 
+    let totalRevenue = 0;
+    let totalProfit = 0;
+    let totalExpensesAmount = 0;
+    let totalItemsSold = 0;
+    
+    filteredTransactions.forEach(t => {
+        totalRevenue += t.totalSale || 0;
+        totalProfit += t.totalProfit || 0;
+        totalItemsSold += t.totalItemsCount || 0;
+    });
+    
+    filteredExpenses.forEach(e => {
+        totalExpensesAmount += e.amount || 0;
+    });
+
+    const netProfit = totalProfit - totalExpensesAmount;
+    const totalTransactionsCount = filteredTransactions.length;
+    const avgProfitPerTransaction = totalTransactionsCount > 0 ? (netProfit / totalTransactionsCount) : 0;
+    
+    
+    // 5. Update the UI
+    document.getElementById('report-revenue').textContent = totalRevenue.toLocaleString() + ' IQD';
+    document.getElementById('report-net-profit').textContent = netProfit.toLocaleString() + ' IQD';
+    
+    const profitElement = document.getElementById('report-net-profit');
+    if (profitElement) {
+        profitElement.style.color = netProfit >= 0 ? '#28a745' : '#dc3545';
+    }
+
+    document.getElementById('report-expenses').textContent = totalExpensesAmount.toLocaleString() + ' IQD';
+    document.getElementById('report-avg-profit').textContent = Math.round(avgProfitPerTransaction).toLocaleString() + ' IQD';
+    
+    // 6. Display detailed table
+    displayDetailedTransactionReport(filteredTransactions);
+}
+
+
+// Function to display the detailed table
+function displayDetailedTransactionReport(transactions) {
+    const container = document.getElementById('detailedReportTableContainer');
+    if (!container) return;
+    
+    if (transactions.length === 0) {
+        container.innerHTML = '<p class="no-data-msg">هیچ مامەڵەیەک لەم مەودایەدا نەدۆزرایەوە.</p>';
+        return;
+    }
+    
+    let tableHTML = `<h3 style="margin-bottom: 15px;">${transactions.length} مامەڵە دۆزرایەوە</h3>
+                     <table class="report-table">
+                         <thead>
+                             <tr>
+                                 <th>بەروار</th>
+                                 <th>کۆی فرۆش</th>
+                                 <th>قازانجی خاوێن</th>
+                                 <th>ژمارەی ئایتم</th>
+                                 <th>وردەکاری</th>
+                             </tr>
+                         </thead>
+                         <tbody>`;
+    
+    transactions.forEach(t => {
+        tableHTML += `<tr>
+                          <td>${t.date}</td>
+                          <td>${(t.totalSale || 0).toLocaleString()} IQD</td>
+                          <td style="color: ${t.totalProfit >= 0 ? '#28a745' : '#dc3545'}">${(t.totalProfit || 0).toLocaleString()} IQD</td>
+                          <td>${t.totalItemsCount || 0}</td>
+                          <td><span style="font-size: 0.9em; color: #6c757d;">${t.items.map(i => `${i.name} (x${i.quantity})`).join(', ')}</span></td>
+                      </tr>`;
+    });
+    
+    tableHTML += `</tbody></table>`;
     container.innerHTML = tableHTML;
 }
 
 
-// Initial Load for Reports Page
+// Initial Load Dispatcher (بۆ ئەوەی loadReportData بانگ بکات)
 document.addEventListener('DOMContentLoaded', () => {
+    // ⚠️ گرنگ: ئەمە بۆ نیشاندانی inputـی بەرواری تایبەت
+    const presetSelect = document.getElementById('datePreset');
+    if (presetSelect) {
+        presetSelect.addEventListener('change', (event) => {
+            if (event.target.value === 'custom') {
+                document.getElementById('customDates').style.display = 'flex';
+            } else {
+                document.getElementById('customDates').style.display = 'none';
+            }
+            // 🚨 بانگکردنی داتا دوای گۆڕینی فلتەر
+            loadReportData(); 
+        });
+    }
+
     if (document.getElementById('report-revenue')) {
-        displayReportMetrics();
+        // Load data on page load (default is 'all')
+        loadReportData(); 
     }
 });

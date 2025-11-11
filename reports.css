@@ -1,149 +1,115 @@
-/* --- REPORTS PAGE STYLES --- */
+/* --- REPORTS PAGE STYLES (reports.css) --- */
+:root {
+    --primary-blue: #007bff;
+    --profit-green: #28a745;
+    --expense-red: #dc3545;
+    --secondary-gray: #6c757d;
+}
 
 .reports-layout {
-    display: block;
-    padding: 40px 20px; /* Padding on the sides */
-    width: 100%; /* Take full width */
-    max-width: none; /* Remove max-width constraint */
-    margin: 0 auto;
-    background-color: #fcfcfc;
-}
-
-.reports-layout h1 {
-    font-size: 2.2em;
-    color: #004d99; 
-    border-bottom: 4px solid #007bff;
-    padding-bottom: 15px;
-    margin-bottom: 40px;
-    font-weight: 800;
-}
-
-/* --- Section 1: KPI Cards (Top Line Metrics) --- */
-
-.kpi-reports-container {
     display: flex;
-    flex-wrap: wrap;
-    gap: 30px; 
-    margin-bottom: 50px;
-    justify-content: space-between;
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+    background-color: #f8f9fa; 
+    min-height: calc(100vh - 60px);
 }
 
-.kpi-card {
-    flex: 1;
-    min-width: 250px;
-    padding: 25px;
-    border-radius: 10px;
+/* --- Filter Panel --- */
+.reports-filter-panel {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s;
-    border-left: 5px solid; 
 }
 
-.kpi-value {
-    font-size: 3.2em; 
-    font-weight: 900;
+.filter-header {
+    font-size: 1.3em;
+    color: var(--primary-blue);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-/* Specific KPI Colors */
-.report-total-revenue { border-color: #007bff; }
-.report-net-profit { border-color: #28a745; } 
-.report-total-expense { border-color: #dc3545; } 
-
-
-/* --- Section 2 & 3: Detailed Tables --- */
-
-.report-section {
-    margin-bottom: 40px;
+.date-inputs-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
-.report-section h2 {
-    font-size: 1.8em;
-    color: #34495e;
-    margin-top: 40px;
-    margin-bottom: 20px;
+.date-inputs-group label {
+    font-weight: 600;
+    color: var(--secondary-gray);
 }
 
-/* Profit Analysis Table (Full Width) */
-.report-analysis-table {
-    width: 100%; /* Ensure table takes full container width */
-    border-collapse: collapse;
-    font-size: 0.95em;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+.date-inputs-group input[type="date"] {
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 1em;
 }
 
-.report-analysis-table th {
-    background-color: #343a40; /* Dark header */
-    color: white;
-    padding: 12px 15px;
+/* --- KPI Reports Summary --- */
+.kpi-reports-summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
 }
 
-.report-analysis-table td {
-    padding: 12px 15px;
-    border: 1px solid #eee;
+.kpi-box {
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    flex: 1;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-left: 5px solid; /* For color indicator */
     text-align: right;
 }
 
-/* Grouping Cell */
-.type-group-cell {
-    background-color: #f0f7ff !important; 
-    color: #004d99;
-    font-weight: 700 !important;
-    border-right: 4px solid #007bff;
+.kpi-box h4 {
+    font-size: 0.9em;
+    color: var(--secondary-gray);
+    margin-bottom: 10px;
 }
 
-/* --- Inventory Valuation Summary Section --- */
-
-.inventory-summary-section {
-    margin-top: 40px;
-    padding-top: 10px;
-    border-top: 1px dashed #ccc;
+.report-value {
+    font-size: 2em;
+    font-weight: 900;
 }
 
-.inventory-summary-section h2 {
-    font-size: 1.6em;
-    color: #343a40;
+/* Color Coding */
+.total-revenue { border-color: var(--primary-blue); }
+.total-revenue .primary-color { color: var(--primary-blue); }
+
+.net-profit { border-color: var(--profit-green); }
+.net-profit .profit-color { color: var(--profit-green); }
+
+.total-expenses { border-color: var(--expense-red); }
+.total-expenses .expense-color { color: var(--expense-red); }
+
+.avg-profit { border-color: var(--secondary-gray); }
+.avg-profit .secondary-color { color: var(--secondary-gray); }
+
+
+/* --- Detailed Reports Area --- */
+.detailed-reports-area {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.report-header {
+    font-size: 1.5em;
+    color: var(--dark-text);
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
-/* Specific Table Design for Valuation */
-.inventory-valuation-table {
-    width: 100%;
-    max-width: 550px; /* Keep it compact */
-    border-collapse: separate;
-    border-spacing: 0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    border-radius: 8px;
-    overflow: hidden; /* Ensures borders are contained */
-}
-
-.inventory-valuation-table th {
-    background-color: #f8f8f8; /* Light gray header */
-    color: #343a40;
-    padding: 12px 15px;
-    font-weight: 700;
-    text-align: right;
-    border-bottom: 2px solid #e0e0e0;
-}
-
-.inventory-valuation-table td {
-    padding: 15px 15px;
-    border-right: 1px solid #f1f1f1;
-    background-color: #ffffff;
-}
-
-/* Row for Total Value */
-.inventory-valuation-table tr.total-row td {
-    font-size: 1.2em;
-    font-weight: 800;
-}
-
-/* Style for the Total Value Amount */
-.inventory-valuation-table .value-amount {
-    color: #007bff; /* Blue color for Total Value */
-    font-size: 1.4em;
-    font-weight: 900;
-    background-color: #e3f2fd; /* Light blue background for emphasis */
-}
-
-.profit-positive{
-    color: green;
+.no-data-msg {
+    text-align: center;
+    color: var(--secondary-gray);
+    padding: 30px;
 }

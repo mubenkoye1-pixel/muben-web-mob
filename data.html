@@ -16,11 +16,11 @@
         <div class="head-div">
             <nav class="nav-links">
                 <a href="index.html" class="btn-head">سەرەکی</a>
-                <a href="data.html" class="btn-head active">داتا</a>
+                <a href="data.html" class="btn-head">داتا</a>
                 <a href="item.html" class="btn-head">ئایتم</a>
-                <a href="sales.html" class="btn-head">فرۆشتن</a>
-                <a href="" class="btn-head">قەرز</a>
-                <a href="" class="btn-head">کریار</a>
+                <a href="reports.html" class="btn-head">راپۆرت</a>
+                <a href="QARZ.HTML" class="btn-head">قەرز</a>
+                <a href="customer.html" class="btn-head">کریار</a>
             </nav>
             <a href="index.html" class="logo-title">
                 <span style="font-size: 30px;">📈</span> سیستەم - داتا
@@ -44,34 +44,57 @@
         </div>
         
         <div class="main-div data-layout">
-    
-    <div id="transactionsListContainer" class="list-group">
-        <h1>لیستی هەموو مامەڵە تەواوکراوەکان</h1>
-        <p class="no-data">هیچ فرۆشتنێک تۆمار نەکراوە.</p>
-    </div>
-    
-    </div>
+            
+            <div class="tab-controls">
+                <button class="tab-btn active" onclick="showTab('all-transactions', this)">لیستی هەموو مامەڵەکان</button>
+                <button class="tab-btn" onclick="showTab('loan-transactions', this)">وەسڵەکانی قەرز</button>
+            </div>
+
+            <div id="all-transactions" class="tab-content active">
+                <h1>لیستی هەموو مامەڵە تەواوکراوەکان</h1>
+                <div id="transactionsListContainer" class="list-group">
+                    <p class="no-data">هیچ فرۆشتنێک تۆمار نەکراوە.</p>
+                </div>
+            </div>
+            
+            <div id="loan-transactions" class="tab-content" style="display:none;">
+                <h1>وەسڵەکانی قەرزی نەگەڕاوە</h1>
+                <div class="search-loan-area">
+                    <input type="text" 
+                           id="loanSearchInput" 
+                           placeholder="گەڕان بە ناوی قەرزار..." 
+                           oninput="displayLoanTransactionsWithSearch()" 
+                           class="search-input">
+                </div>
+                <div id="loanListContainer" class="list-group">
+                    <p class="no-data">هیچ قەرزێک تۆمار نەکراوە.</p>
+                </div>
+            </div>
+            
+        </div>
     </div>
 
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h2>دەستکاریکردنی مامەڵە (Transaction)</h2>
-        
-        <div class="alert-message" id="modalAlert"></div> 
-        
-        <form id="modalForm" onsubmit="saveEditedTransaction(event)">
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2>دەستکاریکردنی مامەڵە (Transaction)</h2>
+            <div class="alert-message" id="modalAlert"></div>
             
-            <input type="hidden" id="edit-transaction-id"> 
-            
-            <p><strong>بەروار:</strong> <span id="edit-date"></span></p> 
-            
-            <div id="edit-items-container">
+            <form id="modalForm" onsubmit="saveEditedTransaction(event)">
+                <input type="hidden" id="edit-transaction-id" name="transaction_id"> 
+                <p><strong>بەروار:</strong> <span id="edit-date"></span></p> 
+                <p>تێبینی: گۆڕینی عدد، کۆی فرۆش و قازانج نوێ دەکاتەوە.</p>
+
+                <div id="edit-items-container">
                 </div>
-            
+                
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">💾 نوێکردنەوە</button>
+                    <button type="button" onclick="closeModal()" class="cancel-btn">هەڵوەشاندنەوە</button>
+                </div>
             </form>
+        </div>
     </div>
-</div>
     
     <script src="customer.js"></script>
     <script src="script.js"></script>

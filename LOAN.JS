@@ -1,14 +1,15 @@
-// loan.js - LOAN MANAGEMENT LOGIC (FINAL STABLE LOCAL STORAGE)
+// loan.js - FINAL STABLE LOCAL STORAGE VERSION (NO ASYNC/AWAIT)
 
-// NOTE: We assume getLoanTransactions, editTransaction, and deleteTransaction are defined globally.
+// ⚠️ تێبینی: ئەم فایلە پشت دەبەستێت بە فەنکشنەکانی getLoanTransactions و saveLoanTransactions 
+// کە دەبێت لە script.jsـدا بوونیان هەبێت.
 
 // Function to group loans by customer
 function getLoansGroupedByCustomer() {
-    // We assume getLoanTransactions is a synchronous function that returns a safe array
     const loans = getLoanTransactions() || []; 
     const groupedLoans = {};
     
     loans.forEach(loan => {
+        const amount = loan.amountDue || 0;
         const customer = (loan.customer || 'Unnamed Customer').trim();
         if (!groupedLoans[customer]) {
             groupedLoans[customer] = {
@@ -16,7 +17,9 @@ function getLoansGroupedByCustomer() {
                 transactions: []
             };
         }
-        groupedLoans[customer].totalDue += loan.amountDue || 0;
+        // دڵنیابوونەوە لەوەی amountDue ژمارەیە
+        const numericAmount = parseFloat(amount) || 0; 
+        groupedLoans[customer].totalDue += numericAmount;
         groupedLoans[customer].transactions.push(loan);
     });
     
@@ -24,22 +27,24 @@ function getLoansGroupedByCustomer() {
 }
 
 // ACTION: Close/Pay Loan (واسڵکردن)
-function closeLoan(transactionId) {
+function closeLoan(transactionId) { 
     if (!confirm('دڵنیایت کە ئەم قەرزە بە تەواوی واسڵ کراوە و دەبێت بسڕدرێتەوە لە لیستی قەرزەکان؟')) {
         return;
     }
 
-    let loans = getLoanTransactions();
+    let loans = getLoanTransactions(); 
     loans = loans.filter(loan => loan.transactionId !== transactionId);
-    saveLoanTransactions(loans); // Assuming saveLoanTransactions is available
+    saveLoanTransactions(loans); 
     
-    loadLoanManagementPage(); 
+    // ✅ چاکسازیی یەکلاکەرەوە: ڕاستەوخۆ دەیگوازینەوە بۆ لیستی سەرەکی
+    window.location.href = 'loan.html'; 
+    
     alert('قەرزەکە بە سەرکەوتوویی واسڵ کرا و لابرا.');
 }
 
 
 // ACTION: Edit Loan (Calls data.js function)
-function editLoan(transactionId) {
+function editLoan(transactionId) { 
     if (typeof editTransaction === 'function') {
         editTransaction(transactionId);
     } else {
@@ -56,10 +61,10 @@ function displayCustomerLoanOverview() {
 
     if (!container) return;
     
-    const groupedLoans = getLoansGroupedByCustomer();
+    const groupedLoans = getLoansGroupedByCustomer(); 
     let customers = Object.keys(groupedLoans).sort();
 
-    // Filtering logic (Applies to search bar)
+    // Filtering logic 
     customers = customers.filter(name => name.toLowerCase().includes(searchTerm));
 
     if (customers.length === 0) {
@@ -109,29 +114,33 @@ function displayCustomerLoanDetails(customerName) {
     const customerData = groupedLoans[customerName];
     
     if (!customerData) {
-        // Fallback to overview if loan is cleared
-        window.location.href = loan.html; 
+        // ✅ چاکسازیی یەکلاکەرەوە: ڕاستەوخۆ دەیگوازینەوە بۆ loan.html (لیستی سەرەکی)
+        window.location.href = 'loan.html'; 
         return;
     }
 
     const totalDue = (customerData.totalDue || 0).toLocaleString();
     
-    let htmlContent = `<button class="detail-back-btn" onclick="loadLoanManagementPage()">گەڕانەوە بۆ لیست</button>`;
+let htmlContent = `<button class="detail-back-btn" onclick="window.location.href='loan.html'">
+                        گەڕانەوە بۆ لیست
+                    </button>`;
+// ...
     
     htmlContent += `<h2 class="loan-list-header">وردەکاری قەرزی کریار: ${customerName}</h2>`;
     
-    // Total Summary Box
+    // 2. Total Summary Box (کۆی قەرز)
     htmlContent += `<div class="customer-total-box">
                         <strong>کۆی گشتی قەرزی نەگەڕاوە: </strong>
                         <span style="font-size: 1.5em; color: #dc3545;">${totalDue} IQD</span>
                     </div>`;
 
-    // List of Invoices/Transactions
+    // 3. List of Invoices/Transactions (لیستی وەسڵەکان)
+    htmlContent += `<div class="loan-invoices-wrapper">`;
     customerData.transactions.forEach(loan => {
         let itemsListHTML = '';
         (loan.items || []).forEach(item => {
              itemsListHTML += `
-                <li>
+                <li class="invoice-item-detail">
                     <span class="item-name-details">${item.name} (${item.brand} / ${item.type})</span>
                     <span class="item-qty">x${item.quantity || 0}</span>
                     <span class="item-price">${(item.salePrice || 0).toLocaleString()} IQD</span>
@@ -141,12 +150,11 @@ function displayCustomerLoanDetails(customerName) {
 
         htmlContent += `
             <div class="loan-invoice-card">
-                <div class="transaction-header" style="background-color: #f8f8f8;">
+                <div class="transaction-header">
                     <span style="font-weight: bold;">وەسڵی ژمارە: ${loan.transactionId}</span>
                     <span class="transaction-date">بەروار: ${loan.date}</span>
                     <span class="total-sale">کۆی فرۆش: ${loan.amountDue.toLocaleString()} IQD</span>
                     <div class="actions">
-                        <button class="action-btn edit-trans-btn" onclick="editLoan(${loan.transactionId})">دەستکاری</button>
                         <button class="pay-loan-btn" onclick="closeLoan(${loan.transactionId})">وا سڵکردن</button>
                     </div>
                 </div>
@@ -156,6 +164,7 @@ function displayCustomerLoanDetails(customerName) {
             </div>
         `;
     });
+    htmlContent += `</div>`;
 
     container.innerHTML = htmlContent;
 }
@@ -190,3 +199,5 @@ document.addEventListener('DOMContentLoaded', () => {
         loadLoanManagementPage();
     }
 });
+
+

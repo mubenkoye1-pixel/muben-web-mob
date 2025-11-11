@@ -1,69 +1,92 @@
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
 <head>
-    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="reports.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ڕاپۆرتی گشتی و شیکار</title> 
+    <title>ڕاپۆرتە داراییەکان و شیکاری</title>
 </head>
 <body>
     <div class="all-div">
         
         <div class="head-div">
             <nav class="nav-links">
-                <a href="index.html" class="btn-head">سەرەکی</a>
+               <a href="index.html" class="btn-head">سەرەکی</a>
                 <a href="data.html" class="btn-head">داتا</a>
                 <a href="item.html" class="btn-head">ئایتم</a>
-                <a href="sales.html" class="btn-head">فرۆشتن</a>
-                <a href="loan.html" class="btn-head">قەرز</a>
-                <a href="expenses.html" class="btn-head">خەرجی</a>
+                <a href="reports.html" class="btn-head">راپۆرت</a>
+                <a href="QARZ.HTML" class="btn-head">قەرز</a>
                 <a href="customer.html" class="btn-head">کریار</a>
-                <a href="reports.html" class="btn-head active">ڕاپۆرت</a>
             </nav>
             <a href="index.html" class="logo-title">
-                <span style="font-size: 30px;">📊</span> سیستەم - ڕاپۆرت
+                <span style="font-size: 30px;">📈</span> شیکاریی دارایی
             </a>
+            <div id="auth-controls" class="auth-control-container">
+                </div>
         </div>
 
         <div class="main-div reports-layout">
             
-            <h1>شیکاری دارایی و قازانجی پڕۆژە</h1>
+            <div class="reports-filter-panel">
+    <h3 class="filter-header"><i class="fas fa-chart-line"></i> ماوەی شیکاری</h3>
+    <div class="date-inputs-group">
+        
+        <label for="datePreset">فلتەر بەپێی ماوەی کاتی:</label>
+        <select id="datePreset" onchange="loadReportData()">
+            <option value="today">ئەمڕۆ</option>
+            <option value="last7">٧ ڕۆژی ڕابردوو</option>
+            <option value="last30">٣٠ ڕۆژی ڕابردوو</option>
+            <option value="currentMonth">ئەم مانگە</option>
+            <option value="all" selected>هەموو کات</option>
+            <option value="custom">بەرواری تایبەت</option> 
+        </select>
 
-            <div class="kpi-reports-container">
-                <div class="kpi-card report-total-revenue">
-                    <h3>داهاتی خاوێن (Net Sales)</h3>
-                    <p class="kpi-value" id="report-revenue">0 IQD</p>
+        <div id="customDates" style="display: none; gap: 10px; margin-right: 15px;">
+            <label for="startDate">لەم بەروارەوە:</label>
+            <input type="date" id="startDate" onchange="loadReportData()">
+            
+            <label for="endDate">بۆ ئەم بەروارە:</label>
+            <input type="date" id="endDate" onchange="loadReportData()">
+        </div>
+    </div>
+</div>
+
+            <div class="kpi-reports-summary">
+                <div class="kpi-box total-revenue">
+                    <h4>کۆی فرۆش (IQD)</h4>
+                    <p id="report-revenue" class="report-value primary-color">0</p>
                 </div>
-                <div class="kpi-card report-total-expense">
-                    <h3>کۆی گشتی خەرجییەکان</h3>
-                    <p class="kpi-value" id="report-expense">0 IQD</p>
+                <div class="kpi-box net-profit">
+                    <h4>قازانجی خاوێن (IQD)</h4>
+                    <p id="report-net-profit" class="report-value profit-color">0</p>
                 </div>
-                <div class="kpi-card report-net-profit">
-                    <h3>قازانجی کۆتایی (Net Profit)</h3>
-                    <p class="kpi-value" id="report-profit">0 IQD</p>
+                <div class="kpi-box total-expenses">
+                    <h4>کۆی خەرجییەکان (IQD)</h4>
+                    <p id="report-expenses" class="report-value expense-color">0</p>
+                </div>
+                <div class="kpi-box avg-profit">
+                    <h4>تێکڕای قازانج بۆ مامەڵە</h4>
+                    <p id="report-avg-profit" class="report-value secondary-color">0</p>
                 </div>
             </div>
 
-            <div class="report-section full-width-section">
-                <h2>ڕاپۆرتی وردی قازانج بەپێی جۆر و براند</h2>
-                <div id="profitAnalysisContainer" class="data-table-container">
-                    <p>لۆدکردنی خشتەی شیکار...</p>
+            <div class="detailed-reports-area">
+                <h2 class="report-header">راپۆرتی مامەڵەکان (Detailed Transactions)</h2>
+                <div id="detailedReportTableContainer" class="table-container">
+                    <p class="no-data-msg">تکایە بەروار هەڵبژێرە.</p>
                 </div>
             </div>
-
-            <div class="report-section inventory-summary-section">
-                <h2>وردەکاری بەهای عەمبار و ستۆک</h2>
-                <div id="inventorySummaryContainer" class="data-table-container">
-                    <p>لۆدکردنی بەهای عەمبار...</p>
-                </div>
-            </div>
-
+            
         </div>
     </div>
     
-    <script src="item.js"></script> 
+    <script src="customer.js"></script>
+    <script src="loan.js"></script>
+    <script src="item.js"></script>
     <script src="data.js"></script>
-    <script src="reports.js"></script> 
-</body>
+    <script src="expenses.js"></script> 
+    <script src="script.js"></script> 
+    <script src="reports.js"></script> </body>
 </html>

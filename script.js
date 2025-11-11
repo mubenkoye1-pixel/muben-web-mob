@@ -1,84 +1,35 @@
-// لە سەرەتای فایلی script.js دایبنێ
-// 🚨 گرنگ: ناونیشانی خۆت و کلیلی خۆت دابنێ!
-const SUPABASE_URL = 'https://iidyoxulomjnbgyjvkou.supabase.co'; 
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlpZHlveHVsb21qbmJneWp2a291Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI0NTk3NTgsImV4cCI6MjA3ODAzNTc1OH0.Y6Owu8_eDS8gvixh8Cx3mg4OWgyp1EZz--NgNy-V2RM';
-
-let supabaseClient = null; // گۆڕاوی سەرەکیی Supabase Client
-
-
-// ==========================================================
-// --- CENTRAL DATA FETCHING (Supabase Implementation) ---
-// ==========================================================
-
-// Function بۆ هێنانی داتا لە Supabase و فلتەرکردنی بەپێی owner_id
-async function fetchDataFromSupabase(tableName) {
-    if (!supabaseClient) return [];
-    
-    // وەرگرتنی یوزەری ئێستا
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) return []; 
-
-    try {
-        const { data, error } = await supabaseClient
-            .from(tableName) 
-            .select('*')
-            .eq('owner_id', user.id); // 🚨 فلتەرکردنی زۆر گرنگ بۆ جیاکردنەوەی داتا
-        
-        if (error) {
-            console.error(`Error fetching data from ${tableName}:`, error.message);
-            return [];
-        }
-        return data; 
-    } catch (e) {
-        console.error("Supabase fetch failed:", e.message);
-        return [];
-    }
-}
-
-
-// --- گۆڕینی فەنکشنەکانی LocalStorage بۆ بەکارهێنانی Supabase ---
-
-// گۆڕینی getFromStorage
-async function getFromStorage(key) { // 🚨 async
-    // 🚨 ئێستا سەرەتا لە Supabase دەهێنێت
-    if (key === 'inventory') {
-        return await fetchDataFromSupabase('inventory'); 
-    }
-    if (key === 'loanTransactions') {
-        return await fetchDataFromSupabase('loans'); 
-    }
-    // بۆ customerData و brands و types
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
-}
-
 // --- General LocalStorage Functions (Shared access) ---
+// NOTE: These are defined here as a fallback, but rely on item.js and customer.js for data.
+
+function getFromStorage(key, defaultValue = []) {
+    const data = localStorage.getItem(key);
+    return data ? JSON.parse(data) : defaultValue;
+}
+
 function saveToStorage(key, data) {
-    // ⚠️ ئەمە دەبێت بگۆڕدرێت بۆ Supabase Insert/Update دواتر
     localStorage.setItem(key, JSON.stringify(data));
 }
 
-function getTransactions() { 
+function getTransactions() {
     const transactions = localStorage.getItem('salesTransactions');
     return transactions ? JSON.parse(transactions) : [];
-} 
+}
 
-function saveTransactions(transactions) { 
+function saveTransactions(transactions) {
     localStorage.setItem('salesTransactions', JSON.stringify(transactions));
-} 
+}
 
-function getLoanTransactions() { 
+function getLoanTransactions() {
     const loans = localStorage.getItem('loanTransactions');
     return loans ? JSON.parse(loans) : [];
-} 
+}
 
-function saveLoanTransactions(loans) { 
-    // ⚠️ کێشەی key لەم فەنکشنەدا چارەسەر کراوە
+function saveLoanTransactions(loans) {
     localStorage.setItem('loanTransactions', JSON.stringify(loans));
-} 
+}
 
-// گۆڕینی getCustomers
-async function getCustomers() { // 🚨 async
+function getCustomers() {
+    // This assumes customer.js has loaded and defined this function globally
     const customers = localStorage.getItem('customerData');
     return customers ? JSON.parse(customers) : [];
 }
@@ -90,10 +41,10 @@ async function getCustomers() { // 🚨 async
 
 let salesCart = []; 
 
-// گۆڕینی populateSalesFilters
-async function populateSalesFilters() { // 🚨 async
-    const brands = await getFromStorage('brands'); // 🚨 await
-    const types = await getFromStorage('types'); // 🚨 await
+// Function to populate Type and Brand filters on sales page
+function populateSalesFilters() {
+    const brands = getFromStorage('brands', []);
+    const types = getFromStorage('types', []);
     
     const filterBrandSelect = document.getElementById('filterBrand');
     const filterTypeSelect = document.getElementById('filterType');
@@ -111,14 +62,14 @@ async function populateSalesFilters() { // 🚨 async
     }
 }
 
-// گۆڕینی populateCustomerDropdown
-async function populateCustomerDropdown() { // 🚨 async
+// Function to populate the customer list datalist (Auto-Complete)
+function populateCustomerDropdown() {
     const customerInput = document.getElementById('customerNameInput');
     const datalist = document.getElementById('customerDatalist');
     
     if (!customerInput || !datalist) return;
     
-    const customers = await getCustomers(); // 🚨 await
+    const customers = getCustomers();
 
     datalist.innerHTML = '';
     customers.forEach(c => {
@@ -137,7 +88,7 @@ function toggleCustomerInput() {
         if (isLoan) {
             customerInput.style.display = 'block';
             customerInput.focus();
-            populateCustomerDropdown(); 
+            populateCustomerDropdown(); // Load customers when toggled
         } else {
             customerInput.style.display = 'none';
             customerInput.value = '';
@@ -145,12 +96,12 @@ function toggleCustomerInput() {
     }
 }
 
-// گۆڕینی displaySalesItems
-async function displaySalesItems() { // 🚨 async
+// Function to display items on the sales page (Search and Filter Logic)
+function displaySalesItems() {
     const itemsContainer = document.getElementById('salesItemsContainer'); 
     if (!itemsContainer) return; 
 
-    const items = await getFromStorage('inventory'); // 🚨 await
+    const items = getFromStorage('inventory', []);
     
     const selectedBrand = document.getElementById('filterBrand') ? document.getElementById('filterBrand').value : 'all';
     const selectedType = document.getElementById('filterType') ? document.getElementById('filterType').value : 'all';
@@ -209,6 +160,13 @@ async function displaySalesItems() { // 🚨 async
             </span>
             
             <p class="item-model-name">${item.name || ' '}</p>
+
+
+<p class="storage-location-text">شوێن: 
+                <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
+            </p>
+
+
             
             <div class="main-info-group">
                 <p class="detail-line">براند: <span class="brand-name">${item.brand}</span> | جۆر: <span class="type-name">${item.type}</span></p>
@@ -220,13 +178,21 @@ async function displaySalesItems() { // 🚨 async
                 <p class="currency">دینار</p>
             </div>
         `;
+
+
+
+
+
+
+
+
         itemsContainer.appendChild(card);
     });
 }
 
-// گۆڕینی addToCart
-async function addToCart(itemId) { // 🚨 async
-    const items = await getFromStorage('inventory'); // 🚨 await
+// Function to add an item to the cart
+function addToCart(itemId) {
+    const items = getFromStorage('inventory');
     const itemToAdd = items.find(item => item.id === itemId);
 
     if (!itemToAdd || itemToAdd.quantity <= 0) {
@@ -234,7 +200,7 @@ async function addToCart(itemId) { // 🚨 async
     }
     
     if (typeof salesCart === 'undefined') {
-           salesCart = [];
+         salesCart = [];
     }
 
 
@@ -265,14 +231,98 @@ async function addToCart(itemId) { // 🚨 async
 }
 
 // Function to remove item from cart
-function removeFromCart(itemId) { /* ... */ }
-// Function to handle manual price changes (Ensures only numbers are used)
-function manualPriceEdit(inputElement) { /* ... */ }
-// Function to update the cart display and total price (Handles Price Edit and Discount)
-function updateCartDisplay() { /* ... */ }
+function removeFromCart(itemId) {
+    const index = salesCart.findIndex(item => item.id === itemId);
+    if (index !== -1) {
+        if (salesCart[index].quantity > 1) {
+            salesCart[index].quantity -= 1;
+        } else {
+            salesCart.splice(index, 1);
+        }
+    }
+    updateCartDisplay();
+}
 
-// گۆڕینی checkout
-async function checkout() { // 🚨 async
+
+// Function to handle manual price changes (Ensures only numbers are used)
+function manualPriceEdit(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+
+    const itemId = parseInt(inputElement.getAttribute('data-item-id'));
+    const newPrice = parseInt(inputElement.value) || 0; 
+
+    const cartItem = salesCart.find(i => i.id === itemId);
+
+    if (cartItem && newPrice >= 0) {
+        cartItem.salePrice = newPrice;
+        updateCartDisplay();
+    }
+}
+
+
+// Function to update the cart display and total price (Handles Price Edit and Discount)
+function updateCartDisplay() {
+    const cartContainer = document.getElementById('cartItems');
+    const subTotalPriceElement = document.getElementById('sub-total-price');
+    const finalTotalPriceElement = document.getElementById('final-total-price');
+    const discountInput = document.getElementById('discountInput');
+
+    if (!cartContainer || !subTotalPriceElement || !finalTotalPriceElement || !discountInput) return;
+
+    let subTotalSale = 0;
+    const discountAmount = parseInt(discountInput.value) || 0;
+    
+    if (discountAmount < 0) {
+        discountInput.value = 0;
+        return updateCartDisplay();
+    }
+
+    cartContainer.innerHTML = '';
+
+    if (salesCart.length === 0) {
+        subTotalPriceElement.textContent = '0';
+        finalTotalPriceElement.textContent = '0';
+        return;
+    }
+
+    salesCart.forEach(item => {
+        const currentSalePrice = parseInt(item.salePrice) || 0; 
+        const itemTotal = currentSalePrice * item.quantity;
+        subTotalSale += itemTotal;
+
+        const cartElement = document.createElement('div');
+        cartElement.className = 'cart-item'; 
+        cartElement.style.borderRight = `5px solid ${item.color || '#ccc'}`;
+        
+        cartElement.innerHTML = `
+            <p class="title">${item.name}</p>
+            <div class="details">
+                <span>x${item.quantity}</span>
+                <span style="font-weight: bold;">= ${itemTotal.toLocaleString()}</span>
+                
+                <input type="text" 
+                       value="${currentSalePrice}" 
+                       data-item-id="${item.id}"
+                       onblur="manualPriceEdit(this)"
+                       class="cart-item-price-input"
+                       pattern="[0-9]*" 
+                       inputmode="numeric"> 
+                       
+                <button class="remove-btn" onclick="removeFromCart(${item.id})">لابردن</button>
+            </div>
+        `;
+        cartContainer.appendChild(cartElement);
+    });
+    
+    const finalTotal = subTotalSale - discountAmount;
+
+    subTotalPriceElement.textContent = subTotalSale.toLocaleString();
+    finalTotalPriceElement.textContent = finalTotal.toLocaleString();
+}
+
+
+// Function to finalize the sale
+function checkout() {
     if (salesCart.length === 0) {
         alert('سەبەتەکە بەتاڵە، ناتوانیت فرۆشتن تەواو بکەیت.');
         return;
@@ -294,103 +344,105 @@ async function checkout() { // 🚨 async
         return;
     }
 
-    let items = await getFromStorage('inventory'); // 🚨 await
+    let items = getFromStorage('inventory');
     const transactionId = Date.now();
-    // ... لۆجیکی تەواوی ئەم فەنکشنە لێرە جێبەجێ دەبێت
-    
-    // 🚨 ئەمە دەبێت بگۆڕدرێت بۆ Supabase Insert
+    let totalSalePrice = 0;
+    let totalProfitForTransaction = 0;
+    let totalItemsCount = 0;
+    let soldItemsDetails = []; 
+
+    // 1. Update stock and calculate profit for the transaction
+    salesCart.forEach(cartItem => {
+        const inventoryItem = items.find(i => i.id === cartItem.id); 
+        const itemSalePrice = parseInt(cartItem.salePrice) || 0; 
+        
+        if (inventoryItem) {
+            inventoryItem.quantity -= cartItem.quantity; 
+
+            const unitProfit = (itemSalePrice - cartItem.purchasePrice);
+            const itemProfit = unitProfit * cartItem.quantity;
+
+            totalSalePrice += itemSalePrice * cartItem.quantity;
+            totalProfitForTransaction += itemProfit;
+            totalItemsCount += cartItem.quantity;
+            
+            soldItemsDetails.push({
+                id: cartItem.id, // CRUCIAL: Pass the inventory ID for data.js
+                name: cartItem.name,
+                type: cartItem.type,
+                brand: cartItem.brand,
+                quality: cartItem.quality,
+                quantity: cartItem.quantity,
+                salePrice: itemSalePrice, 
+                purchasePrice: cartItem.purchasePrice,
+                profit: itemProfit
+            });
+        }
+    });
+
+    const subTotalSale = totalSalePrice;
+    const finalSale = subTotalSale - discountAmount;
+    const finalProfit = totalProfitForTransaction - discountAmount;
+
+    // 2. Save the updated inventory
     saveToStorage('inventory', items);
-    
-    // 🚨 ئەمە دەبێت بگۆڕدرێت بۆ Supabase Insert
+
+    // 3. Record the complete transaction (with discount and loan details)
+    const transactions = getTransactions();
+    const newTransaction = {
+        id: transactionId,
+        date: new Date().toLocaleString('ckb-IQ', { timeZone: 'Asia/Baghdad' }), 
+        isLoan: isLoan, 
+        customerName: isLoan ? customerName : null, 
+        subTotalSale: subTotalSale,
+        totalSale: finalSale, 
+        discount: discountAmount,
+        totalProfit: finalProfit, 
+        totalItemsCount: totalItemsCount,
+        items: soldItemsDetails 
+    };
+    transactions.push(newTransaction);
     saveTransactions(transactions); 
     
-    // 🚨 ئەمە دەبێت بگۆڕدرێت بۆ Supabase Insert
-    saveLoanTransactions(loans);
+    // 4. Record as a LOAN if applicable
+    if (isLoan) {
+        const loans = getLoanTransactions();
+        loans.push({
+            transactionId: transactionId,
+            customer: customerName,
+            amountDue: finalSale,
+            date: newTransaction.date,
+            items: soldItemsDetails 
+        });
+        saveLoanTransactions(loans);
+    }
     
-    // ... 
+    // 5. Clear the current cart and update displays
     alert("فرۆشتن بە سەرکەوتوویی تەواو بوو!");
+
+    salesCart = [];
+    document.getElementById('discountInput').value = 0; 
+    document.getElementById('isLoanSale').checked = false;
+    document.getElementById('customerNameInput').value = '';
+    toggleCustomerInput();
+    updateCartDisplay();
+    displaySalesItems(); 
 }
 
 
-// ==========================================================
-// --- Supabase Authentication Logic ---
-// ==========================================================
-
-// Function بۆ کردنەوەی پەنجەرەی لۆگین/تۆمارکردن
-async function handleLogin() {
-    if (!supabaseClient) return; 
-
-    const email = prompt("تکایە ئیمەیڵی خۆت بنووسە بۆ لۆگین/تۆمارکردن:");
-    if (!email) return;
-
-    const { data, error } = await supabaseClient.auth.signInWithOtp({
-        email: email,
-        options: {
-            emailRedirectTo: window.location.origin, 
-        },
-    });
-    
-    if (error) {
-        console.error("Login Error:", error.message);
-        alert(`هەڵە: ${error.message}`);
-    } else {
-        alert("✅ نامەیەکی لۆگین نێردرا بۆ ئیمەیڵەکەت. تکایە بۆ تەواوکردنی پرۆسەی لۆگین، کرتە لەسەر لینکەکە بکە.");
-    }
-}
-
-// Function بۆ چوونە دەرەوە
-async function handleLogout() {
-    if (!supabaseClient) return;
-    await supabaseClient.auth.signOut();
-    window.location.reload(); 
-}
-
-// Function بۆ پشکنینی باری لۆگین و نیشاندانی دوگمە
-async function checkUserStatus() {
-    if (!supabaseClient) return;
-
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    
-    const loginButton = document.getElementById('login-button');
-    
-    if (loginButton) {
-        if (user) {
-            loginButton.textContent = `چوونە دەرەوە (${user.email})`;
-            loginButton.onclick = handleLogout;
-        } else {
-            loginButton.textContent = 'چوونە ژوورەوە / تۆمارکردن';
-            loginButton.onclick = handleLogin;
-        }
-    }
-}
-
-
-// Function بۆ گواستنەوەی داتای LocalStorage بۆ Supabase
-async function migrateLocalStorageData() {
-    // ... لۆجیکی گواستنەوەی تەواو لێرەدایە ...
-}
-
-
-// Initial Load on Page AND Supabase Client Initialization
+// Initial Load on Page
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. لۆجیکی باری سەرەتایی پڕۆژەی خۆت (Sales)
+    // Check if we are on the sales page
     if (document.getElementById('salesItemsContainer')) {
-        // بانگکردنی فەنکشنە asyncـەکان
-        populateSalesFilters(); 
-        populateCustomerDropdown(); 
+        // Assuming other functions like populateSalesFilters() are defined elsewhere or loaded
+        if (typeof populateSalesFilters === 'function') {
+             populateSalesFilters(); 
+        }
+        // CRITICAL: Load customers on sales page startup
+        if (typeof populateCustomerDropdown === 'function') {
+             populateCustomerDropdown(); 
+        }
         displaySalesItems();
         updateCartDisplay(); 
-    }
-    
-    // 2. ✅ دروستکردنی Supabase Client و چالاککردنی
-    if (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        
-        // 3. چالاککردنی لۆگین دوای دروستکردنی Client
-        if (supabaseClient) {
-            checkUserStatus(); 
-        }
-    } else {
-        console.error("Fatal Error: Supabase library (CDN) is missing or not ready.");
     }
 });

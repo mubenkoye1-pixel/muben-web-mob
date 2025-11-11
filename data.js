@@ -1,37 +1,39 @@
-// data.js - FINAL STABLE LOCAL STORAGE VERSION (SYNCHRONOUS)
+// data.js - FINAL LOCAL STORAGE VERSION (SYNCHRONOUS & FULLY FIXED)
 
-// --- Shared Storage Access (Relies on item.js base functions) ---
-// NOTE: We assume getFromStorage and saveToStorage are defined globally in item.js.
-
+// --- General LocalStorage Functions (Shared access) ---
 function getFromStorage(key, defaultValue = []) {
     const data = localStorage.getItem(key);
-    try {
-        const parsed = JSON.parse(data);
-        return parsed || defaultValue;
-    } catch (e) {
-        return defaultValue;
-    }
+    return data ? JSON.parse(data) : defaultValue;
 }
 
 function saveToStorage(key, data) {
     localStorage.setItem(key, JSON.stringify(data));
 }
 
+// --- Motherboard Data Access ---
+const MOTHERBOARDS_KEY = 'motherboardInventory';
+const BOARD_TRANSACTIONS_KEY = 'motherboardSales';
+
+function getBoards() { return getFromStorage(MOTHERBOARDS_KEY, []); }
+function saveBoards(boards) { return saveToStorage(MOTHERBOARDS_KEY, boards); }
+function getBoardTransactions() { return getFromStorage(BOARD_TRANSACTIONS_KEY, []); }
+function saveBoardTransactions(transactions) { return saveToStorage(BOARD_TRANSACTIONS_KEY, transactions); }
+
+// --- Data Access Utilities (Loans and Transactions) ---
 function getTransactions() { return getFromStorage('salesTransactions', []); }
-function saveTransactions(transactions) { saveToStorage('salesTransactions', transactions); }
+function saveTransactions(transactions) { return saveToStorage('salesTransactions', transactions); }
 function getLoanTransactions() { return getFromStorage('loanTransactions', []); }
-function saveLoanTransactions(loans) { saveToStorage('loanTransactions', loans); }
+function saveLoanTransactions(loans) { return saveToStorage('loanTransactions', loans); }
 function getInventory() { return getFromStorage('inventory', []); } 
 
 
 // ==========================================================
-// --- DATA PAGE LOGIC (data.html) ---
+// --- CORE FUNCTIONALITY (Must be at the top) ---
 // ==========================================================
 
-// FIX 1: Define the global variable here ONLY ONCE
 let currentTransactionBeingEdited = null; 
 
-// --- Tab Switching Logic (Necessary utility) ---
+// --- Tab Switching Logic (Now includes Motherboard) ---
 function showTab(tabId, clickedButton) {
     document.querySelectorAll('.tab-content').forEach(content => {
         content.style.display = 'none';
@@ -49,17 +51,27 @@ function showTab(tabId, clickedButton) {
         clickedButton.classList.add('active');
     }
 
-    if (tabId === 'loan-transactions') {
-         // Assuming displayLoanTransactionsWithSearch is accessible from loan.js or defined here
-         if (typeof displayLoanTransactionsWithSearch === 'function') {
-              displayLoanTransactionsWithSearch(); 
-         }
+    // 🚨 بانگکردنی لۆجیکی تایبەت بە هەر تابێک
+    if (tabId === 'all-transactions' || tabId === 'loan-transactions') {
+         analyzeInventory(); // Load general data and KPIs
+    } else if (tabId === 'motherboard-management') {
+         displayBoardManagement(); // 👈 چالاککردنی لۆجیکی خەریتە
+    }
+}
+
+
+// Initial Load Dispatcher (Must be defined early)
+function loadDataPage() {
+    analyzeInventory(); 
+    const defaultTabButton = document.querySelector('.tab-btn');
+    if (defaultTabButton) {
+        showTab('all-transactions', defaultTabButton);
     }
 }
 
 
 // --- Core Analysis Function (Synchronous) ---
-function analyzeInventory() {
+function analyzeInventory() { 
     const transactions = getTransactions();
     const loanTransactions = getLoanTransactions();
     
@@ -96,10 +108,12 @@ function analyzeInventory() {
         }
     }
 
+    // Display detailed lists
     displayTransactions(transactions);
     
+    // Check if loan functions are loaded (from loan.js)
     if (typeof displayLoanTransactionsWithSearch === 'function') {
-         displayLoanTransactionsWithSearch(); 
+        displayLoanTransactionsWithSearch(); 
     }
 }
 
@@ -135,8 +149,8 @@ function displayTransactions(transactions) {
                 <div class="transaction-header">
                     <span class="transaction-date">بەروار: ${t.date}</span>
                     <div class="actions">
-                         <button class="action-btn edit-trans-btn" onclick="editTransaction(${t.id})">دەستکاری</button>
-                         <button class="action-btn delete-trans-btn" onclick="deleteTransaction(${t.id})">سڕینەوە</button>
+                            <button class="action-btn edit-trans-btn" onclick="editTransaction(${t.id})">دەستکاری</button>
+                            <button class="action-btn delete-trans-btn" onclick="deleteTransaction(${t.id})">سڕینەوە</button>
                     </div>
                 </div>
                 <ul class="item-sold-list">
@@ -153,6 +167,67 @@ function displayTransactions(transactions) {
     });
 }
 
+// لە data.js زیاد بکە (لە خوار displayTransactions)
+
+// ==========================================================
+// --- LOAN DISPLAY AND ACTIONS (From Loan.js) ---
+// ==========================================================
+
+function displayLoanTransactionsWithSearch() {
+    const loans = getLoanTransactions();
+    const container = document.getElementById('loanListContainer');
+    if (!container) return;
+    
+    // Safety check for search element
+    const searchInput = document.getElementById('loanSearchInput');
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    container.innerHTML = ''; 
+
+    // Filter loans based on customer name
+    const filteredLoans = loans.filter(loan => {
+        const customer = (loan.customer || '').toLowerCase();
+        return searchTerm === '' || customer.includes(searchTerm);
+    });
+
+    if (filteredLoans.length === 0) {
+        container.innerHTML = '<p class="no-data">هیچ قەرزێکی نەگەڕاوە تۆمار نەکراوە.</p>';
+        return;
+    }
+
+    filteredLoans.forEach(loan => {
+        let itemsListHTML = '';
+        (loan.items || []).forEach(item => { 
+            itemsListHTML += `
+                <li>
+                    <span class="item-name-details">${item.name} (${item.brand} / ${item.type})</span>
+                    <span class="item-qty">x${item.quantity || 0}</span>
+                    <span class="item-price">${(item.salePrice || 0).toLocaleString()} IQD</span>
+                </li>
+            `;
+        });
+
+        const cardHTML = `
+            <div class="loan-card">
+                <div class="loan-header">
+                    <span class="customer-name">کریار: ${loan.customer}</span>
+                    <div class="actions">
+                        <button class="action-btn edit-trans-btn" onclick="editTransaction(${loan.transactionId})">دەستکاری</button>
+                        <button class="pay-loan-btn" onclick="closeLoan(${loan.transactionId})">وا سڵکردن</button>
+                    </div>
+                </div>
+                <ul class="item-sold-list">
+                    ${itemsListHTML}
+                </ul>
+                <div class="loan-header" style="background-color: #faebd7;">
+                    <span class="loan-date">بەروار: ${loan.date}</span>
+                    <span class="total-sale">بڕی قەرز: <span class="loan-amount">${(loan.amountDue || 0).toLocaleString()} IQD</span></span>
+                </div>
+            </div>
+        `;
+        container.innerHTML += cardHTML;
+    });
+}
 
 // --- DELETE LOGIC (سڕینەوە) ---
 function deleteTransaction(transactionId) {
@@ -161,7 +236,7 @@ function deleteTransaction(transactionId) {
     }
     
     let transactions = getTransactions();
-    let inventory = getFromStorage('inventory', []);
+    let inventory = getFromStorage('inventory');
     let loans = getLoanTransactions(); 
     
     const transactionIndex = transactions.findIndex(t => t.id === transactionId);
@@ -171,12 +246,8 @@ function deleteTransaction(transactionId) {
         
         // 1. Restore items to inventory (Reverse the sale)
         transactionToDelete.items.forEach(soldItem => {
-            const inventoryItemIndex = inventory.findIndex(item => 
-                (item.name || '').toLowerCase() === (soldItem.name || '').toLowerCase() &&
-                (item.brand || '').toLowerCase() === (soldItem.brand || '').toLowerCase() &&
-                (item.type || '').toLowerCase() === (soldItem.type || '').toLowerCase() &&
-                (item.quality || '').toLowerCase() === (soldItem.quality || '').toLowerCase()
-            );
+            // ✅ FIX: دۆزینەوە بەپێی ID
+            const inventoryItemIndex = inventory.findIndex(item => item.id === soldItem.id); 
             
             if (inventoryItemIndex !== -1) {
                 inventory[inventoryItemIndex].quantity += (soldItem.quantity || 0); // Increase stock
@@ -202,8 +273,7 @@ function deleteTransaction(transactionId) {
 }
 
 
-// --- EDIT LOGIC (دەستکاریکردن) ---
-
+// --- EDIT LOGIC (مامەڵە) ---
 function closeModal() {
     const modalElement = document.getElementById('editModal');
     if (modalElement) {
@@ -212,7 +282,7 @@ function closeModal() {
     currentTransactionBeingEdited = null;
     const alertElement = document.getElementById('modalAlert');
     if (alertElement) {
-        alertElement.textContent = ''; // Clear alerts
+        alertElement.textContent = ''; 
     }
 }
 
@@ -251,13 +321,13 @@ function editTransaction(transactionId) {
                 <span>${item.name} (${item.brand}/${item.type}) - نرخی فرۆشتن: ${(item.salePrice || 0).toLocaleString()}</span>
                 <label>عدد: 
                     <input type="number" 
-                           id="qty-edit-${index}" 
-                           data-index="${index}"
-                           data-old-qty="${item.quantity || 0}"
-                           data-sale-price="${item.salePrice || 0}"
-                           data-purchase-price="${item.purchasePrice || 0}"
-                           value="${item.quantity || 0}" 
-                           min="0" required>
+                            id="qty-edit-${index}" 
+                            data-index="${index}"
+                            data-old-qty="${item.quantity || 0}"
+                            data-sale-price="${item.salePrice || 0}"
+                            data-purchase-price="${item.purchasePrice || 0}"
+                            value="${item.quantity || 0}" 
+                            min="0" required>
                 </label>
             </div>
         `;
@@ -268,14 +338,18 @@ function editTransaction(transactionId) {
 
 function saveEditedTransaction(event) {
     event.preventDefault();
-    if (!currentTransactionBeingEdited) return;
+    if (!currentTransactionBeingEdited || !currentTransactionBeingEdited.items) {
+        alert("ناتوانرێت مامەڵە دەستکاری بکرێت. وەسڵەکە نەدۆزرایەوە.");
+        closeModal();
+        return; 
+    }
 
     let totalNewSale = 0;
     let totalNewProfit = 0;
     let totalNewItemsCount = 0;
     
-    let inventory = getFromStorage('inventory', []);
-    let loans = getLoanTransactions();
+    let inventory = getFromStorage('inventory'); 
+    let loans = getLoanTransactions(); 
     const updatedItems = [];
     
     const modalAlert = document.getElementById('modalAlert');
@@ -290,7 +364,7 @@ function saveEditedTransaction(event) {
         if (!inputElement) continue;
 
         const oldQuantity = parseInt(inputElement.getAttribute('data-old-qty'));
-        const newQuantity = parseInt(inputElement.value);
+        const newQuantity = parseInt(inputElement.value) || 0; 
         
         if (isNaN(newQuantity) || newQuantity < 0) {
              isQuantitiesValid = false;
@@ -302,12 +376,7 @@ function saveEditedTransaction(event) {
         const quantityDifference = newQuantity - oldQuantity; 
         
         // 1. Update Inventory Stock based on difference
-        const inventoryItemIndex = inventory.findIndex(i => 
-            (i.name || '').toLowerCase() === (item.name || '').toLowerCase() && 
-            (i.brand || '').toLowerCase() === (item.brand || '').toLowerCase() && 
-            (i.type || '').toLowerCase() === (item.type || '').toLowerCase() && 
-            (i.quality || '').toLowerCase() === (item.quality || '').toLowerCase()
-        );
+        const inventoryItemIndex = inventory.findIndex(i => i.id === item.id); 
 
         if (inventoryItemIndex !== -1) {
             const currentStock = inventory[inventoryItemIndex].quantity || 0;
@@ -357,6 +426,7 @@ function saveEditedTransaction(event) {
         transactions[index] = currentTransactionBeingEdited;
     }
     
+    // 6. Update Loan Record if applicable
     const loanIndex = loans.findIndex(l => l.transactionId === currentTransactionBeingEdited.id);
     if (loanIndex !== -1) {
         loans[loanIndex].amountDue = totalNewSale;
@@ -365,11 +435,11 @@ function saveEditedTransaction(event) {
     }
 
 
-    saveToStorage('inventory', inventory); 
+    saveToStorage('inventory', inventory); // Save inventory changes
     saveTransactions(transactions); 
     
     closeModal();
-    analyzeInventory(); 
+    analyzeInventory(); // Reload data page
     alert('مامەڵەکە بە سەرکەوتوویی دەستکاری کرا.');
 }
 

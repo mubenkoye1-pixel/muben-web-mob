@@ -480,16 +480,180 @@
 }
 
 
-/* --- LOAN TRANSACTION HIGHLIGHT --- */
-
-.transaction-card.transaction-is-loan {
-    /* Highlight the border and background lightly */
-    border: 2px solid #ffc107; /* Orange/Yellow border */
-    background-color: #000000; /* Very light yellow background */
-    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.2);
+/* --- MOTHERBOARD PAGE STYLES (motherboard.css) - FINAL VERSION --- */
+:root {
+    --primary-blue: #007bff;
+    --expense-red: #dc3545;
+    --success-green: #28a745;
+    --neutral-gray: #6c757d;
+    --light-bg: #f8f9fa;
+    --white: #ffffff;
 }
 
-.transaction-card.transaction-is-loan .transaction-header {
-    /* Make the header stand out slightly more */
-    background-color: #ffc10740; /* 40% transparent yellow */
+.motherboard-layout {
+    display: flex;
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 30px;
+    background-color: var(--light-bg);
+    min-height: calc(100vh - 60px);
+}
+
+/* --- Split View Container --- */
+.split-view {
+    display: flex;
+    gap: 25px;
+    flex-grow: 1; 
+    align-items: stretch; /* بۆ ئەوەی هەموو لایەک بە درێژی یەکسان بێت */
+}
+
+/* --- Left Panel: Inventory Management (Board List & Add) --- */
+.motherboard-inventory-panel {
+    flex-basis: 60%; /* بەشی گەورەتر بۆ لیست و زیادکردن */
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.motherboard-inventory-panel h2 {
+    color: var(--primary-blue);
+    border-bottom: 3px solid var(--primary-blue);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* --- Right Panel: Transaction/Report (40% width) --- */
+.motherboard-transaction-panel {
+    flex-basis: 40%;
+    background-color: var(--light-bg); 
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* --- Form for Adding Boards --- */
+.add-board-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-radius: 10px;
+    background-color: #e3f2fd; /* Light Blue Background */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.add-board-form input {
+    flex: 1;
+    min-width: 120px;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+}
+
+.add-board-btn {
+    background-color: var(--success-green);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* --- Boards Inventory Table --- */
+.boards-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.boards-table th, .boards-table td {
+    padding: 12px;
+    text-align: right;
+    border-bottom: 1px solid #eee;
+}
+
+.boards-table th {
+    background-color: var(--neutral-gray); /* Darker gray */
+    color: white;
+}
+
+.boards-table tbody tr:hover {
+    background-color: #f0f8ff;
+    cursor: pointer;
+}
+
+.board-status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-active { color: var(--success-green); }
+.status-depleted { color: var(--expense-red); }
+
+
+/* --- Transaction/Report Panel Styling (Right Side) --- */
+
+.motherboard-transaction-panel h2 {
+    background-color: var(--white);
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: var(--expense-red);
+    font-size: 1.5em;
+}
+
+.board-details-area {
+    background-color: var(--white);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-grow: 1; /* پڕکردنەوەی پانتایی لە بەشی ڕاستدا */
+}
+
+/* --- Component Sale Form/Modal Inside Details Area --- */
+
+.component-sale-form-wrapper {
+    padding: 20px;
+    border-top: 1px dashed #ddd;
+    margin-top: 15px;
+    background-color: #fffaf0; /* Light yellow background */
+    border-radius: 8px;
+}
+
+.component-sale-form-wrapper label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.record-sale-btn {
+    background-color: var(--expense-red);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.report-summary-box {
+    padding: 15px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.report-summary-box strong {
+    color: var(--primary-blue);
+    font-size: 1.2em;
 }

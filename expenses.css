@@ -1,99 +1,132 @@
-/* --- EXPENSES PAGE STYLES --- */
+/* --- EXPENSES PAGE STYLES (expenses.css) --- */
+:root {
+    --expense-red: #dc3545; 
+    --expense-light: #f8d7da;
+    --neutral-gray: #6c757d;
+    --dark-text: #343a40;
+}
 
 .expenses-layout {
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 30px 20px;
+    gap: 25px;
+    background-color: #f8f9fa; /* Light Gray Background */
+    min-height: calc(100vh - 60px);
 }
 
-.form-and-list-wrapper {
-    display: flex;
-    gap: 30px;
-    flex-direction: row-reverse; /* Form on the right, list on the left */
-}
-
-.expense-form-container {
-    width: 40%;
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    height: fit-content;
-}
-
-.expense-list-container {
-    width: 60%;
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.expense-form-container h1, .expense-list-container h1 {
-    font-size: 1.4em;
-    color: #dc3545; /* Red color for expenses */
-    border-bottom: 2px solid #dc3545;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-/* --- KPI Bar for Expenses (Customized) --- */
-.summary-bar-container {
+/* --- KPI Summary Bar --- */
+.kpi-card-wrapper {
     display: flex;
     justify-content: flex-start;
-    padding: 10px 20px;
-    background-color: #fff0f0; /* Light red/pink background */
-    border-left: 5px solid #dc3545;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
-.summary-card {
-    text-align: right; 
-    padding: 5px 15px;
-    flex-basis: 300px;
+.total-kpi-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 25px;
+    flex: 0 0 350px; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-left: 8px solid var(--expense-red); /* Red line for Expense Focus */
+    text-align: right;
 }
 
-.summary-card h3 {
-    color: #dc3545;
+.total-kpi-card h3 {
+    font-size: 1.1em;
+    color: var(--neutral-gray);
+    margin-bottom: 10px;
 }
 
 .summary-value {
-    font-size: 1.8em;
+    font-size: 2.5em;
     font-weight: 900;
-    color: #dc3545;
+    color: var(--expense-red); /* Red for Expenses */
+    direction: ltr;
+    text-align: left;
 }
 
-/* Input & Button Styles (from previous step) */
+/* --- Form and List Layout --- */
+.form-and-list-wrapper {
+    display: flex;
+    gap: 25px;
+    flex-direction: row-reverse; /* Form on the right, list on the left */
+    align-items: flex-start;
+    flex-grow: 1;
+}
+
+.expense-form-container, .expense-list-container {
+    padding: 30px;
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+}
+
+.expense-form-container {
+    width: 35%; /* بچووککردنەوەی فۆڕم */
+}
+
+.expense-list-container {
+    width: 65%;
+}
+
+.expense-form-container h1, .expense-list-container h1 {
+    font-size: 1.5em;
+    color: var(--dark-text); 
+    border-bottom: 3px solid var(--expense-red); 
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+}
+
+/* Input & Button Styles */
 .expense-form-container .submit-btn {
-    background-color: #dc3545; /* Red */
+    background-color: var(--expense-red); 
     color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 /* Table Style */
 .expense-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 15px;
 }
 
 .expense-table th, .expense-table td {
-    padding: 10px;
-    border: 1px solid #eee;
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    text-align: right;
 }
 
 .expense-table th {
-    background-color: #f8d7da; 
-    color: #333;
+    background-color: var(--expense-light); 
+    color: var(--dark-text);
+    font-weight: 600;
+}
+
+.expense-table tbody tr:hover {
+    background-color: #fff8f8; 
 }
 
 .expense-table .amount-col {
-    color: #dc3545;
-    font-weight: 700;
+    color: var(--expense-red);
+    font-weight: 800;
+    direction: ltr;
 }
 
 .expense-table .delete-btn {
-    background-color: #6c757d;
+    background-color: var(--neutral-gray);
     color: white;
-    padding: 4px 8px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 13px;
 }
+
+
