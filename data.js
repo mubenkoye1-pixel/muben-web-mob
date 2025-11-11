@@ -159,6 +159,8 @@ function displayTransactions(transactions) {
 
 // لە data.js زیاد بکە (لە خوار displayTransactions)
 
+// لە data.js زیاد بکە (لۆجیکی نمایشکردنی قەرزەکان)
+
 function displayLoanTransactionsWithSearch() {
     const loans = getLoanTransactions();
     const container = document.getElementById('loanListContainer');
