@@ -121,10 +121,10 @@ function displayCustomerLoanDetails(customerName) {
 
     const totalDue = (customerData.totalDue || 0).toLocaleString();
     
-let htmlContent = `<button class="detail-back-btn" onclick="window.location.href='loan.html'">
-                        گەڕانەوە بۆ لیست
-                    </button>`;
-// ...
+    // 1. دروستکردنی دوگمەی گەڕانەوە
+    let htmlContent = `<button class="detail-back-btn" onclick="window.location.href='loan.html'">
+                            گەڕانەوە بۆ لیست
+                        </button>`;
     
     htmlContent += `<h2 class="loan-list-header">وردەکاری قەرزی کریار: ${customerName}</h2>`;
     
@@ -199,5 +199,3 @@ document.addEventListener('DOMContentLoaded', () => {
         loadLoanManagementPage();
     }
 });
-
-
