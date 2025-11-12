@@ -156,11 +156,6 @@ function displayTransactions(transactions) {
         container.innerHTML += cardHTML;
     });
 }
-
-// لە data.js زیاد بکە (لە خوار displayTransactions)
-
-// لە data.js زیاد بکە (لۆجیکی نمایشکردنی قەرزەکان)
-
 function displayLoanTransactionsWithSearch() {
     const loans = getLoanTransactions();
     const container = document.getElementById('loanListContainer');
@@ -216,6 +211,34 @@ function displayLoanTransactionsWithSearch() {
         container.innerHTML += cardHTML;
     });
 }
+
+
+// لە data.js زیاد بکە (لۆجیکی واسڵکردنی قەرز)
+
+function closeLoan(transactionId) {
+    if (!confirm('دڵنیایت کە ئەم قەرزە بە تەواوی واسڵ کراوە و دەبێت بسڕدرێتەوە لە لیستی قەرزەکان؟')) {
+        return;
+    }
+
+    let loans = getLoanTransactions();
+    
+    // 1. لابردنی قەرزەکە لە لیستی قەرزەکان
+    const initialLength = loans.length;
+    loans = loans.filter(loan => loan.transactionId !== transactionId);
+
+    if (loans.length !== initialLength) {
+        // 2. پاشەکەوتکردنی گۆڕانکارییەکان
+        saveLoanTransactions(loans);
+        
+        // 3. نوێکردنەوەی پەرەکە
+        analyzeInventory(); 
+        alert('قەرزەکە بە سەرکەوتوویی واسڵ کرا و لابرا.');
+    } else {
+        alert('هەڵە: قەرزەکە نەدۆزرایەوە.');
+    }
+}
+
+
 
 
 
