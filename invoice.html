@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="invoice.css"> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وەسڵی فرۆشتن</title>
+</head>
+<body>
+
+    <div class="invoice-page-wrapper">
+        <div id="invoiceContainer" class="invoice-box">
+            <h1 class="loading-message">⚠️ داتای وەسڵ بار دەکرێت...</h1>
+        </div>
+    </div>
+
+    <div class="print-controls">
+        <button onclick="window.print()" class="print-btn"><i class="fas fa-print"></i> پرێنتکردن</button>
+        <button onclick="window.close()" class="close-btn-web">داخستن</button>
+    </div>
+
+    <script src="invoice.js"></script> 
+    <script src="script.js"></script>
+    <script src="data.js"></script> 
+    </body>
+</html>

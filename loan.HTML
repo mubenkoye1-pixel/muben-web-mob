@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ckb" dir="rtl">
 <head>
-    <link rel="stylesheet" href="style.css"> 
-    <link rel="stylesheet" href="loan.css"> <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="loan.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بەڕێوەبردنی قەرزەکان</title> 
 </head>
@@ -11,7 +13,7 @@
         
         <div class="head-div">
             <nav class="nav-links">
-            <a href="index.html" class="btn-head">سەرەکی</a>
+              <a href="index.html" class="btn-head">سەرەکی</a>
                 <a href="data.html" class="btn-head">داتا</a>
                 <a href="item.html" class="btn-head">ئایتم</a>
                 <a href="reports.html" class="btn-head">راپۆرت</a>
@@ -20,28 +22,24 @@
                 <a href="customer.html" class="btn-head">کریار</a>
             </nav>
             <a href="index.html" class="logo-title">
-                <span style="font-size: 30px;">🏦</span> سیستەم - قەرزەکان
+                <span style="font-size: 30px;">💰</span> سیستەم - قەرزەکان
             </a>
+            <div id="auth-controls" class="auth-control-container"></div>
         </div>
 
-        <div class="main-div loan-management-layout">
+        <div class="main-div loan-layout">
             
-            <div class="search-loan-area">
-                <input type="text" 
-                       id="loanSearchInput" 
-                       placeholder="گەڕان بە ناوی قەرزار..." 
-                       oninput="loadLoanManagementPage()" 
-                       class="search-input">
-            </div>
-
-            <div id="loanContentContainer" class="loan-content-area">
-                <p>لۆدکردنی داتا...</p>
-            </div>
+            <div id="loanContentContainer" class="loan-content-wrapper">
+                </div>
             
         </div>
     </div>
     
-    <script src="item.js"></script> 
+    <script src="customer.js"></script>
+    <script src="loan.js"></script> 
+    <script src="item.js"></script>
     <script src="data.js"></script>
-    <script src="loan.js"></script> </body>
+    <script src="expenses.js"></script> 
+    <script src="script.js"></script> 
+</body>
 </html>

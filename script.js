@@ -322,7 +322,11 @@ function updateCartDisplay() {
 
 
 // Function to finalize the sale
-function checkout() {
+// لە script.js: جێگەی فەنکشنی checkout() بگرەوە
+
+// لە script.js: جێگەی فەنکشنی checkout() بگرەوە
+
+function checkout() { 
     if (salesCart.length === 0) {
         alert('سەبەتەکە بەتاڵە، ناتوانیت فرۆشتن تەواو بکەیت.');
         return;
@@ -340,23 +344,32 @@ function checkout() {
     const discountAmount = parseInt(document.getElementById('discountInput').value) || 0;
     const finalPriceText = document.getElementById('final-total-price').textContent;
     
+    // دڵنیابوونەوەی کۆتایی
     if (!confirm(`دڵنیایت لە تەواوکردنی فرۆشتن بە کۆی گشتی ${finalPriceText} دینار؟\n${isLoan ? '⚠ ئەمە وەک مامەڵەی قەرز تۆمار دەکرێت.' : ''}`)) {
         return;
     }
 
+    // 1. وەرگرتنی داتای سەرەکی (Sync)
     let items = getFromStorage('inventory');
+    let transactions = getTransactions();
+    let loans = getLoanTransactions(); 
+
     const transactionId = Date.now();
     let totalSalePrice = 0;
     let totalProfitForTransaction = 0;
     let totalItemsCount = 0;
     let soldItemsDetails = []; 
 
-    // 1. Update stock and calculate profit for the transaction
+    // 2. Update stock and calculate profit for the transaction
     salesCart.forEach(cartItem => {
-        const inventoryItem = items.find(i => i.id === cartItem.id); 
-        const itemSalePrice = parseInt(cartItem.salePrice) || 0; 
+        // دۆزینەوەی ئایتمەکە لە عەمباردا (بە ID)
+        const inventoryItemIndex = items.findIndex(i => i.id === cartItem.id); 
+        const itemSalePrice = parseInt(cartItem.salePrice) || 0;
         
-        if (inventoryItem) {
+        if (inventoryItemIndex !== -1) {
+            const inventoryItem = items[inventoryItemIndex];
+            
+            // کەمکردنەوەی ستۆک
             inventoryItem.quantity -= cartItem.quantity; 
 
             const unitProfit = (itemSalePrice - cartItem.purchasePrice);
@@ -366,12 +379,13 @@ function checkout() {
             totalProfitForTransaction += itemProfit;
             totalItemsCount += cartItem.quantity;
             
+            // تۆمارکردنی وردەکاریی فرۆشتن
             soldItemsDetails.push({
-                id: cartItem.id, // CRUCIAL: Pass the inventory ID for data.js
+                id: cartItem.id, 
                 name: cartItem.name,
                 type: cartItem.type,
                 brand: cartItem.brand,
-                quality: cartItem.quality,
+                quality: cartItem.quality, 
                 quantity: cartItem.quantity,
                 salePrice: itemSalePrice, 
                 purchasePrice: cartItem.purchasePrice,
@@ -384,11 +398,7 @@ function checkout() {
     const finalSale = subTotalSale - discountAmount;
     const finalProfit = totalProfitForTransaction - discountAmount;
 
-    // 2. Save the updated inventory
-    saveToStorage('inventory', items);
-
-    // 3. Record the complete transaction (with discount and loan details)
-    const transactions = getTransactions();
+    // 3. Record the complete transaction 
     const newTransaction = {
         id: transactionId,
         date: new Date().toLocaleString('ckb-IQ', { timeZone: 'Asia/Baghdad' }), 
@@ -402,11 +412,9 @@ function checkout() {
         items: soldItemsDetails 
     };
     transactions.push(newTransaction);
-    saveTransactions(transactions); 
     
     // 4. Record as a LOAN if applicable
     if (isLoan) {
-        const loans = getLoanTransactions();
         loans.push({
             transactionId: transactionId,
             customer: customerName,
@@ -414,10 +422,14 @@ function checkout() {
             date: newTransaction.date,
             items: soldItemsDetails 
         });
-        saveLoanTransactions(loans);
+        saveLoanTransactions(loans); // Save loan list
     }
     
-    // 5. Clear the current cart and update displays
+    // 5. Save all changes (Inventory and Transactions)
+    saveToStorage('inventory', items); 
+    saveTransactions(transactions); 
+    
+    // 6. Clear the current cart and update displays
     alert("فرۆشتن بە سەرکەوتوویی تەواو بوو!");
 
     salesCart = [];
@@ -428,6 +440,7 @@ function checkout() {
     updateCartDisplay();
     displaySalesItems(); 
 }
+
 
 
 // Initial Load on Page
@@ -446,3 +459,271 @@ document.addEventListener('DOMContentLoaded', () => {
         updateCartDisplay(); 
     }
 });
+
+
+// ==========================================================
+// --- INVOICE GENERATION LOGIC ---
+// ==========================================================
+
+// ==========================================================
+// --- INVOICE GENERATION LOGIC (Modern Design) ---
+// ==========================================================
+
+function generateInvoiceAndPrint() {
+    if (salesCart.length === 0) {
+        alert('سەبەتەکە بەتاڵە، ناتوانیت وەسڵ دروست بکەیت.');
+        return;
+    }
+
+    const subTotal = document.getElementById('sub-total-price').textContent;
+    const finalTotal = document.getElementById('final-total-price').textContent;
+    const discount = document.getElementById('discountInput').value;
+    const customerName = document.getElementById('isLoanSale').checked 
+                        ? document.getElementById('customerNameInput').value.trim() 
+                        : 'کڕیاری گشتی';
+
+    const transactionId = Math.floor(Math.random() * 100000) + 1;
+    const currentDate = new Date().toLocaleDateString('ckb-IQ');
+    const currentTime = new Date().toLocaleTimeString('ckb-IQ', { hour: '2-digit', minute: '2-digit' });
+
+    // زانیاری فرۆشگا (دەتوانیت بیگۆڕیت)
+    const storeName = "ناوی کۆمپانیا / فرۆشگای ئێوە";
+    const storeAddress = "کوردستان - هەولێر / ناونیشان";
+    const storePhone = "07XX XXX XXXX";
+
+    // 1. دروستکردنی خشتەی ئایتمەکان
+    let itemsTableHTML = '';
+    salesCart.forEach(item => {
+        const itemTotal = (parseInt(item.salePrice) || 0) * item.quantity;
+        itemsTableHTML += `
+            <tr class="item-row">
+                <td style="text-align: right; width: 45%;">${item.name} (${item.brand} - ${item.type})</td>
+                <td style="text-align: center;">${item.quantity.toLocaleString()}</td>
+                <td style="text-align: left;">${(parseInt(item.salePrice) || 0).toLocaleString()} IQD</td>
+                <td style="text-align: left; font-weight: bold;">${itemTotal.toLocaleString()} IQD</td>
+            </tr>
+        `;
+    });
+
+    // 2. دروستکردنی تەواوی کۆدی HTMLی وەسڵەکە
+    const invoiceHTML = `
+        <!DOCTYPE html>
+        <html lang="ckb" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title>وەسڵی فرۆشتن #${transactionId}</title>
+            <style>
+                /* فونتی سەرەکی */
+                body { 
+                    font-family: Tahoma, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    background-color: #f7f7f7; /* باکگراوندی سادە */
+                }
+
+                /* قاڵبی وەسڵ */
+                .invoice-box {
+                    max-width: 700px; 
+                    margin: 50px auto; 
+                    padding: 30px; 
+                    border: 1px solid #ddd;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, .1); 
+                    font-size: 14px; 
+                    line-height: 20px;
+                    color: #333; 
+                    background: #fff; 
+                    direction: rtl;
+                }
+
+                /* سەر و ژێرەوەی وەسڵ */
+                .header-section {
+                    display: flex;
+                    justify-content: space-between;
+                    border-bottom: 3px solid #007bff; /* ڕەنگی شین بۆ جوانی */
+                    padding-bottom: 15px;
+                    margin-bottom: 25px;
+                }
+
+                .header-info {
+                    text-align: left;
+                    font-size: 13px;
+                }
+                .header-info p { margin: 0; }
+
+                .store-details {
+                    text-align: right;
+                }
+                .store-details h1 {
+                    color: #007bff;
+                    font-size: 26px;
+                    margin-top: 0;
+                    margin-bottom: 5px;
+                }
+
+                /* زانیاری کڕیار و فرۆشتن */
+                .client-info {
+                    border: 1px solid #eee;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    background-color: #fcfcfc;
+                }
+                .client-info p { margin: 5px 0; }
+                .client-info strong { color: #000; }
+
+                /* خشتەی ئایتمەکان */
+                .items-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    text-align: right;
+                }
+                .items-table th, .items-table td {
+                    padding: 10px;
+                    border-bottom: 1px solid #eee;
+                }
+                .items-table th {
+                    background-color: #007bff;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 15px;
+                }
+                .item-row:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                /* بەشی کۆی گشتی */
+                .total-section {
+                    width: 100%;
+                    margin-top: 20px;
+                    border-top: 2px solid #007bff;
+                    padding-top: 10px;
+                }
+                .total-row {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin: 5px 0;
+                }
+                .total-row strong {
+                    width: 250px;
+                    text-align: left;
+                    padding-left: 10px;
+                }
+                .total-row span {
+                    font-weight: bold;
+                    width: 150px;
+                    text-align: left;
+                }
+                .grand-total-row {
+                    font-size: 20px;
+                    color: #d9534f; /* ڕەنگی سوور بۆ کۆی کۆتایی */
+                    border-top: 1px dashed #ccc;
+                    padding-top: 10px;
+                }
+
+                /* ژێرەوە */
+                .footer { 
+                    text-align: center; 
+                    margin-top: 30px; 
+                    font-size: 12px; 
+                    color: #777;
+                    border-top: 1px solid #eee;
+                    padding-top: 10px;
+                }
+
+                /* چاودێری چاپکردن (چاپی سپی و ڕەش) */
+                @media print {
+                    body { 
+                        background: #fff; 
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                    .invoice-box { 
+                        box-shadow: none; 
+                        border: none; 
+                        margin: 0; 
+                        padding: 0;
+                    }
+                    .items-table th {
+                        background-color: #007bff !important;
+                        color: #fff !important;
+                    }
+                    .grand-total-row {
+                        color: #d9534f !important;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="invoice-box">
+                
+                <div class="header-section">
+                    <div class="store-details">
+                        <h1>ناووی دوکان</h1>
+                        <p>ناونیشان</p>
+                        <p>تەلەفۆن: ${storePhone}</p>
+                    </div>
+                    <div class="header-info">
+                        <p><strong>وەسڵی ژمارە:</strong> #${transactionId}</p>
+                        <p><strong>بەروار:</strong> ${currentDate}</p>
+                        <p><strong>کات:</strong> ${currentTime}</p>
+                    </div>
+                </div>
+
+                <div class="client-info">
+                    <p><strong>ناوی کڕیار:</strong> ${customerName}</p>
+                    <p><strong>شێوازی فرۆشتن:</strong> ${document.getElementById('isLoanSale').checked ? 'قەرز' : 'نەقد'}</p>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 45%;">ناوی ئایتم</th>
+                            <th style="width: 15%; text-align: center;">بڕ</th>
+                            <th style="width: 20%; text-align: left;">نرخی تاک</th>
+                            <th style="width: 20%; text-align: left;">کۆی گشتی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsTableHTML}
+                    </tbody>
+                </table>
+                
+                <div class="total-section">
+                    <div class="total-row">
+                        <strong>کۆی گشتی (بێ داشکاندن):</strong>
+                        <span>${subTotal} IQD</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>داشکاندن:</strong>
+                        <span>${parseInt(discount).toLocaleString()} IQD</span>
+                    </div>
+                    <div class="total-row grand-total-row">
+                        <strong> کۆی گشتی:</strong>
+                        <span>${finalTotal} IQD</span>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    سوپاس بۆ مامەڵەکردنتان! هیوای ڕۆژێکی خۆشتان بۆ دەخوازین.<br>
+                    
+                </div>
+
+            </div>
+        </body>
+        </html>
+    `;
+
+    // 3. دروستکردنی پەنجەرەی نوێ و چاپکردن
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+        printWindow.document.write(invoiceHTML);
+        printWindow.document.close();
+        
+        printWindow.onload = () => {
+            printWindow.focus();
+            printWindow.print();
+        };
+    } else {
+        alert('ناتوانرێت پەنجەرەی چاپکردن بکرێتەوە. تکایە ڕێگە بە "پۆپ ئەپەکان" بدە.');
+    }
+}

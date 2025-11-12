@@ -28,34 +28,17 @@ function getInventory() { return getFromStorage('inventory', []); }
 
 
 // ==========================================================
-// --- DATA PAGE LOGIC (data.html) ---
+// --- CORE FUNCTIONALITY (Must be at the top) ---
 // ==========================================================
 
 let currentTransactionBeingEdited = null; 
 
-// --- Tab Switching Logic (Now includes Motherboard) ---
-function showTab(tabId, clickedButton) {
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.style.display = 'none';
-    });
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    const selectedTab = document.getElementById(tabId);
-    if (selectedTab) {
-        selectedTab.style.display = 'block';
-    }
-    
-    if (clickedButton) {
-        clickedButton.classList.add('active');
-    }
-
-    // 🚨 بانگکردنی لۆجیکی تایبەت بە هەر تابێک
-    if (tabId === 'all-transactions' || tabId === 'loan-transactions') {
-         analyzeInventory(); // Load general data and KPIs
-    } else if (tabId === 'motherboard-management') {
-         displayBoardManagement(); // 👈 چالاککردنی لۆجیکی خەریتە
+// Initial Load Dispatcher (Must be defined early)
+function loadDataPage() {
+    analyzeInventory(); 
+    const defaultTabButton = document.querySelector('.tab-btn');
+    if (defaultTabButton) {
+        showTab('all-transactions', defaultTabButton);
     }
 }
 
@@ -100,10 +83,33 @@ function analyzeInventory() {
 
     // Display detailed lists
     displayTransactions(transactions);
+    displayLoanTransactionsWithSearch(); 
+}
+
+
+// --- Tab Switching Logic ---
+function showTab(tabId, clickedButton) {
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.style.display = 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+
+    const selectedTab = document.getElementById(tabId);
+    if (selectedTab) {
+        selectedTab.style.display = 'block';
+    }
     
-    // Check if loan functions are loaded (from loan.js)
-    if (typeof displayLoanTransactionsWithSearch === 'function') {
-        displayLoanTransactionsWithSearch(); 
+    if (clickedButton) {
+        clickedButton.classList.add('active');
+    }
+
+    // 🚨 بانگکردنی لۆجیکی تایبەت بە هەر تابێک
+    if (tabId === 'all-transactions' || tabId === 'loan-transactions') {
+         analyzeInventory(); // Load general data and KPIs
+    } else if (tabId === 'motherboard-management') {
+         displayBoardManagement(); // 👈 چالاککردنی لۆجیکی خەریتە
     }
 }
 
@@ -138,10 +144,11 @@ function displayTransactions(transactions) {
             <div class="transaction-card">
                 <div class="transaction-header">
                     <span class="transaction-date">بەروار: ${t.date}</span>
-                    <div class="actions">
-                            <button class="action-btn edit-trans-btn" onclick="editTransaction(${t.id})">دەستکاری</button>
-                            <button class="action-btn delete-trans-btn" onclick="deleteTransaction(${t.id})">سڕینەوە</button>
-                    </div>
+                  <div class="actions">
+                            <button class="action-btn edit-trans-btn" onclick="editTransaction(${t.id})">دەستکاری</button>
+                            <button class="action-btn prnt-trans-btn" onclick="generateInvoiceFromTransaction(${t.id})">🖨️ وەسڵ</button> 
+                            <button class="action-btn delete-trans-btn" onclick="deleteTransaction(${t.id})">سڕینەوە</button>
+                    </div>
                 </div>
                 <ul class="item-sold-list">
                     ${itemsListHTML}
@@ -156,6 +163,9 @@ function displayTransactions(transactions) {
         container.innerHTML += cardHTML;
     });
 }
+
+
+// --- LOAN DISPLAY AND ACTIONS (FIXED FOR DATA PAGE) ---
 function displayLoanTransactionsWithSearch() {
     const loans = getLoanTransactions();
     const container = document.getElementById('loanListContainer');
@@ -194,10 +204,11 @@ function displayLoanTransactionsWithSearch() {
             <div class="loan-card">
                 <div class="loan-header">
                     <span class="customer-name">کریار: ${loan.customer}</span>
-                    <div class="actions">
-                        <button class="action-btn edit-trans-btn" onclick="editTransaction(${loan.transactionId})">دەستکاری</button>
-                        <button class="pay-loan-btn" onclick="closeLoan(${loan.transactionId})">وا سڵکردن</button>
-                    </div>
+                 <div class="actions">
+                        <button class="action-btn edit-trans-btn" onclick="editTransaction(${loan.transactionId})">دەستکاری</button>
+                        <button class="action-btn prnt-trans-btn" onclick="generateInvoiceFromTransaction(${loan.transactionId})">🖨️ وەسڵ</button>
+                        <button class="pay-loan-btn" onclick="closeLoan(${loan.transactionId})">وا سڵکردن</button>
+                    </div>
                 </div>
                 <ul class="item-sold-list">
                     ${itemsListHTML}
@@ -212,9 +223,6 @@ function displayLoanTransactionsWithSearch() {
     });
 }
 
-
-// لە data.js زیاد بکە (لۆجیکی واسڵکردنی قەرز)
-
 function closeLoan(transactionId) {
     if (!confirm('دڵنیایت کە ئەم قەرزە بە تەواوی واسڵ کراوە و دەبێت بسڕدرێتەوە لە لیستی قەرزەکان؟')) {
         return;
@@ -222,16 +230,12 @@ function closeLoan(transactionId) {
 
     let loans = getLoanTransactions();
     
-    // 1. لابردنی قەرزەکە لە لیستی قەرزەکان
     const initialLength = loans.length;
     loans = loans.filter(loan => loan.transactionId !== transactionId);
 
     if (loans.length !== initialLength) {
-        // 2. پاشەکەوتکردنی گۆڕانکارییەکان
         saveLoanTransactions(loans);
-        
-        // 3. نوێکردنەوەی پەرەکە
-        analyzeInventory(); 
+        analyzeInventory(); // Refresh KPIs and lists
         alert('قەرزەکە بە سەرکەوتوویی واسڵ کرا و لابرا.');
     } else {
         alert('هەڵە: قەرزەکە نەدۆزرایەوە.');
@@ -239,10 +243,7 @@ function closeLoan(transactionId) {
 }
 
 
-
-
-
-// --- DELETE LOGIC (سڕینەوە) ---
+// --- TRANSACTION DISPLAY AND EDIT (باقی فەنکشنەکان وەک خۆی) ---
 function deleteTransaction(transactionId) {
     if (!confirm('ئایا دڵنیایت لە سڕینەوەی ئەم مامەڵەیە؟ ژمارەی ئایتمەکان دەگەڕێنرێنەوە بۆ ئینڤێنتۆری.')) {
         return;
@@ -285,8 +286,6 @@ function deleteTransaction(transactionId) {
     }
 }
 
-
-// --- EDIT LOGIC (مامەڵە) ---
 function closeModal() {
     const modalElement = document.getElementById('editModal');
     if (modalElement) {
@@ -349,8 +348,11 @@ function editTransaction(transactionId) {
     editModal.style.display = 'block';
 }
 
+
+
+
+
 function saveEditedTransaction(event) {
-    event.preventDefault();
     if (!currentTransactionBeingEdited || !currentTransactionBeingEdited.items) {
         alert("ناتوانرێت مامەڵە دەستکاری بکرێت. وەسڵەکە نەدۆزرایەوە.");
         closeModal();
@@ -476,3 +478,272 @@ document.addEventListener('DOMContentLoaded', () => {
         closeButton.onclick = closeModal;
     }
 });
+
+
+
+
+
+
+
+// ==========================================================
+// --- INVOICE GENERATION LOGIC FROM TRANSACTION (data.js) ---
+// ==========================================================
+
+function generateInvoiceFromTransaction(transactionId) {
+    const transactions = getTransactions();
+    const transaction = transactions.find(t => t.id === transactionId);
+
+    if (!transaction) {
+        alert('مامەڵەکە (Transaction) نەدۆزرایەوە بۆ دروستکردنی وەسڵ.');
+        return;
+    }
+
+    // وەرگرتنی داتای مامەڵە تۆمارکراوەکە
+    const subTotal = transaction.subTotalSale.toLocaleString() || '0'; 
+    const finalTotal = transaction.totalSale.toLocaleString() || '0';
+    const discount = transaction.discount.toLocaleString() || '0';
+    const customerName = transaction.customerName || 'کڕیاری گشتی';
+
+    const transactionIdDisplay = transaction.id; 
+    const currentDate = transaction.date; 
+
+    // زانیاری فرۆشگا (دەتوانیت بیگۆڕیت)
+    const storeName = "ناوی کۆمپانیا / فرۆشگای ئێوە";
+    const storeAddress = "کوردستان - هەولێر / ناونیشان";
+    const storePhone = "07XX XXX XXXX";
+
+    // 1. دروستکردنی خشتەی ئایتمەکان
+    let itemsTableHTML = '';
+    transaction.items.forEach(item => {
+        const itemTotal = (item.salePrice || 0) * (item.quantity || 0);
+        itemsTableHTML += `
+            <tr class="item-row">
+                <td style="text-align: right; width: 45%;">${item.name} (${item.brand} - ${item.type})</td>
+                <td style="text-align: center;">${(item.quantity || 0).toLocaleString()}</td>
+                <td style="text-align: left;">${(item.salePrice || 0).toLocaleString()} IQD</td>
+                <td style="text-align: left; font-weight: bold;">${itemTotal.toLocaleString()} IQD</td>
+            </tr>
+        `;
+    });
+
+    // 2. دروستکردنی تەواوی کۆدی HTMLی وەسڵەکە (بە هەمان دیزاینی پرۆفیشناڵی پێشوو)
+    const invoiceHTML = `
+        <!DOCTYPE html>
+        <html lang="ckb" dir="rtl">
+        <head>
+            <meta charset="UTF-8">
+            <title>وەسڵی فرۆشتن #${transactionIdDisplay}</title>
+            <style>
+                /* فونتی سەرەکی */
+                body { 
+                    font-family: Tahoma, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
+                    background-color: #f7f7f7; 
+                }
+
+                /* قاڵبی وەسڵ */
+                .invoice-box {
+                    max-width: 700px; 
+                    margin: 50px auto; 
+                    padding: 30px; 
+                    border: 1px solid #ddd;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, .1); 
+                    font-size: 14px; 
+                    line-height: 20px;
+                    color: #333; 
+                    background: #fff; 
+                    direction: rtl;
+                }
+
+                /* سەر و ژێرەوەی وەسڵ */
+                .header-section {
+                    display: flex;
+                    justify-content: space-between;
+                    border-bottom: 3px solid #007bff; 
+                    padding-bottom: 15px;
+                    margin-bottom: 25px;
+                }
+
+                .header-info {
+                    text-align: left;
+                    font-size: 13px;
+                }
+                .header-info p { margin: 0; }
+
+                .store-details {
+                    text-align: right;
+                }
+                .store-details h1 {
+                    color: #007bff;
+                    font-size: 26px;
+                    margin-top: 0;
+                    margin-bottom: 5px;
+                }
+
+                /* زانیاری کڕیار و فرۆشتن */
+                .client-info {
+                    border: 1px solid #eee;
+                    padding: 15px;
+                    margin-bottom: 20px;
+                    background-color: #fcfcfc;
+                }
+                .client-info p { margin: 5px 0; }
+                .client-info strong { color: #000; }
+
+                /* خشتەی ئایتمەکان */
+                .items-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    text-align: right;
+                }
+                .items-table th, .items-table td {
+                    padding: 10px;
+                    border-bottom: 1px solid #eee;
+                }
+                .items-table th {
+                    background-color: #007bff;
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 15px;
+                }
+                .item-row:nth-child(even) {
+                    background-color: #f9f9f9;
+                }
+
+                /* بەشی کۆی گشتی */
+                .total-section {
+                    width: 100%;
+                    margin-top: 20px;
+                    border-top: 2px solid #007bff;
+                    padding-top: 10px;
+                }
+                .total-row {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    margin: 5px 0;
+                }
+                .total-row strong {
+                    width: 250px;
+                    text-align: left;
+                    padding-left: 10px;
+                }
+                .total-row span {
+                    font-weight: bold;
+                    width: 150px;
+                    text-align: left;
+                }
+                .grand-total-row {
+                    font-size: 20px;
+                    color: #d9534f; 
+                    border-top: 1px dashed #ccc;
+                    padding-top: 10px;
+                }
+
+                /* ژێرەوە */
+                .footer { 
+                    text-align: center; 
+                    margin-top: 30px; 
+                    font-size: 12px; 
+                    color: #777;
+                    border-top: 1px solid #eee;
+                    padding-top: 10px;
+                }
+
+                /* چاودێری چاپکردن (چاپی سپی و ڕەش) */
+                @media print {
+                    body { 
+                        background: #fff; 
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                    }
+                    .invoice-box { 
+                        box-shadow: none; 
+                        border: none; 
+                        margin: 0; 
+                        padding: 0;
+                    }
+                    .items-table th {
+                        background-color: #007bff !important;
+                        color: #fff !important;
+                    }
+                    .grand-total-row {
+                        color: #d9534f !important;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="invoice-box">
+                
+                <div class="header-section">
+                    <div class="store-details">
+                        <h1>${storeName}</h1>
+                        <p>${storeAddress}</p>
+                        <p>تەلەفۆن: ${storePhone}</p>
+                    </div>
+                    <div class="header-info">
+                        <p><strong>وەسڵی ژمارە:</strong> #${transactionIdDisplay}</p>
+                        <p><strong>بەروار و کات:</strong> ${currentDate}</p>
+                    </div>
+                </div>
+
+                <div class="client-info">
+                    <p><strong>ناوی کڕیار:</strong> ${customerName}</p>
+                    <p><strong>شێوازی فرۆشتن:</strong> ${transaction.isLoan ? 'قەرز' : 'نەقد'}</p>
+                </div>
+
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 45%;">ناوی ئایتم</th>
+                            <th style="width: 15%; text-align: center;">بڕ</th>
+                            <th style="width: 20%; text-align: left;">نرخی تاک</th>
+                            <th style="width: 20%; text-align: left;">کۆی گشتی</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${itemsTableHTML}
+                    </tbody>
+                </table>
+                
+                <div class="total-section">
+                    <div class="total-row">
+                        <strong>کۆی گشتی (بێ داشکاندن):</strong>
+                        <span>${subTotal} IQD</span>
+                    </div>
+                    <div class="total-row">
+                        <strong>داشکاندن:</strong>
+                        <span>${discount} IQD</span>
+                    </div>
+                    <div class="total-row grand-total-row">
+                        <strong>کۆی کۆتایی:</strong>
+                        <span>${finalTotal} IQD</span>
+                    </div>
+                </div>
+                
+                <div class="footer">
+                    سوپاس بۆ مامەڵەکردنتان! هیوای ڕۆژێکی خۆشتان بۆ دەخوازین.<br>
+                    ئەم وەسڵە بە سیستەمی ئێمە دروستکراوە.
+                </div>
+
+            </div>
+        </body>
+        </html>
+    `;
+
+    // 3. دروستکردنی پەنجەرەی نوێ و چاپکردن
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+        printWindow.document.write(invoiceHTML);
+        printWindow.document.close();
+        
+        printWindow.onload = () => {
+            printWindow.focus();
+            printWindow.print();
+        };
+    } else {
+        alert('ناتوانرێت پەنجەرەی چاپکردن بکرێتەوە. تکایە ڕێگە بە "پۆپ ئەپەکان" بدە.');
+    }
+}
