@@ -202,5 +202,12 @@ function getQueryParam(param) {
     return encodedValue ? decodeURIComponent(encodedValue) : null;
 }
 
+// لە کۆتایی فایلی loan.js زیاد بکە
 
-
+// ✅ چارەسەری یەکلاکەرەوە: ناساندنی فەنکشنە سەرەکییەکان بە شێوەی Global
+window.getLoansGroupedByCustomer = getLoansGroupedByCustomer;
+window.displayCustomerOverview = displayCustomerOverview;
+window.loadLoanRouter = loadLoanRouter;
+window.loadOverview = loadOverview;
+window.loadDetailsView = loadDetailsView;
+window.loadInvoiceView = loadInvoiceView;
