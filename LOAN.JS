@@ -201,3 +201,6 @@ function getQueryParam(param) {
     const encodedValue = urlParams.get(param);
     return encodedValue ? decodeURIComponent(encodedValue) : null;
 }
+
+
+
