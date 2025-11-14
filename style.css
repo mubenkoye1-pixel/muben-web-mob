@@ -537,4 +537,7 @@ justify-content: space-around;
         display: flex;
         gap: 5px;
         justify-content: center;
+        position: fixed;
+        bottom: 50px;
+        width: 50%;
     }
