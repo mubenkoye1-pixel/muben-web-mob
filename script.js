@@ -487,9 +487,10 @@ function generateInvoiceAndPrint() {
     const currentTime = new Date().toLocaleTimeString('ckb-IQ', { hour: '2-digit', minute: '2-digit' });
 
     // زانیاری فرۆشگا (دەتوانیت بیگۆڕیت)
-    const storeName = "ناوی کۆمپانیا / فرۆشگای ئێوە";
-    const storeAddress = "کوردستان - هەولێر / ناونیشان";
-    const storePhone = "07XX XXX XXXX";
+    const storeName = "SAIFADEN PHONE";
+    const storeAddress = "هەولێر : کەلەک";
+    const storePhone = "0751 400 2080";
+  
 
     // 1. دروستکردنی خشتەی ئایتمەکان
     let itemsTableHTML = '';
@@ -658,8 +659,8 @@ function generateInvoiceAndPrint() {
                 
                 <div class="header-section">
                     <div class="store-details">
-                        <h1>ناووی دوکان</h1>
-                        <p>ناونیشان</p>
+                        <h1>${storeName}</h1>
+                        <p>ناونیشان:${storeAddress}</p>
                         <p>تەلەفۆن: ${storePhone}</p>
                     </div>
                     <div class="header-info">
@@ -671,6 +672,7 @@ function generateInvoiceAndPrint() {
 
                 <div class="client-info">
                     <p><strong>ناوی کڕیار:</strong> ${customerName}</p>
+                     <p><strong>ژمارەی کڕیار:</strong> </p>
                     <p><strong>شێوازی فرۆشتن:</strong> ${document.getElementById('isLoanSale').checked ? 'قەرز' : 'نەقد'}</p>
                 </div>
 
