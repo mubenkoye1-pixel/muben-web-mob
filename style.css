@@ -295,7 +295,7 @@ font-weight: bold;
 }
 
 .cart-summary {
-   flex-shrink: 0;;
+   flex-shrink: 0;
     border-top: 1px solid #ccc;
     text-align: center;
 }
@@ -428,9 +428,9 @@ background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی ت
 
 /* کۆی گشتی کۆتایی */
 .final-total-line {
-    font-size: 1.2em;
+    font-size: 1em;
     color: #28a745; /* Green for the final price */
-    margin-top: 10px;
+   
 }
 
 /* --- LOAN / CREDIT SALE DESIGN (Inside cart-summary) --- */
@@ -448,7 +448,8 @@ background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی ت
 }
 
 .loan-toggle-area label {
-    font-size: 1.1em;
+    
+    font-size: 1em;
     font-weight: 700;
     color: #dc3545; /* ڕەنگی سوور بۆ وشەی 'قەرز' */
     cursor: pointer;
@@ -530,4 +531,10 @@ justify-content: space-around;
  font-weight: bold;
     font-size: 0.8em;
     width: 50%;
+    }
+
+    .btnfro{
+        display: flex;
+        gap: 5px;
+        justify-content: center;
     }

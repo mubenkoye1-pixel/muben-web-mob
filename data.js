@@ -223,6 +223,9 @@ function displayLoanTransactionsWithSearch() {
     });
 }
 
+
+
+
 function closeLoan(transactionId) {
     if (!confirm('دڵنیایت کە ئەم قەرزە بە تەواوی واسڵ کراوە و دەبێت بسڕدرێتەوە لە لیستی قەرزەکان؟')) {
         return;

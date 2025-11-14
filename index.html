@@ -30,6 +30,9 @@
                
                  <div class="loan-toggle-area">
                         <label>
+                               <p class="sub-total-line">بێ داشکاندن: <span id="sub-total-price">0</span> IQD</p>
+                    <p class="final-total-line"><strong>کۆی کۆتایی: <span id="final-total-price">0</span> IQD</strong></p>
+                        <input type="number" id="discountInput" value="0" min="0" oninput="updateCartDisplay()" class="discount-input">
                             <input type="checkbox" id="isLoanSale" onchange="toggleCustomerInput()"> فرۆشتن بە قەرز
                         </label>
                         <input type="text" id="customerNameInput" placeholder="ناوی کریار..." class="customer-input" style="display: none;" required list="customerDatalist">
@@ -47,15 +50,11 @@
                     <p class="empty-cart">سەبەتەکە بەتاڵە.</p>
                 </div>
                 
-                <div class="cart-summary">
                    
 
                     
 
-                    <p class="sub-total-line">کۆی گشتی (بێ داشکاندن): <span id="sub-total-price">0</span> IQD</p>
-                    <p class="final-total-line"><strong>کۆی کۆتایی: <span id="final-total-price">0</span> IQD</strong></p>
-                        <input type="number" id="discountInput" value="0" min="0" oninput="updateCartDisplay()" class="discount-input">
-
+     <div class="btnfro">
                     <button class="checkout-btn" onclick="checkout()">تەواوکردنی فرۆشتن</button>
                     <button class="invoice-btn" onclick="generateInvoiceAndPrint()">🖨️</button>
                 </div>
@@ -78,6 +77,18 @@
             </div>
 
         </div>
+
+  <footer class="cart-summary">
+                   
+
+                    
+
+                   
+                    <button class="checkout-btn" onclick="checkout()">تەواوکردنی فرۆشتن</button>
+                    <button class="invoice-btn" onclick="generateInvoiceAndPrint()">🖨️</button>
+                </footer>
+
+
     </div>
     <datalist id="customerDatalist"></datalist>
     
