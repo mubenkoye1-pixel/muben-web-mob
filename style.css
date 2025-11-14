@@ -11,6 +11,7 @@ body {
   background-color: #f4f7f6; 
   font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
   direction: rtl;
+  overflow: hidden;
   
 }
 
@@ -86,9 +87,14 @@ body {
 .left-div{
   background-color: rgb(138, 146, 153);
   width: 50%;
+  height: 79vh;
 }
 .right-div{
   width: 50%;
+  height: 79vh;
+ 
+    cursor: pointer;
+  
 
 }
 
@@ -113,6 +119,7 @@ body {
     width: 50%;
     padding: 4px;
     background-color: white; 
+ 
     
 
 }
@@ -255,25 +262,36 @@ padding-right: 5px;
 }
 
 .cart-item {
-    background-color: white;
-    padding: 5px;
+    height: 40PX;
+    padding: 2px;
     margin-bottom: 3px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     border-right: 5px solid #ccc;
 }
-
+.tablethead{
+    justify-content: space-between;
+  height: 40PX;
+    padding: 2px;
+    margin-bottom: 3px;
+}
 .cart-item .title {
     font-weight: bold;
-    font-size: 1.1em;
-    margin-bottom: 3px;
+    font-size: 0.8em;
+    width: 50%;
+    
+}
+
+.item-id{
+font-weight: bold;
+    font-size: 0.8em;
+    width: 50%;
+
 }
 
 .cart-item .details {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 1.3em;
+    font-size: 0.8em;
 }
 
 .cart-summary {
@@ -298,29 +316,29 @@ padding-right: 5px;
     background-color: #03ba00ba;
 }
 
+.fa-solidfa-trash{
+  display: block;
 
+}
 
 
 .cart-item .remove-btn {
-
-    background-color: #f8d7da; 
-    color: #721c24; 
-    border: 1px solid #f5c6cb;
-    padding: 5px 10px;
-    border-radius: 5px;
+background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی تۆ یان ڕوون (transparent) */
+    color: #e74c3c; /* ڕەنگی سوور بۆ هێماکە (کە گونجاوترە بۆ سڕینەوە) */
+    border: none;
+    padding: 8px; /* پادینگ کەمتر دەکەینەوە چونکە تەنها هێمایە */
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9em;
-    font-weight: 600;
-    transition: background-color 0.2s, box-shadow 0.2s, color 0.2s;
+    font-size: 1.2em; /* قەبارەی هێماکە گەورەتر دەکەین */
+    transition: color 0.3s, background-color 0.3s;
+    line-height: 1; /* بۆ دڵنیابوون لەوەی هێماکە لە ناوەڕاستدا دەردەکەوێت */
+
+
     
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .cart-item .remove-btn:hover {
-    background-color: #dc3545; 
-    color: white; 
-    border-color: #dc3545;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: rgba(201, 16, 16, 0.433); 
 }
 
 .cart-item .remove-btn:active {
@@ -383,11 +401,13 @@ padding-right: 5px;
 
 /* Input بۆ نرخی ئایتم لەناو سەبەتە (Cart Item Price Input) */
 .cart-item-price-input {
+    color: #007bff;
+    font-size: 0.8rem;
+    border: none;
+    background-color: transparent;
     width: 80px; 
     padding: 3px;
     margin-right: 5px;
-    border: 1px solid #007bff;
-    border-radius: 4px;
     text-align: center;
     font-weight: bold;
 }
@@ -487,3 +507,27 @@ padding-right: 5px;
 .invoice-btn:hover{
     background-color: #000678bc;
 }
+
+
+
+
+.head-tr{
+  
+    background-color: rgb(29, 29, 30);
+    height: 5vh;
+}
+
+.teblhed{
+    padding: 0px;
+    align-items: center;
+    width: 100%;
+    display: flex;
+background-color: #999;
+height: 40px;
+justify-content: space-around;
+}
+.titlehed{
+ font-weight: bold;
+    font-size: 0.8em;
+    width: 50%;
+    }

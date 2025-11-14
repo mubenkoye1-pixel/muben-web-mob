@@ -295,10 +295,11 @@ function updateCartDisplay() {
         cartElement.style.borderRight = `5px solid ${item.color || '#ccc'}`;
         
         cartElement.innerHTML = `
-            <p class="title">${item.name}</p>
+      
             <div class="details">
-                <span>x${item.quantity}</span>
-                <span style="font-weight: bold;">= ${itemTotal.toLocaleString()}</span>
+            <p class="title">${item.name}</p>
+                <span>${item.quantity}</span>
+                <span style="font-weight: bold;"> ${itemTotal.toLocaleString()}</span>
                 
                 <input type="text" 
                        value="${currentSalePrice}" 
@@ -308,7 +309,7 @@ function updateCartDisplay() {
                        pattern="[0-9]*" 
                        inputmode="numeric"> 
                        
-                <button class="remove-btn" onclick="removeFromCart(${item.id})">لابردن</button>
+                <button class="remove-btn" onclick="removeFromCart(${item.id})"><i class="fa-solidfa-trash"></i>X</button>
             </div>
         `;
         cartContainer.appendChild(cartElement);

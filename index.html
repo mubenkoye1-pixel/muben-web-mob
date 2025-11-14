@@ -2,6 +2,8 @@
 <html lang="ckb" dir="rtl">
 <head>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سیستەمی کارگێڕی - فرۆشتن</title>
@@ -24,7 +26,6 @@
         </div>
 
         <div class="main-div sales-layout">
-            
             <div class="left-div cart-div">
                
                  <div class="loan-toggle-area">
@@ -32,7 +33,16 @@
                             <input type="checkbox" id="isLoanSale" onchange="toggleCustomerInput()"> فرۆشتن بە قەرز
                         </label>
                         <input type="text" id="customerNameInput" placeholder="ناوی کریار..." class="customer-input" style="display: none;" required list="customerDatalist">
+                <div class="teblhed">
+            <p class="titlehed">ناوی ئایتم</p>
+                <span>عدد</span>
+                <p>کۆی نرخ</p>
+                <p>نرخ</p>
+                <p>سرینەوە</p>
                     </div>
+                     
+                    </div>
+                     
                 <div id="cartItems" class="cart-items-list">
                     <p class="empty-cart">سەبەتەکە بەتاڵە.</p>
                 </div>
