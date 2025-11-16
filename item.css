@@ -258,3 +258,40 @@
     border: 1px solid #ccc;
     vertical-align: middle;
 }
+
+/* --- STYLES FOR SEARCH INPUT (Used in data.html loan tab) --- */
+
+.search-and-controls {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ddd; 
+    padding-top: 10px;
+    display: flex;
+}
+
+.search-and-controls .search-input {
+    width: 100%;
+    max-width: 450px; /* دانانی گەورەترین پانتایی بۆ Input */
+    
+    /* شێوازدانان */
+    padding: 12px 18px;
+    border: 2px solid #007bff; /* سنووری شین بۆ فۆکەس */
+    border-radius: 8px; 
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #333;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: white;
+}
+
+/* کاریگەری کاتێک ماوس دەبرێتە سەر/کلیک دەکرێت */
+.search-and-controls .search-input:focus {
+    border-color: #dc3545; /* سوور دەبێت لەکاتی نووسین (گرنگی قەرز) */
+    box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.1); 
+    outline: none;
+}
+
+.search-and-controls .search-input::placeholder {
+    color: #999;
+    font-style: italic;
+}

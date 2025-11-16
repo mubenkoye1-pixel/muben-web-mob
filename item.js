@@ -241,13 +241,39 @@ function setItemColorByType() {
 
 // --- Inventory CRUD (Synchronous LocalStorage calls) ---
 
-function loadItems() { 
-    const items = getInventory(); 
-    displayItemsTable(items);
-    // Only set color if the item form is present (i.e., on item.html)
-    if (document.getElementById('itemForm')) { 
-        setItemColorByType(); 
-    }
+// لە item.js: گۆڕینی فەنکشنی loadItems()
+
+ function loadItems() { // 🚨 async
+    const items =  getInventory(); // 🚨 await
+    
+    // 1. وەرگرتنی نرخی گەڕان
+    const searchInput = document.getElementById('itemSearchInput');
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    let itemsToDisplay = items;
+
+    // 2. فلتەرکردنی داتا ئەگەر گەڕان هەبێت
+    if (searchTerm) {
+        itemsToDisplay = items.filter(item => {
+            const itemString = [
+                item.name, 
+                item.brand, 
+                item.quality,
+                item.type, 
+                item.storageLocation // ⚠️ شوێنی هەڵگرتنی نوێ زیاد کرا
+            ].join(' ').toLowerCase();
+
+            return itemString.includes(searchTerm);
+        });
+    }
+    
+    // 3. نیشاندانی خشتەی فلتەرکراو
+    displayItemsTable(itemsToDisplay);
+    
+    // Only set color if the item form is present (i.e., on item.html)
+    if (document.getElementById('itemForm')) { 
+        setItemColorByType(); 
+    }
 }
 
 function saveOrUpdateItem(event) { 

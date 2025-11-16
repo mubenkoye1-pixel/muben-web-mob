@@ -88,6 +88,7 @@ body {
   background-color: rgb(138, 146, 153);
   width: 50%;
   height: 79vh;
+  display: flex;
 }
 .right-div{
   width: 50%;
@@ -112,7 +113,6 @@ body {
     border-right: 1px solid #ddd;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .right-div.item-list-div {
@@ -255,10 +255,10 @@ padding-right: 5px;
 }
 
 .cart-items-list {
-    height: 100px;
+    top: 10vh;
     flex-grow: 1;
     overflow-y: auto;
-    max-height: calc(100vh - 2px);
+    max-height: calc(69vh - 2px);
 }
 
 .cart-item {
@@ -437,7 +437,6 @@ background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی ت
 
 .loan-toggle-area {
     /* هەمان شێوازی پێشوو کە لە HTML دا زیاد کرا */
-    padding: 10px 0;
     border-top: 1px dashed #ccc;
     border-bottom: 1px dashed #ccc;
     margin-bottom: 10px;
@@ -538,6 +537,6 @@ justify-content: space-around;
         gap: 5px;
         justify-content: center;
         position: fixed;
-        bottom: 50px;
+        bottom: 5vh;
         width: 50%;
     }

@@ -480,6 +480,7 @@ function generateInvoiceAndPrint() {
     const finalTotal = document.getElementById('final-total-price').textContent;
     const discount = document.getElementById('discountInput').value;
     const customerName = document.getElementById('isLoanSale').checked 
+    const numcustomer = document.getElementById('customerPhone')
                         ? document.getElementById('customerNameInput').value.trim() 
                         : 'کڕیاری گشتی';
 
@@ -489,8 +490,8 @@ function generateInvoiceAndPrint() {
 
     // زانیاری فرۆشگا (دەتوانیت بیگۆڕیت)
     const storeName = "SAIFADEN PHONE";
-    const storeAddress = "هەولێر : کەلەک";
-    const storePhone = "0751 400 2080";
+    const storeAddress = "هەولێر : کەلەک شەقامی 20م";
+    const storePhone = "07514002080";
   
 
     // 1. دروستکردنی خشتەی ئایتمەکان
@@ -673,7 +674,7 @@ function generateInvoiceAndPrint() {
 
                 <div class="client-info">
                     <p><strong>ناوی کڕیار:</strong> ${customerName}</p>
-                     <p><strong>ژمارەی کڕیار:</strong> </p>
+                   
                     <p><strong>شێوازی فرۆشتن:</strong> ${document.getElementById('isLoanSale').checked ? 'قەرز' : 'نەقد'}</p>
                 </div>
 

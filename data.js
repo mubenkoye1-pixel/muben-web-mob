@@ -511,9 +511,9 @@ function generateInvoiceFromTransaction(transactionId) {
     const currentDate = transaction.date; 
 
     // زانیاری فرۆشگا (دەتوانیت بیگۆڕیت)
-    const storeName = "ناوی کۆمپانیا / فرۆشگای ئێوە";
-    const storeAddress = "کوردستان - هەولێر / ناونیشان";
-    const storePhone = "07XX XXX XXXX";
+ const storeName = "SAIFADEN PHONE";
+    const storeAddress = "هەولێر : کەلەک شەقامی 20م";
+    const storePhone = "07514002080";
 
     // 1. دروستکردنی خشتەی ئایتمەکان
     let itemsTableHTML = '';
@@ -728,7 +728,7 @@ function generateInvoiceFromTransaction(transactionId) {
                 
                 <div class="footer">
                     سوپاس بۆ مامەڵەکردنتان! هیوای ڕۆژێکی خۆشتان بۆ دەخوازین.<br>
-                    ئەم وەسڵە بە سیستەمی ئێمە دروستکراوە.
+                   
                 </div>
 
             </div>
