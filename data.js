@@ -155,7 +155,7 @@ function displayTransactions(transactions) {
                 </ul>
                 <div class="transaction-header" style="background-color: #f8f9fa;">
                     <span class="total-sale">کۆی فرۆش: ${(t.totalSale || 0).toLocaleString()} IQD</span>
-                    <span class="${profitClass}">کۆی قازانج: ${(t.totalProfit || 0).toLocaleString()} IQD</span>
+                   
                     <span class="total-count">کۆی عدد: ${t.totalItemsCount || 0}</span>
                 </div>
             </div>

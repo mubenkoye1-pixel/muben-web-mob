@@ -1,0 +1,430 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.head-div {
+  padding: 0 30px; 
+  background-color: #007bff; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  height: 60px; 
+  display: flex;
+  flex-direction: row; 
+  justify-content: space-between; 
+  align-items: center;
+  color: white;
+}
+
+.logo-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  text-decoration: none; 
+  padding: 0 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 25px; 
+  align-items: center;
+}
+
+.btn-head {
+  font-size: 18px; 
+  font-weight: 500;
+  color: white;
+  text-decoration: none; 
+  padding: 5px 0; 
+  transition: color 0.3s ease; 
+  position: relative;
+}
+
+.btn-head:hover {
+  color: #ffc107; 
+}
+
+.btn-head::after {
+  content: '';
+  position: absolute;
+  right: 0; 
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #ffc107;
+  transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+  width: 100%;
+  right: 0; 
+}
+
+
+
+
+body {
+    font-family: 'Arial', sans-serif; /* دەتوانیت فۆنتێکی کوردی لێرە دابنێیت */
+    direction: rtl; /* بۆ زمانی کوردی و ڕاستکردنەوەی لایەنەکان */
+    text-align: right;
+    background-color: #f4f7f6; /* ڕەنگێکی هێمن بۆ پاشخان */
+}
+
+/* دیزاینی سەرەکی کۆنتەینەری 'additem' */
+.additem {
+    background-color: #ffffff;
+    padding: 5px;
+    border: 1px solid #e0e0e0;
+}
+
+/* ڕێکخستنی ڕیزەکان بۆ سێ ستوون */
+.input-row {
+    display: flex;
+    gap: 20px; /* دووری نێوان ستوونەکان */
+    margin-bottom: 20px;
+    flex-wrap: wrap; /* ئەگەر پانی کەم بوو، با بشکێتەوە بۆ خوارەوە */
+}
+
+/* دیزاینی هەر یەکێک لە فۆڕم-گرووپەکان */
+.form-group {
+    flex: 1; /* یەکسانکردنی پانی سێ گرووپەکە لە یەک ڕیزدا */
+    min-width: 280px; /* کەمترین پانی بۆ گرووپەکە (بۆ شاشە بچووکەکان) */
+}
+
+/* دیزاینی لێبڵەکان */
+.form-group label {
+    display: block; /* لێبڵەکە بەتەنیا ڕیزی خۆی بگرێت */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+    font-size: 15px;
+}
+
+/* دیزاینی Input و Selectۆرەکان */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #555555;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* زۆر گرنگە بۆ ڕێکخستنی پانی */
+}
+
+/* دیزاینی سەرنجڕاکێشتر کاتێک کلیکی لەسەر دەکرێت */
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #007bff; /* ڕەنگی شین بۆ فۆکەس */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    outline: none; /* لابردنی سنوری ستاندارد */
+    background-color: #ffffff;
+}
+
+/* دیزاین بۆ placeholder (نێو ئینپوت) */
+::placeholder {
+    color: #aaaaaa;
+    font-style: italic;
+}
+
+/* دیزاینی تایبەت بۆ کۆنتەینەری ژمارەی بەردەست، چونکە لە دەرەوەی ڕیزەکاندایە */
+/* ئەگەر دەتەوێت ئەویش وەکو ستوونێکی تەواو بێت: */
+.additem > .form-group {
+    max-width: 100%;
+}
+
+
+/* ------------------------------------------- */
+/* دیزاینی دوگمە و ژمارەی بەردەست          */
+/* ------------------------------------------- */
+
+/* ڕێکخستنی کۆنتەینەری ناوی ئایتم بۆ ئەوەی ڕیزێکی تەواو بێت (وەک ناوی ئایتم) */
+.full-width-item {
+    width: 100%; /* دڵنیابوون لەوەی 100%ی پانی دایگرتووە */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* ڕێکخستنی شوێنی Input و Button لەناو یەک گرووپدا */
+.input-and-button {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.input-and-button input {
+    flex-grow: 1; /* ئینپوتەکە زۆرترین شوێنی ڕیزەکە دەگرێت */
+}
+
+
+/* دیزاینی دوگمەی سەرەکی (زیاد کردن) */
+.add-button {
+    flex-shrink: 0; /* ڕێگە نادات دوگمەکە بچووک بێتەوە */
+    background-color: #28a745; /* ڕەنگی سەوز (سەوزێکی مۆدێرن) */
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px; /* قەبارەی دوگمەکە */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); /* سێبەرێکی جوان */
+}
+
+/* دیزاینی دوگمەکە کاتێک ماوس دەچێتە سەری */
+.add-button:hover {
+    background-color: #218838; /* ڕەنگێکی تۆختر */
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+}
+
+/* دیزاینی دوگمەکە کاتێک کلیکی لەسەر دەکرێت */
+.add-button:active {
+    background-color: #1e7e34;
+    transform: translateY(1px); /* جووڵەیەکی کەم بۆ ئەوەی هەست بکەیت کە کرتەت لەسەر کردووە */
+}
+
+
+
+
+
+
+
+/* ... هەموو کۆدەکانی پێشوو لێرە ماونەتەوە ... */
+
+/* لابردنی دیزاینی additem چونکە ئیتر پێویست نییە لە inventory.html نوێدا */
+/* .additem { ... } */
+/* .input-row { ... } */ 
+
+/* ناونیشان و گەڕان */
+.main-inventory-content {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.page-title {
+    color: #333;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+/* ... هەموو کۆدەکانی پێشوو وەک head-div و .main-inventory-content ... */
+
+/* لابردنی ستاڵی خشتەی کۆن و جێگرتنەوەی بە کارد */
+.inventory-table-container {
+    padding: 10px 0;
+}
+
+.inventory-card-grid {
+    display: grid;
+    /* پیشاندانی سێ ستوون لەسەر شاشەی گەورە */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.inventory-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* دیزاینی سنوری لای ڕاست (وەک وێنەکە) */
+    border-right: 8px solid #ffc107; 
+    display: flex;
+    flex-direction: column;
+}
+
+.inventory-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.item-name {
+    font-size: 1.4em;
+    font-weight: 700;
+    color: #333;
+    margin: 0;
+}
+
+.action-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-right: 5px;
+    transition: color 0.2s;
+}
+
+.edit-card-btn { color: #007bff; }
+.edit-card-btn:hover { color: #0056b3; }
+
+.delete-card-btn { color: #dc3545; }
+.delete-card-btn:hover { color: #a71d2a; }
+
+.card-body .info-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.info-group:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.info-label {
+    font-weight: 500;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+.info-label i {
+    margin-left: 8px;
+    font-size: 0.9em;
+}
+
+.info-value {
+    font-weight: bold;
+    color: #333;
+}
+
+.quantity-value {
+    color: #28a745; /* سەوز بۆ بڕی بەردەست */
+    font-size: 1.1em;
+}
+
+.total-value {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+.total-cost-value {
+    color: #e0a800; /* زەردی گەش بۆ کۆی بەها */
+    font-size: 1.2em;
+}
+
+.location-group, .note-group {
+    margin-top: 10px;
+    display: block; /* وا دەکات لە ڕیزێکی تەواودا دەرکەوێت */
+}
+.location-group .info-value, .note-group .info-value {
+    display: block;
+    font-weight: normal;
+    font-style: italic;
+    color: #555;
+    margin-top: 5px;
+    font-size: 0.95em;
+}
+
+
+/* دیزاینی کۆی گشتی مەخزەن (لە خوار کارتەکان) */
+.inventory-total-summary {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #fff9e6; /* ڕەنگی پاشخانێکی کاڵ */
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.total-label {
+    color: #333;
+}
+
+.total-value-final {
+    color: #e0a800;
+    font-size: 1.2em;
+}
+
+/* دیزاینی فۆڕمی زیادکردنی کاڵای مەخزەن */
+.add-to-warehouse-form {
+    /* هەمان ستاڵی پێشوو بمێنێتەوە */
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+
+
+
+/* inventory.css - زیادکردنی ئەم ستاێلانە */
+
+.transfer-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.transfer-section form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.transfer-input {
+    flex-grow: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 100px;
+    font-size: 14px;
+}
+
+.transfer-btn {
+    background-color: #007bff; /* شین */
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.transfer-btn:hover {
+    background-color: #0056b3;
+}
+
+.transfer-btn i {
+    margin-left: 5px;
+}
