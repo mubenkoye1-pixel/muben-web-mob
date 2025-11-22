@@ -9,16 +9,17 @@
     <link rel="stylesheet" href="item.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بەڕێوەبردنی ئایتمەکان</title> 
+    <title>براند</title>
 </head>
 <body>
     <div class="all-div">
         
         <div class="head-div">
-            <nav class="nav-links">
-           <a href="index.html" class="btn-head">سەرەکی</a>
+           <nav class="nav-links">
+                  <a href="index.html" class="btn-head">سەرەکی</a>
                 <a href="data.html" class="btn-head">داتا</a>
                 <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="brand.html" class="btn-head">براند</a>
                 <a href="reports.html" class="btn-head">راپۆرت</a>
                     <a href="inventory.html" class="btn-head">مەخزەن</a>
                 <a href="qarz.html" class="btn-head">قەرز</a>
@@ -32,116 +33,25 @@
 
         <div class="main-div">
             
-            <div class="side-panel">
-                
-                <div class="component-box">
-                    <h3>ناوەکانی براند</h3>
-                    <form onsubmit="addBrand(event)" class="add-form">
-                        <input type="text" id="newBrand" placeholder="براندێکی نوێ بنووسە" required>
-                        <button type="submit" class="add-btn">زیادکردن</button>
-                    </form>
-                    <ul id="brandList" class="component-list">
-                        </ul>
-                </div>
-
-                <div class="component-box">
-                    <h3>جۆر (Type)</h3>
-                    <form onsubmit="addType(event)" class="add-form type-form-group">
-                        <input type="text" id="newType" placeholder="جۆرێکی نوێ بنووسە (نموونە: شاشە)" required>
-                        <input type="color" id="newTypeColor" value="#007bff" title="ڕەنگی جۆر">
-                        <button type="submit" class="add-btn">زیادکردن</button>
-                    </form>
-                    <ul id="typeList" class="component-list">
-                        </ul>
-                </div>
-                
-                <div class="component-box">
-                    <h3>جۆرایەتی (کوالێتی)</h3>
-                    <form onsubmit="addQuality(event)" class="add-form">
-                        <input type="text" id="newQuality" placeholder="کوالێتییەکی نوێ بنووسە" required>
-                        <button type="submit" class="add-btn">زیادکردن</button>
-                    </form>
-                    <ul id="qualityList" class="component-list">
-                        </ul>
-                </div>
-
-            </div>
+            <!-- Side panel removed: Brand/Type/Quality creation moved to `brand.html` -->
 
  
             
             <div class="item-form-container">
-                <h1 id="formTitle">زیادکردنی ئایتمی نوێ</h1>
-                
-                <form id="itemForm" onsubmit="saveOrUpdateItem(event)">
-                    <input type="hidden" id="itemId" value="">
+                <!-- Inline creation: add rows directly into the table -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px">
+                  <h1 id="formTitle">لیستی ئایتمە بەردەستەکان</h1>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <button id="inlineAddBtn" class="submit-btn" style="padding:10px 14px">＋ زیادکردن</button>
+                    <a href="brand.html" class="cancel-btn" style="text-decoration:none;padding:8px 12px">براند / جۆر / کوالێتی</a>
+                  </div>
+                </div>
 
-                    <div class="form-grid">
-                        
-                        <div class="form-group">
-                            <label for="itemName">ناوی ئایتم:</label>
-                            <input type="text" id="itemName" required placeholder="نموونە: شاشەی A50">
-                        </div>
+                <div class="search-and-controls">
+                  <input type="text" id="itemSearchInput" placeholder="گەڕان بە ناوی ئایتم، براند، یان کوالێتی..." oninput="loadItems()" class="search-input">
+                </div>
 
-                        <div class="form-group">
-                            <label for="itemType">جۆر:</label>
-                            <select id="itemType" required onchange="setItemColorByType()">
-                                </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="itemBrand">براند:</label>
-                            <select id="itemBrand" required>
-                                </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="itemQuality">کوالێتی:</label>
-                            <select id="itemQuality" required>
-                                </select>
-                        </div>
-
-
-           <div class="form-group">
-    <label for="storageLocation">شوێنی هەڵگرتن (چەکمەجە/ژمارە):</label>
-    <input type="text" id="storageLocation" placeholder="نموونە: چەکمەجەی 3، ڕەفەی B5">
-</div>
-
-<div class="form-group">
-    <label for="isComponentSource">ئایتمی پارچەدان (وەک خەریتەی مۆبایل):</label>
-    <input type="checkbox" id="isComponentSource" value="true">
-</div>
-
-
-                        <div class="form-group">
-                            <label for="itemPurchasePrice">نرخی کڕین (دینار):</label>
-                            <input type="number" id="itemPurchasePrice" min="0" required placeholder="نموونە: 15000">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="itemSalePrice">نرخی فرۆشتن (دینار):</label>
-                            <input type="number" id="itemSalePrice" min="0" required placeholder="نموونە: 20000">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="itemQuantity">ژمارەی بەردەست (عدد):</label>
-                            <input type="number" id="itemQuantity" min="1" required placeholder="نموونە: 10">
-                        </div>
-                        
-                        <input type="hidden" id="itemColor" value="#007bff"> 
-
-                    </div>
-                    
-                    <div class="form-actions">
-                        <button type="submit" id="submitBtn" class="submit-btn">✅ زیادکردن</button>
-                        <button type="button" onclick="resetForm()" class="cancel-btn">سڕینەوەی فۆڕم</button>
-                    </div>
-                </form>
-<div class="search-and-controls">
-    <input type="text" id="itemSearchInput" placeholder="گەڕان بە ناوی ئایتم، براند، یان کوالێتی..." oninput="loadItems()" class="search-input">
-    </div>
-                <h2 style="margin-top: 40px; border-bottom: 2px solid #ccc; padding-bottom: 10px;">لیستی ئایتمە بەردەستەکان</h2>
-                <div id="itemListTableContainer">
-                    </div>
+                <div class="itemListTableContainer" id="itemListTableContainer"></div>
 
             </div>
 

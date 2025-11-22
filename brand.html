@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brand Management</title>
+    <link rel="stylesheet" href="brand.css">
+    <script defer src="brand.js"></script>
+</head>
+<body>
+  <div class="all-div">
+    <div class="head-div">
+          <nav class="nav-links">
+                  <a href="index.html" class="btn-head">سەرەکی</a>
+                <a href="data.html" class="btn-head">داتا</a>
+                <a href="item.html" class="btn-head">ئایتم</a>
+                <a href="brand.html" class="btn-head">براند</a>
+                <a href="reports.html" class="btn-head">راپۆرت</a>
+                    <a href="inventory.html" class="btn-head">مەخزەن</a>
+                <a href="qarz.html" class="btn-head">قەرز</a>
+                <a href="expenses.html" class="btn-head">خەرجیەکانم</a>
+                <a href="customer.html" class="btn-head">کریار</a>
+            </nav>
+            <a href="index.html" class="logo-title">
+                <span style="font-size: 30px;">💰</span> سیستەم - براند
+            </a>
+        </div>
+    <div class="container">
+      <div class="page-card">
+        <aside class="side-panel">
+          <div class="panel">
+            <h3>گەڕان</h3>
+            <div class="search-row">
+              <input id="brandSearch" placeholder="Search brands / types / qualities" />
+              <button class="secondary" onclick="clearBrandForm();clearTypeForm();clearQualityForm();">Clear</button>
+            </div>
+            <h3 style="margin-top:12px">بڕاند</h3>
+            <ul id="brandList" class="list"></ul>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="panel">
+            <h3>جۆرەکان (کەتێگۆریەکان)</h3>
+            <ul id="typeList" class="list"></ul>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="panel">
+            <h3>کوالێتیەکان</h3>
+            <ul id="qualityList" class="list"></ul>
+          </div>
+        </aside>
+
+        <main class="main">
+          <div class="card">
+            <h2> بڕاند</h2>
+            <form id="brandForm">
+              <input type="hidden" id="brandId">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="brandName">ناوی بڕاند</label>
+                  <input id="brandName" class="input" placeholder="e.g. Samsung" required />
+                </div>
+                <div class="form-group">
+                  <label for="brandDesc">کورتەیەک لەسەر بڕاند</label>
+                  <input id="brandDesc" class="input" placeholder="وەسفی هەڵبژاردن" />
+                </div>
+              </div>
+              <div class="controls">
+                <button class="primary" type="submit">پاشەکەوتکردنی بڕاند</button>
+                <button type="button" class="secondary" onclick="clearBrandForm()">ڕێستکردنەوە</button>
+              </div>
+            </form>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="card">
+            <h2>دیفاین جۆر / کەتێگۆری</h2>
+            <form id="typeForm">
+              <input type="hidden" id="typeId">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="typeName">ناوی جۆر</label>
+                  <input id="typeName" class="input" placeholder="e.g. Smartphone" required />
+                </div>
+                <div class="form-group">
+                  <label for="typeBrand">بڕاندی پەیوەندیدار</label>
+                  <select id="typeBrand" class="input"></select>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="typeColor">ڕەنگ </label>
+                  <input id="typeColor" type="color" value="#ffb400" class="input" />
+                </div>
+                <div class="form-group">
+                  <label for="typeNote">تێبینی (هەڵبژاردە)</label>
+                  <input id="typeNote" class="input" placeholder="تێبینی هەڵبژاردە" />
+                </div>
+              </div>
+              <div class="controls">
+                <button class="primary" type="submit">پاشەکەوتکردنی جۆر</button>
+                <button type="button" class="secondary" onclick="clearTypeForm()">ڕێستکردنەوە</button>
+              </div>
+            </form>
+          </div>
+
+          <div style="height:18px"></div>
+
+          <div class="card">
+            <h2> کوالێتی</h2>
+            <form id="qualityForm">
+              <input type="hidden" id="qualityId">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="qualityLabel">ناونیشان</label>
+                  <input id="qualityLabel" class="input" placeholder="e.g. New, Refurbished, Used" required />
+                </div>
+                <div class="form-group">
+                  <label for="qualityScore">نمرە / پلە</label>
+                  <input id="qualityScore" class="input" placeholder="نمرەی ژمێریاری هەڵبژاردە" />
+                </div>
+              </div>
+              <div class="controls">
+                <button class="primary" type="submit">پاشەکەوتکردنی کوالێتی</button>
+                <button type="button" class="secondary" onclick="clearQualityForm()">ڕێستکردنەوە</button>
+              </div>
+            </form>
+          </div>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  </body>
+</html>

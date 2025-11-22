@@ -32,6 +32,9 @@ function getComponentData() {
 }
 function saveComponentData(data) { saveToStorage(COMPONENTS_KEY, data); }
 
+// Cache used by item form to lookup type colors and names (populated by loadComponents)
+let COMPONENTS_CACHE = { typesObjects: [], brandsObjects: [], qualitiesObjects: [] };
+
 // --- Transaction/Loan Access (Defined here to avoid redundancy) ---
 function getTransactions() { return getFromStorage('salesTransactions', []); }
 function saveTransactions(transactions) { saveToStorage('salesTransactions', transactions); }
@@ -48,21 +51,54 @@ let editingItemId = null; // Global variable for edit mode
 // --- Component Management ---
 
 function loadComponents() { 
-    const components = getComponentData(); 
-    
-    const brands = components.brands || ['سامسونگ', 'ئەپڵ'];
-    const types = components.types || [{ name: 'شاشە', color: '#007bff' }];
-    const qualities = components.qualities || ['بیلادی', 'نۆڕماڵ'];
-    
-    // Display in side panel 
-    displayComponents('brandList', brands, 'deleteBrand', false);
-    displayComponents('qualityList', qualities, 'deleteQuality', false);
-    displayTypes('typeList', types); 
-    
-    // Populate Item Form Selects
-    populateSelect('itemBrand', brands);
-    populateSelect('itemType', types.map(t => t.name));
-    populateSelect('itemQuality', qualities);
+    // Try to read the newer separated keys (used by brand.js) first
+    const components = getComponentData();
+    const brandsKey = getFromStorage('brands', []);
+    const typesKey = getFromStorage('types', []);
+    const qualitiesKey = getFromStorage('qualities', []);
+
+    // Determine brands list (brand.js stores objects {id,name,description})
+    let brands = [];
+    let brandsObjects = [];
+    if (Array.isArray(brandsKey) && brandsKey.length) {
+        brandsObjects = brandsKey;
+        brands = brandsKey.map(b => (typeof b === 'string' ? b : (b.name || ''))).filter(Boolean);
+    } else {
+        brandsObjects = components.brands || [];
+        brands = Array.isArray(brandsObjects) ? brandsObjects : [];
+    }
+
+    // Types may be objects {id,name,color} or legacy objects {name,color}
+    let types = [];
+    let typesObjects = [];
+    if (Array.isArray(typesKey) && typesKey.length) {
+        typesObjects = typesKey;
+        types = typesKey.map(t => (typeof t === 'string' ? t : (t.name || ''))).filter(Boolean);
+    } else {
+        typesObjects = components.types || [];
+        types = (typesObjects || []).map(t => (typeof t === 'string' ? t : (t.name || ''))).filter(Boolean);
+    }
+
+    // Qualities may be strings or objects {id,label,score}
+    let qualities = [];
+    let qualitiesObjects = [];
+    if (Array.isArray(qualitiesKey) && qualitiesKey.length) {
+        qualitiesObjects = qualitiesKey;
+        qualities = qualitiesKey.map(q => (typeof q === 'string' ? q : (q.label || q))).filter(Boolean);
+    } else {
+        qualitiesObjects = components.qualities || [];
+        qualities = Array.isArray(qualitiesObjects) ? qualitiesObjects : [];
+    }
+
+    // Update cache used for color lookups
+    COMPONENTS_CACHE.typesObjects = typesObjects;
+    COMPONENTS_CACHE.brandsObjects = brandsObjects;
+    COMPONENTS_CACHE.qualitiesObjects = qualitiesObjects;
+
+    // Populate Item Form Selects if present (use names for values to keep existing item schema)
+    if (document.getElementById('itemBrand')) populateSelect('itemBrand', brands);
+    if (document.getElementById('itemType')) populateSelect('itemType', types);
+    if (document.getElementById('itemQuality')) populateSelect('itemQuality', qualities);
 }
 
 function updateComponents(newComponents) { 
@@ -224,18 +260,18 @@ function deleteType(typeToDelete) {
 }
 
 function setItemColorByType() {
-    const selectedType = document.getElementById('itemType').value;
-    const colorInput = document.getElementById('itemColor');
-    const components = getComponentData(); 
-    const types = components.types; 
+    const selectedType = document.getElementById('itemType')?.value;
+    const colorInput = document.getElementById('itemColor');
+    if (!colorInput) return;
 
-    const typeObject = types.find(t => t.name === selectedType);
-    
-    if (typeObject) {
-        colorInput.value = typeObject.color;
-    } else {
-        colorInput.value = '#ccc'; // Default if none selected
-    }
+    const types = COMPONENTS_CACHE.typesObjects || [];
+    // typesObjects may be array of strings or objects
+    const typeObject = types.find(t => (typeof t === 'string' ? t === selectedType : (t.name === selectedType)));
+    if (typeObject && typeof typeObject === 'object') {
+        colorInput.value = typeObject.color || '#ccc';
+    } else {
+        colorInput.value = '#ccc';
+    }
 }
 
 
@@ -270,10 +306,8 @@ function setItemColorByType() {
     // 3. نیشاندانی خشتەی فلتەرکراو
     displayItemsTable(itemsToDisplay);
     
-    // Only set color if the item form is present (i.e., on item.html)
-    if (document.getElementById('itemForm')) { 
-        setItemColorByType(); 
-    }
+    // ensure components cache exists (for inline row creation)
+    if (!COMPONENTS_CACHE.typesObjects) COMPONENTS_CACHE.typesObjects = [];
 }
 
 function saveOrUpdateItem(event) { 
@@ -361,36 +395,17 @@ function saveOrUpdateItem(event) {
 }
 
 
-function editItem(itemId) { 
-    const items = getInventory(); 
-    const itemToEdit = items.find(item => item.id === itemId);
+function editItem(itemId) {
+    // Open an inline edit row prefilled with item data
+    const items = getInventory();
+    const itemToEdit = items.find(item => item.id === itemId);
+    if (!itemToEdit) return;
 
-    if (itemToEdit) {
-        document.getElementById('itemName').value = itemToEdit.name;
-        document.getElementById('itemBrand').value = itemToEdit.brand;
-        document.getElementById('itemType').value = itemToEdit.type; 
-        document.getElementById('itemQuality').value = itemToEdit.quality;
-        
-        document.getElementById('itemPurchasePrice').value = itemToEdit.purchasePrice;
-        document.getElementById('itemSalePrice').value = itemToEdit.salePrice;
-        
-        document.getElementById('itemQuantity').value = itemToEdit.quantity;
-        document.getElementById('itemColor').value = itemToEdit.color; 
+    // Remove any existing inline row
+    const existingInline = document.querySelector('tr.inline-create-row');
+    if (existingInline) existingInline.remove();
 
-        // ✅ زیادکردنی شوێنی هەڵگرتن بۆ فۆڕمی دەستکاریکردن
-        const storageLocationInput = document.getElementById('storageLocation');
-        if (storageLocationInput) {
-            storageLocationInput.value = itemToEdit.storageLocation || '';
-        }
-        
-        editingItemId = itemId;
-        document.getElementById('formTitle').textContent =` دەستکاریکردنی ئایتم: ${itemToEdit.name}`;
-        document.getElementById('submitBtn').textContent = '💾 نوێکردنەوە';
-        document.getElementById('submitBtn').style.backgroundColor = '#ffc107'; 
-        
-        document.getElementById('itemPurchasePrice').readOnly = false; 
-        document.getElementById('itemQuantity').readOnly = false;
-    }
+    addInlineRow(itemToEdit);
 }
 
 function deleteItem(itemId) { 
@@ -403,18 +418,8 @@ function deleteItem(itemId) {
 }
 
 function resetForm() {
-    document.getElementById('itemForm').reset();
-    editingItemId = null;
-    document.getElementById('formTitle').textContent = 'زیادکردنی ئایتمی نوێ';
-    document.getElementById('submitBtn').textContent = '✅ زیادکردن';
-    document.getElementById('submitBtn').style.backgroundColor = '#28a745';
-    document.getElementById('itemColor').value = '#007bff'; 
-
-    // ✅ دڵنیابوونەوە لە بەتاڵکردنی شوێنی هەڵگرتن
-    const storageLocationInput = document.getElementById('storageLocation');
-    if (storageLocationInput) {
-        storageLocationInput.value = '';
-    }
+    // No central form anymore. Clear editing state.
+    editingItemId = null;
 }
 
 // Display table (Synchronous)
@@ -443,7 +448,7 @@ function displayItemsTable(items) {
                     <th>شوێنی هەڵگرتن</th>                     <th>کردار</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="itemTableBody">
     `;
 
     items.forEach(item => {
@@ -486,11 +491,189 @@ function displayItemsTable(items) {
     container.innerHTML = tableHTML;
 }
 
+
+// ----------------------
+// Inline row creation
+// ----------------------
+
+function addInlineRow(prefill = null) {
+    const tbody = document.getElementById('itemTableBody');
+    // If no table exists (no items), re-render an empty table then get tbody
+    if (!tbody) {
+        displayItemsTable(getInventory());
+    }
+
+    // remove existing inline row if present
+    const existing = document.querySelector('tr.inline-create-row');
+    if (existing) return existing.querySelector('input')?.focus();
+
+    const tableBody = document.getElementById('itemTableBody');
+    if (!tableBody) return;
+
+    const tr = document.createElement('tr');
+    tr.classList.add('inline-create-row');
+
+    // helper to create inputs/selects
+    const createInput = (value = '', type = 'text', attrs = {}) => {
+        const el = document.createElement('input');
+        el.type = type;
+        el.className = 'inline-input';
+        el.value = value || '';
+        Object.keys(attrs).forEach(k => el.setAttribute(k, attrs[k]));
+        return el;
+    };
+
+    // Prepare component option lists from cache
+    const brands = (COMPONENTS_CACHE.brandsObjects || []).map(b => (typeof b === 'object' ? (b.name || '') : b)).filter(Boolean);
+    const types = (COMPONENTS_CACHE.typesObjects || []).map(t => (typeof t === 'object' ? (t.name || '') : t)).filter(Boolean);
+    const qualities = (COMPONENTS_CACHE.qualitiesObjects || []).map(q => (typeof q === 'object' ? (q.label || q) : q)).filter(Boolean);
+
+    const nameInput = createInput(prefill?.name || '', 'text', { placeholder: 'ناوی ئایتم' });
+    const typeSelect = document.createElement('select');
+    typeSelect.className = 'inline-input';
+    const brandSelect = document.createElement('select');
+    brandSelect.className = 'inline-input';
+    const qualitySelect = document.createElement('select');
+    qualitySelect.className = 'inline-input';
+
+    const makeOptions = (sel, items) => {
+        sel.innerHTML = '';
+        const empty = document.createElement('option'); empty.value = ''; empty.textContent = '—'; sel.appendChild(empty);
+        items.forEach(it => { const opt = document.createElement('option'); opt.value = it; opt.textContent = it; sel.appendChild(opt); });
+    };
+
+    makeOptions(typeSelect, types);
+    makeOptions(brandSelect, brands);
+    makeOptions(qualitySelect, qualities);
+
+    if (prefill) {
+        nameInput.value = prefill.name || '';
+        typeSelect.value = prefill.type || '';
+        brandSelect.value = prefill.brand || '';
+        qualitySelect.value = prefill.quality || '';
+    }
+
+    const purchaseInput = createInput(prefill?.purchasePrice || '', 'number', { min: 0, placeholder: 'قیمەتی کڕین' });
+    const saleInput = createInput(prefill?.salePrice || '', 'number', { min: 0, placeholder: 'نرخ' });
+    const qtyInput = createInput(prefill?.quantity || 1, 'number', { min: 1, placeholder: 'ژمارە' });
+    const storageInput = createInput(prefill?.storageLocation || '', 'text', { placeholder: 'شوێن' });
+
+    const profitCell = document.createElement('td');
+    const updateProfit = () => {
+        const pp = parseInt(purchaseInput.value) || 0;
+        const sp = parseInt(saleInput.value) || 0;
+        profitCell.textContent = (sp - pp).toLocaleString();
+    };
+    purchaseInput.addEventListener('input', updateProfit);
+    saleInput.addEventListener('input', updateProfit);
+    updateProfit();
+
+    // Build cells (first color cell placeholder)
+    tr.innerHTML = `<td style="width:10px;background:#eee"></td>`;
+    const tdName = document.createElement('td'); tdName.appendChild(nameInput); tr.appendChild(tdName);
+    const tdType = document.createElement('td'); tdType.appendChild(typeSelect); tr.appendChild(tdType);
+    const tdBrand = document.createElement('td'); tdBrand.appendChild(brandSelect); tr.appendChild(tdBrand);
+    const tdQuality = document.createElement('td'); tdQuality.appendChild(qualitySelect); tr.appendChild(tdQuality);
+    const tdPurchase = document.createElement('td'); tdPurchase.appendChild(purchaseInput); tr.appendChild(tdPurchase);
+    const tdSale = document.createElement('td'); tdSale.appendChild(saleInput); tr.appendChild(tdSale);
+    tr.appendChild(profitCell);
+    const tdQty = document.createElement('td'); tdQty.appendChild(qtyInput); tr.appendChild(tdQty);
+    const tdStorage = document.createElement('td'); tdStorage.appendChild(storageInput); tr.appendChild(tdStorage);
+
+    const tdActions = document.createElement('td');
+    const saveBtn = document.createElement('button'); saveBtn.textContent = '💾'; saveBtn.className = 'submit-btn';
+    const cancelBtn = document.createElement('button'); cancelBtn.textContent = '✖'; cancelBtn.className = 'cancel-btn';
+    tdActions.appendChild(saveBtn); tdActions.appendChild(cancelBtn);
+    tr.appendChild(tdActions);
+
+    // If editing, mark the row with data-id
+    if (prefill && prefill.id) tr.dataset.editingId = prefill.id;
+
+    // Save handler
+    saveBtn.addEventListener('click', () => {
+        const name = nameInput.value.trim();
+        const brand = brandSelect.value;
+        const type = typeSelect.value;
+        const quality = qualitySelect.value;
+        const purchasePrice = parseInt(purchaseInput.value) || 0;
+        const salePrice = parseInt(saleInput.value) || 0;
+        const quantity = parseInt(qtyInput.value) || 0;
+        const storageLocation = storageInput.value.trim();
+
+        if (!name || !brand || !type || !quality || quantity < 1) {
+            alert('تکایە خانەکان پڕبکە تا رێک بێت (ناو, براند, جۆر, کوالێتی, ژمارە).');
+            return;
+        }
+
+        const itemObj = { name, brand, type, quality, purchasePrice, salePrice, quantity, storageLocation };
+
+        const editingId = tr.dataset.editingId;
+        if (editingId) {
+            updateItemInline(parseInt(editingId), itemObj);
+        } else {
+            addOrMergeItem(itemObj);
+        }
+
+        tr.remove();
+        loadItems();
+    });
+
+    cancelBtn.addEventListener('click', () => { tr.remove(); });
+
+    // prepend the row to top
+    tableBody.insertBefore(tr, tableBody.firstChild);
+    // focus first input
+    nameInput.focus();
+}
+
+function addOrMergeItem(itemData) {
+    const items = getInventory();
+    const components = getComponentData();
+    const typeObj = (COMPONENTS_CACHE.typesObjects || []).find(t => (typeof t === 'string' ? t === itemData.type : (t.name === itemData.type)));
+    const color = typeObj && typeof typeObj === 'object' ? (typeObj.color || '#007bff') : '#007bff';
+
+    const existingIndex = items.findIndex(item => item.name === itemData.name && item.brand === itemData.brand && item.type === itemData.type && item.quality === itemData.quality);
+    if (existingIndex !== -1) {
+        const existingItem = items[existingIndex];
+        const totalOldCost = (existingItem.purchasePrice || 0) * (existingItem.quantity || 0);
+        const totalNewCost = (itemData.purchasePrice || 0) * (itemData.quantity || 0);
+        const totalQuantity = (existingItem.quantity || 0) + (itemData.quantity || 0);
+        const averagePurchasePrice = totalQuantity ? Math.round((totalOldCost + totalNewCost) / totalQuantity) : (itemData.purchasePrice || 0);
+
+        items[existingIndex].quantity = totalQuantity;
+        items[existingIndex].purchasePrice = averagePurchasePrice;
+        items[existingIndex].salePrice = itemData.salePrice;
+        items[existingIndex].color = color;
+        items[existingIndex].storageLocation = itemData.storageLocation;
+        alert(`ژمارەی ئایتمی "${itemData.name}" زیاد کرا. ژمارەی نوێ: ${totalQuantity}.`);
+    } else {
+        const newItem = { id: Date.now(), name: itemData.name, brand: itemData.brand, type: itemData.type, quality: itemData.quality, purchasePrice: itemData.purchasePrice, salePrice: itemData.salePrice, quantity: itemData.quantity, color, storageLocation: itemData.storageLocation };
+        items.push(newItem);
+        alert('ئایتمی نوێ زیاد کرا');
+    }
+
+    saveToStorage(INVENTORY_KEY, items);
+}
+
+function updateItemInline(itemId, itemData) {
+    const items = getInventory();
+    const idx = items.findIndex(i => i.id === itemId);
+    if (idx === -1) return;
+    const typeObj = (COMPONENTS_CACHE.typesObjects || []).find(t => (typeof t === 'string' ? t === itemData.type : (t.name === itemData.type)));
+    const color = typeObj && typeof typeObj === 'object' ? (typeObj.color || '#007bff') : '#007bff';
+
+    items[idx] = { id: itemId, name: itemData.name, brand: itemData.brand, type: itemData.type, quality: itemData.quality, purchasePrice: itemData.purchasePrice, salePrice: itemData.salePrice, quantity: itemData.quantity, color, storageLocation: itemData.storageLocation };
+    saveToStorage(INVENTORY_KEY, items);
+    alert('ئایتم نوێکرایەوە');
+}
+
 // Initial Load for Item Management Page
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if we are on the item management page
-    if (document.getElementById('itemForm')) {
-        loadComponents();
-        loadItems();
-    }
+    // Always load components and items on this page
+    loadComponents();
+    loadItems();
+
+    // Wire the inline add button (if present)
+    const addBtn = document.getElementById('inlineAddBtn');
+    if (addBtn) addBtn.addEventListener('click', (e) => { e.preventDefault(); addInlineRow(); });
 });
