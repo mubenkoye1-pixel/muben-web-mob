@@ -128,52 +128,69 @@ function displayCustomerOverview() {
 // --- LEVEL 2: INVOICE LIST FOR ONE CUSTOMER (وردەکاریی وەسڵەکان) ---
 // -----------------------------------------------------------------------
 
+// -----------------------------------------------------------------------
+// --- LEVEL 2: INVOICE LIST FOR ONE CUSTOMER (وردەکاریی وەسڵەکان) ---
+// -----------------------------------------------------------------------
+
 function displayCustomerInvoices(customerName) {
-    const container = document.getElementById('loanContentContainer');
-    if (!container) return;
-    
-    const groupedLoans = getLoansGroupedByCustomer();
-    const customerData = groupedLoans[customerName];
-    
+    const container = document.getElementById('loanContentContainer');
+    if (!container) return;
+    
+    const groupedLoans = getLoansGroupedByCustomer();
+    const customerData = groupedLoans[customerName];
+    
+    // 🚨 زیادکردنی بەشی سۆرتکردن لێرە
+    const unsortedTransactions = customerData.transactions || [];
 
-    const totalDue = (customerData.totalDue || 0).toLocaleString();
-    
-    let htmlContent = `<div class="customer-total-box">
-                        <strong>کۆی گشتی قەرزی نەگەڕاوە: </strong>
-                        <span style="font-size: 1.5em; color: #dc3545;">${totalDue} IQD</span>
-                    </div>
-    <button class="detail-back-btn" onclick="loadOverview()">گەڕانەوە بۆ لیستی کڕیارەکان</button>
+    // سۆرتکردنی مامەڵەکان بەپێی transactionId (کە new Date().getTime()ـە)
+    // بۆ نوێترین بۆ کۆنترین (Descending Order)
+    const sortedTransactions = unsortedTransactions.sort((a, b) => {
+        // transactionId ژمارەیەکە و بە ئاسانی دەتوانرێت بەراورد بکرێت
+        // بۆ نوێترین (گەورەترین ژمارە) بۆ سەرەوە: b.transactionId - a.transactionId
+        return b.transactionId - a.transactionId;
+    });
+    // ---------------------------------------------
+    
+
+    const totalDue = (customerData.totalDue || 0).toLocaleString();
+    
+    let htmlContent = `<div class="customer-total-box">
+                         <strong>کۆی گشتی قەرزی نەگەڕاوە: </strong>
+                         <span style="font-size: 1.5em; color: #dc3545;">${totalDue} IQD</span>
+                     </div>
+    <button class="detail-back-btn" onclick="loadOverview()">گەڕانەوە بۆ لیستی کڕیارەکان</button>
 <button class="plus-btn" onclick="addBlankInvoiceRow('${customerName}')">+</button>`;
-    htmlContent += `<h2 class="loan-header">وردەکاری قەرزی کریار: ${customerName}</h2>`;
- 
+    htmlContent += `<h2 class="loan-header">وردەکاری قەرزی کریار: ${customerName}</h2>`;
+ 
 
-    // 🚨 3. List of Invoices/Transactions
-    htmlContent += `  
-    <div class="loan-invoices-wrapper">`;
-    (customerData.transactions || []).forEach(invoice => {
-        // 💡 دیاریکردنی ئەوەی ئاخۆ مامەڵەکە دانەوەی قەرزە (سالبە)
+    // 🚨 3. List of Invoices/Transactions
+    htmlContent += `  
+    <div class="loan-invoices-wrapper">`;
+    // ئێستا sortedTransactions بەکاردەهێنین
+    sortedTransactions.forEach(invoice => {
+        // 💡 دیاریکردنی ئەوەی ئاخۆ مامەڵەکە دانەوەی قەرزە (سالبە)
         const isPayment = (invoice.amountDue || 0) < 0;
         const cardClass = isPayment ? ' loan-invoice-card--payment' : '';
         
-        // ناونیشانی گونجاو دیاری دەکەین
+        // ناونیشانی گونجاو دیاری دەکەین
         const titleText = isPayment ? 'گەڕانەوەی قەرز (دانەوە)' : 'وەسڵی قەرز';
         
-        // 🚨 کرتەکردن دەتنێرێت بۆ ئاستی 3 (وردەکاریی یەک وەسڵ)
-        htmlContent += `
-            <div class="loan-invoice-card${cardClass}" onclick="loadInvoiceView(${invoice.transactionId})">
-                <div class="transaction-header">
-                    <span style="font-weight: bold;">${titleText} ژمارە: ${invoice.transactionId}</span>
-                    <span class="total-sale">بڕ: ${(invoice.amountDue || 0).toLocaleString()} IQD</span>
-                    <div class="actions">
-                        <button class="pay-loan-btn" onclick="event.stopPropagation(); closeLoan(${invoice.transactionId})">وا سڵکردن</button>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
-    htmlContent += `</div>`;
+        // 🚨 کرتەکردن دەتنێرێت بۆ ئاستی 3 (وردەکاریی یەک وەسڵ)
+        htmlContent += `
+            <div class="loan-invoice-card${cardClass}" onclick="loadInvoiceView(${invoice.transactionId})">
+                <div class="transaction-header">
+                    <span style="font-weight: bold;">${titleText} ژمارە: ${invoice.transactionId}</span>
+                    <span class="total-sale">بڕ: ${(invoice.amountDue || 0).toLocaleString()} IQD</span>
+                    <div class="actions">
+                        <button class="pay-loan-btn" onclick="event.stopPropagation(); closeLoan(${invoice.transactionId})">وا سڵکردن</button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    htmlContent += `</div>`;
 
-    container.innerHTML = htmlContent;
+    container.innerHTML = htmlContent;
 }
 
 // -----------------------------------------------------------------------

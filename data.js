@@ -178,10 +178,13 @@ function displayLoanTransactionsWithSearch() {
     container.innerHTML = ''; 
 
     // Filter loans based on customer name
-    const filteredLoans = loans.filter(loan => {
+    let filteredLoans = loans.filter(loan => {
         const customer = (loan.customer || '').toLowerCase();
         return searchTerm === '' || customer.includes(searchTerm);
     });
+
+    // Sort by newest first (by transactionId)
+    filteredLoans.sort((a, b) => b.transactionId - a.transactionId);
 
     if (filteredLoans.length === 0) {
         container.innerHTML = '<p class="no-data">هیچ قەرزێکی نەگەڕاوە تۆمار نەکراوە.</p>';

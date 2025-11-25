@@ -7,11 +7,11 @@
     --muted:#6b7280;
 }
 
-*{padding:0;margin:0;box-sizing:border-box}
+*{padding:0;margin:0;box-sizing:border-box;}
 html,body{height:100%}
-body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);color:#111}
+body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);color:#111;}
 /* Main Content Layout (Two Columns) */
-.main-div{display:flex;min-height:calc(100vh - 64px);flex-direction:column;gap:22px;padding:18px 22px 28px 22px;padding-top:84px;width:100%}
+.main-div{display:flex;min-height:calc(100vh - 64px);flex-direction:column;gap:22px;padding-top:84px;width:100%}
 
 /* --------------------
    Right Side: Item Form Container (Wider)
@@ -215,3 +215,7 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
 
 
 
+.itemListTableContainer{
+margin: 0;
+padding: 0;
+}
