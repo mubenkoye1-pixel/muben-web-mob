@@ -1,158 +1,473 @@
-/* --- EXPENSES PAGE STYLES (expenses.css) - DARK MODE --- */
-:root {
-    /* Global Dark Mode Variables */
-    --background-dark: #121212; /* Very Dark Background */
-    --card-dark: #1e1e1e; /* Card/Surface Dark */
-    --input-bg: #2c2c2c; /* Input field background */
-    --text-light: #f0f0f0; /* Main text color */
-    --muted: #a0a0a0; /* Muted/Label Color */
-    --border-dark: #383838; /* Border/Divider Color */
-    --hover-bg: #282828; /* Hover color */
+/* ------------------------------------------- */
+/* 🌙 Global Variables & Reset 🌙 */
+/* ------------------------------------------- */
 
-    /* Expense Specific Colors (Red) */
-    --expense-red: #ef5350; /* Brighter Red for visibility in Dark Mode */
-    --expense-light: #382c2c; /* Darker, slightly reddish background for tables/alerts */
-    --neutral-gray: #a0a0a0;
-    --dark-text: #f0f0f0; /* Use light text for headers */
+:root {
+    /* 🎨 ڕەنگە سەرەکییەکانی دارک مۆدی مۆدێرن (شینی قووڵ) */
+    --main-bg: #0d1117;       /* پاشخانی سەرەکی قووڵ (GitHub Dark) */
+    --card-bg: #161b22;       /* ڕەنگی کارد و توخمەکان */
+    --input-bg: #21262d;      /* پاشخانی خانەی نووسین (Input) */
+    --text-light: #c9d1d9;    /* ڕەنگی نووسینی سەرەکی ڕووناک */
+    --text-muted: #8b949e;    /* ڕەنگی نووسینی کاڵ/لێبڵەکان */
+    --border-color: #30363d;  /* ڕەنگی سنور و هێڵەکان */
+    --hover-bg: #21262d;      /* پاشخانی هۆڤەر (Hover) */
+
+    /* 💎 ڕەنگی گەش (Accent Color) - شینی پیشەیی */
+    --accent-blue: #58a6ff;     /* شینی زیندوو بۆ چالاکییەکان و هێڵە گرنگەکان */
+    --accent-hover: #79c0ff;    /* شینی کاڵتر بۆ هۆڤەر */
+
+    /* 🟢 ڕەنگی سەرکەوتن (Success) */
+    --success-green: #3fb950;   
+    
+    /* 🔴 ڕەنگی خەرجی/ئاگادارکردنەوە (Expense/Warning) */
+    --expense-color: #f77c00; /* پرتەقاڵی بۆ خەرجییەکان */
+    --expense-bg-light: #2c2114; /* پاشخانی تاریکی پرتەقاڵی بۆ هێدەری خشتەی خەرجی */
 }
+
+
+/* Reset */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* دڵنیابوونەوەی لە ڕێکوپێکی */
+
+}
+
+/* ------------------------------------------- */
+/* بنچینەی پەرە (BODY) */
+/* ------------------------------------------- */
+
+body {
+    font-family: 'Arial', sans-serif; 
+    direction: rtl; 
+    text-align: right;
+    background-color: var(--main-bg); 
+    color: var(--text-light); 
+   
+}
+
+
+/* ------------------------------------------- */
+/* سەرووی لاپەڕە (Header: .head-div) */
+/* ------------------------------------------- */
+.head-div {
+    padding: 0 30px; 
+    background-color: var(--card-bg); 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); 
+    height: 60px; 
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+    color: var(--text-light);
+}
+
+.logo-title {
+    color: var(--text-light);
+    text-decoration: none; 
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px; 
+    align-items: center;
+}
+
+.btn-head {
+    color: var(--text-light);
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+    position: relative;
+}
+
+.btn-head:hover {
+    color: var(--accent-blue); /* شینی گەش */
+}
+
+.btn-head::after {
+    content: '';
+    position: absolute;
+    right: 0; 
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-blue);
+    transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+    width: 100%;
+    right: 0; 
+}
+
+
+/* ------------------------------------------- */
+/* فۆڕم و خانەکانی نووسین (General Forms: .additem) */
+/* ------------------------------------------- */
+
+.additem {
+    background-color: var(--card-bg); 
+    padding: 20px; 
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+.form-group label {
+    color: var(--text-light); 
+    font-weight: 500; /* کەمێک کەم کراوەتەوە */
+}
+
+/* Input, Select, and Textarea */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.expense-form-container .form-group input,
+.expense-form-container .form-group select,
+.expense-form-container .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-light);
+    background-color: var(--input-bg); /* پاشخانی تاریک بۆ ئینپوت */
+    transition: border-color 0.3s, box-shadow 0.3s;
+    box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.expense-form-container input:focus,
+.expense-form-container select:focus,
+.expense-form-container textarea:focus {
+    border-color: var(--accent-blue); 
+    box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+    outline: none; 
+}
+
+::placeholder {
+    color: var(--text-muted); 
+}
+
+/* ------------------------------------------- */
+/* دوگمەی زیادکردن (Inventory Add Button) */
+/* ------------------------------------------- */
+
+.add-button {
+    background-color: var(--success-green); /* سەوزی گەش */
+    color: white;
+    font-weight: bold;
+    padding: 12px 30px; 
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 4px 10px rgba(63, 185, 80, 0.3);
+}
+
+.add-button:hover {
+    background-color: #31a441;
+    box-shadow: 0 6px 15px rgba(63, 185, 80, 0.4);
+}
+
+.add-button:active {
+    background-color: #278c35;
+    transform: translateY(1px); 
+}
+
+/* ------------------------------------------- */
+/* Inventory Main Content (.main-inventory-content) */
+/* ------------------------------------------- */
+
+.main-inventory-content {
+    padding: 20px;
+    max-width: 1400px;
+    margin: 20px auto;
+    background-color: var(--card-bg); 
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.page-title {
+    color: var(--text-light);
+    border-bottom: 2px solid var(--accent-blue); /* شینی گەش */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.search-input {
+    background-color: var(--input-bg);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+}
+.search-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+}
+
+/* ------------------------------------------- */
+/* Inventory Cards (.inventory-card) */
+/* ------------------------------------------- */
+
+.inventory-card {
+    background-color: var(--input-bg); /* ڕەنگێکی کەمێک ڕووناکتر لە پاشخان */
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-right: 8px solid var(--accent-blue); /* شینی گەش */
+}
+
+.inventory-card:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px); /* کەمێک جووڵە بۆ سەرەوە */
+}
+
+.item-name {
+    color: var(--text-light);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--border-color); 
+}
+
+/* دوگمەکانی ناو کارد */
+.edit-card-btn { color: var(--accent-blue); } 
+.edit-card-btn:hover { color: var(--accent-hover); }
+
+.delete-card-btn { color: var(--expense-color); } /* پرتەقاڵی بۆ سڕینەوە */
+.delete-card-btn:hover { color: #ffad50; }
+
+.card-body .info-group {
+    border-bottom: 1px dashed var(--border-color); 
+}
+
+.info-label {
+    color: var(--text-muted);
+}
+
+.info-value {
+    color: var(--text-light);
+}
+
+.quantity-value {
+    color: var(--success-green); /* سەوز بۆ بڕی بەردەست */
+    font-weight: bold;
+}
+
+.total-cost-value {
+    color: #ffaa00; /* زەردێکی مات بۆ کۆی بەها */
+}
+
+.total-value {
+    border-top: 1px solid var(--border-color);
+}
+.location-group .info-value, .note-group .info-value {
+    color: var(--text-muted);
+}
+
+
+/* کۆی گشتی مەخزەن (Summary) */
+.inventory-total-summary {
+    background-color: var(--input-bg); 
+    border: 2px solid var(--accent-blue);
+}
+
+.total-label {
+    color: var(--text-light);
+}
+
+.total-value-final {
+    color: #ffaa00; 
+}
+
+
+/* ------------------------------------------- */
+/* بەشی خەرجییەکان (Expenses) */
+/* ------------------------------------------- */
 
 .expenses-layout {
     display: flex;
     flex-direction: column;
     padding: 30px 20px;
     gap: 25px;
-    background-color: var(--background-dark); /* Dark Background */
+    background-color: var(--main-bg); 
     min-height: calc(100vh - 60px);
     color: var(--text-light);
 }
 
-/* --- KPI Summary Bar --- */
-.kpi-card-wrapper {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-}
-
+/* KPI Card */
 .total-kpi-card {
-    background-color: var(--card-dark); /* Dark Card Background */
-    border-radius: 12px;
-    padding: 25px;
-    flex: 0 0 350px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Darker Shadow */
-    border-left: 8px solid var(--expense-red); /* Red line for Expense Focus */
+    background-color: var(--card-bg); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+    border-left: 8px solid var(--expense-color); /* پرتەقاڵی بۆ خەرجی */
     text-align: right;
 }
 
 .total-kpi-card h3 {
-    font-size: 1.1em;
-    color: var(--neutral-gray); /* Lighter gray for labels */
-    margin-bottom: 10px;
+    color: var(--text-muted); 
 }
 
 .summary-value {
-    font-size: 2.5em;
-    font-weight: 900;
-    color: var(--expense-red); /* Red for Expenses */
-    direction: ltr;
-    text-align: left;
+    color: var(--expense-color); /* پرتەقاڵی بۆ بڕی خەرجی */
 }
 
-/* --- Form and List Layout --- */
-.form-and-list-wrapper {
-    display: flex;
-    gap: 25px;
-    flex-direction: row-reverse; 
-    align-items: flex-start;
-    flex-grow: 1;
-}
-
+/* Form and List */
 .expense-form-container, .expense-list-container {
-    padding: 30px;
-    border-radius: 12px;
-    background-color: var(--card-dark); /* Dark Card Background */
+    background-color: var(--card-bg); 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    height: fit-content;
-}
-
-.expense-form-container {
-    width: 35%; 
-}
-
-.expense-list-container {
-    width: 65%;
 }
 
 .expense-form-container h1, .expense-list-container h1 {
-    font-size: 1.5em;
-    color: var(--text-light); /* Light text for headers */
-    border-bottom: 3px solid var(--expense-red); 
-    padding-bottom: 10px;
-    margin-bottom: 25px;
+    color: var(--text-light); 
+    border-bottom: 3px solid var(--expense-color); /* پرتەقاڵی بۆ هێدەر */
 }
 
-/* Input Styles */
-.form-group input, .form-group select, .form-group textarea {
-    background-color: var(--input-bg);
-    border: 1px solid var(--border-dark);
-    color: var(--text-light);
-}
-
-/* Button Styles */
+/* Button Submit (Expense Form) */
 .expense-form-container .submit-btn {
-    background-color: var(--expense-red); /* Red for Submit (Expense focus) */
+    background-color: var(--expense-color); 
     color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .expense-form-container .submit-btn:hover {
-    background-color: #c62828; /* Darker red on hover */
+    background-color: #e66b00; /* پرتەقاڵییەکی تۆختر */
 }
 
 
 /* Table Style */
 .expense-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
     color: var(--text-light);
 }
 
 .expense-table th, .expense-table td {
-    padding: 12px;
-    border-bottom: 1px solid var(--border-dark); /* Dark border */
-    text-align: right;
+    border-bottom: 1px solid var(--border-color); 
 }
 
 .expense-table th {
-    background-color: var(--expense-light); /* Dark reddish background for header */
+    background-color: var(--expense-bg-light); /* پاشخانی تاریکی پرتەقاڵی بۆ هێدەری خشتە */
     color: var(--text-light);
-    font-weight: 600;
 }
 
 .expense-table tbody tr:hover {
-    background-color: var(--hover-bg); /* Darker hover */
+    background-color: var(--hover-bg); 
 }
 
 .expense-table .amount-col {
-    color: var(--expense-red);
-    font-weight: 800;
-    direction: ltr;
+    color: var(--expense-color);
 }
 
 .expense-table .delete-btn {
-    background-color: #5a6268; /* Darker gray for delete */
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    font-size: 13px;
+    background-color: var(--border-color); /* تاریکتر بۆ دوگمەی لابردن */
+    color: var(--text-light);
 }
 
 .expense-table .delete-btn:hover {
-    background-color: #727b82;
+    background-color: #495057;
+}
+
+/* ------------------------------------------- */
+/* بەشی گواستنەوە (Transfer Section) - لە Inventory */
+/* ------------------------------------------- */
+
+.transfer-section {
+    border-top: 1px solid var(--border-color); 
+}
+
+.transfer-input {
+    background-color: var(--input-bg); 
+    color: var(--text-light);
+    border: 1px solid var(--border-color); 
+}
+
+.transfer-btn {
+    background-color: var(--accent-blue); /* شینی گەش */
+    color: white;
+}
+
+.transfer-btn:hover {
+    background-color: var(--accent-hover);
+}
+
+
+/* ------------------------------------------- */
+/* 📑 STYLES FOR LIST/TABLE CONTAINER */
+/* ------------------------------------------- */
+
+/* ------------------------------------------- */
+/* 📑 STYLES FOR LIST/TABLE CONTAINER - VERTICAL SCROLL */
+/* ------------------------------------------- */
+
+.list-table-container {
+    background-color: var(--card-bg); 
+    border: 1px solid var(--border-color); 
+    border-radius: 12px; 
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+    
+    /* 🛠️ ستاڵی نوێ بۆ سکڕۆڵی ستوونی */
+    max-height: 400px; /* دانانی بەرزاییەکی زۆرترین بۆ دەرکەوتنی سکڕۆڵ */
+    overflow-y: auto; /* ڕێگە دەدات بە سکڕۆڵی ستوونی کاتێک پێویست بێت */
+    overflow-x: hidden; /* دڵنیایی دەدات لەوەی کە سکڕۆڵی ئاسۆیی نادۆزرێتەوە */
+}
+
+/* --- دیزاینی خشتە ناوەکییەکان (وەک .expense-table) --- */
+.list-table-container table {
+    width: 100%;
+    /* لێرەدا پێویستمان بە min-width نییە چونکە تەنها ستوونییە */
+    border-collapse: separate; 
+    border-spacing: 0 8px; 
+    margin-top: 10px;
+}
+
+.list-table-container th {
+    /* زۆر گرنگە: جێگیرکردنی هێدەر لەسەرەوەی سکڕۆڵی ناوەکی */
+    background-color: var(--input-bg); 
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 12px 15px;
+    border-bottom: none; 
+    text-align: right;
+    position: sticky; /* جێگیرکردنی لە سەرەوەی کۆنتەینەرەکە */
+    top: 0;
+    z-index: 10;
+}
+
+.list-table-container td {
+    background-color: var(--card-bg); 
+    padding: 15px 15px;
+    border-bottom: none;
+    color: var(--text-light);
+}
+
+/* خڕکردنی گۆشەکانی سەرەتای خشتە */
+.list-table-container th:first-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.list-table-container th:last-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+/* دیزاینی ڕیزەکان */
+.list-table-container tbody tr {
+    transition: background-color 0.2s ease;
+    border-radius: 8px;
+    border: 1px solid transparent; 
+}
+
+.list-table-container tbody tr:hover {
+    background-color: #1e2630; 
+    cursor: pointer;
+    border: 1px solid var(--accent-blue); 
+}
+
+/* ستاڵی تایبەت بۆ خانەکانی ناو ڕیزەکان */
+.list-table-container td:first-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.list-table-container td:last-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }

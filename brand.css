@@ -1,25 +1,35 @@
-/* --- Brand Page Styles - DARK MODE --- */
+/* ------------------------------------------- */
+/* 🛠️ Brand Page Styles - DARK MODE (R-t-L Adjustments) */
+/* ------------------------------------------- */
+
 :root{
-    /* Global Dark Mode Variables */
-    --accent-1: #6a9bd8; /* Primary Blue Accent */
-    --accent-2: #ff5555; /* Secondary Red Accent */
-    --muted: #a0a0a0; /* Muted/Label Color */
-    --surface: #1e1e1e; /* Main Card/Surface Dark */
-    --bg: #121212; /* Very Dark Background */
-    --input-bg: #2c2c2c; /* Input field background */
-    --text-light: #f0f0f0; /* Main text color */
-    --border-dark: #383838; /* Border/Divider Color */
-    --hover-bg: #282828; /* Hover color */
-    --glass: rgba(0,0,0,0.4); /* Darker Glass effect */
+    /* Global Dark Mode Variables - نەگۆڕدراوە */
+    --accent-1: #6a9bd8; 
+    --accent-2: #ff5555; 
+    --muted: #a0a0a0; 
+    --surface: #1e1e1e; 
+    --bg: #121212; 
+    --input-bg: #2c2c2c; 
+    --text-light: #f0f0f0; 
+    --border-dark: #383838; 
+    --hover-bg: #282828; 
+    --glass: rgba(0,0,0,0.4); 
 }
 
 *{box-sizing:border-box}
-body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);color:var(--text-light);margin:0}
+body{
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text-light);
+    margin:0;
+    direction: rtl;
+    overflow: auto;
+    min-height:100vh;       }
 
 /* --- Header (head-div) --- */
 .head-div {
     padding: 0 30px;
-    background-color: #1f1f1f; /* Dark Header */
+    background-color: #1f1f1f;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
     height: 6.5vh;
     display: flex;
@@ -28,12 +38,14 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
     align-items: center;
     color: #ffffff;
     flex-shrink: 0;
+    direction: rtl;
 }
+
 
 .logo-title {
     font-size: 24px;
     font-weight: 700;
-    color: #ffffff; /* White logo */
+    color: #ffffff; 
     text-decoration: none;
     padding: 0 10px;
 }
@@ -47,7 +59,7 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
 .btn-head {
     font-size: 18px;
     font-weight: 500;
-    color: #cccccc; /* Light gray navigation text */
+    color: #cccccc; 
     text-decoration: none;
     padding: 5px 0;
     transition: color 0.3s ease;
@@ -55,24 +67,32 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
 }
 
 .btn-head:hover {
-    color: #9d57ff; /* Modern Accent Color (e.g., Violet/Purple) */
+    color: #9d57ff; 
 }
 
+/* هێڵی خوارەوەی لینکەکان (پێویستە لەگەڵ R-t-L بگونجێت) */
 .btn-head::after {
     content: '';
     position: absolute;
-    right: 0;
+    /* گۆڕدراوە: دەستپێکردن لە ڕاستەوە بۆ گەشەکردن بە شێوەیەکی گونجاو */
+    left: 0; 
     bottom: 0;
     width: 0;
     height: 2px;
-    background-color: #9d57ff; /* Modern Accent Color */
+    background-color: #9d57ff; 
     transition: width 0.3s ease;
 }
 
 .btn-head:hover::after {
     width: 100%;
-    right: 0;
+    /* لێرەدا پێویستە `right: 0` لاببەین و `left: 0` بەکاربهێنین */
+    left: 0; 
 }
+
+
+/* ------------------------------------------- */
+/* --- بەشەکانی تر (بێ گۆڕانکاری) --- */
+/* ------------------------------------------- */
 .container{max-width:1200px;margin:28px auto;padding:0 18px}
 .page-card{display:flex;gap:26px}
 
@@ -82,7 +102,7 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
     background:var(--surface);
     border-radius:14px;
     padding:18px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.3); /* Darker Shadow */
+    box-shadow:0 8px 30px rgba(0,0,0,0.3);
 }
 .panel h3{
     margin:0 0 12px;
@@ -98,11 +118,11 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
     padding:10px;
     border-radius:10px;
     margin-bottom:8px;
-    background:var(--hover-bg); /* Darker background for list item */
+    background:var(--hover-bg); 
     box-shadow:0 2px 8px rgba(0,0,0,0.15);
 }
 .list li:hover {
-    background: #333333; /* Slightly brighter hover */
+    background: #333333; 
 }
 
 .list li .meta{display:flex;align-items:center;gap:10px}
@@ -110,7 +130,7 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
     width:18px;
     height:18px;
     border-radius:50%;
-    border:2px solid var(--card-dark); /* Dark border */
+    border:2px solid var(--card-dark); 
     box-shadow:0 1px 4px rgba(0,0,0,0.2)
 }
 .small-muted{font-size:0.92rem;color:var(--muted)}
@@ -118,11 +138,11 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
 .btns{display:flex;gap:8px}
 .action{border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700}
 .action.edit{
-    background:linear-gradient(90deg,#ffc107,#ffaa00); /* Darker Amber */
+    background:linear-gradient(90deg,#ffc107,#ffaa00);
     color:#111;
 }
 .action.del{
-    background:linear-gradient(90deg,#ff8a8f,var(--accent-2)); /* Red Accent */
+    background:linear-gradient(90deg,#ff8a8f,var(--accent-2)); 
     color:#fff
 }
 
@@ -132,7 +152,7 @@ body{font-family: 'Segoe UI', Roboto, Arial, sans-serif;background:var(--bg);col
     background:var(--surface);
     border-radius:14px;
     padding:22px;
-    box-shadow:0 10px 36px rgba(0,0,0,0.4); /* Darker Shadow */
+    box-shadow:0 10px 36px rgba(0,0,0,0.4); 
 }
 .card h2{margin:0 0 10px;color:var(--accent-1)}
 
@@ -155,7 +175,7 @@ textarea{min-height:90px;resize:vertical}
 
 .controls{display:flex;gap:12px;align-items:center}
 .primary{
-    background:linear-gradient(90deg,var(--accent-1),#4477aa); /* Blue Gradient */
+    background:linear-gradient(90deg,var(--accent-1),#4477aa); 
     border:none;
     padding:10px 16px;
     border-radius:10px;
@@ -164,7 +184,7 @@ textarea{min-height:90px;resize:vertical}
     cursor:pointer
 }
 .secondary{
-    background:#444444; /* Darker Gray */
+    background:#444444; 
     border:1px solid var(--border-dark);
     padding:10px 14px;
     border-radius:10px;
@@ -188,9 +208,9 @@ textarea{min-height:90px;resize:vertical}
 
 /* Responsive */
 @media (max-width: 980px){
-  .page-card{flex-direction:column}
-  .side-panel{width:100%}
-  .form-row{grid-template-columns:1fr}
+    .page-card{flex-direction:column}
+    .side-panel{width:100%}
+    .form-row{grid-template-columns:1fr}
 }
 
 /* Tiny UI helpers */
@@ -204,6 +224,6 @@ textarea{min-height:90px;resize:vertical}
 
 /* accessibility focus outlines */
 .input:focus,textarea:focus,select:focus,button:focus{
-    outline:3px solid rgba(106,155,216,0.3); /* Dark Blue Focus */
+    outline:3px solid rgba(106,155,216,0.3); 
     outline-offset:2px
 }

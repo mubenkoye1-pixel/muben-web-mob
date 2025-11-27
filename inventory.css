@@ -1,100 +1,117 @@
+/* ------------------------------------------- */
+/* 🌙 گۆڕانکارییەکانی دارک مۆدی هێمن 🌙 */
+/* ------------------------------------------- */
+
+/* گۆڕاوە سەرەکییەکانی ڕەنگ */
+:root {
+    --dark-bg-color: #0b0f19;      /* پاشخانی سەرەکی قووڵ */
+    --card-bg-color: #1e2634;      /* پاشخانی کارد و توخمەکان */
+    --light-text-color: #e3e8f1;   /* ڕەنگی نووسینی سەرەکی */
+    --soft-text-color: #a4b4c7;    /* ڕەنگی نووسینی کاڵ */
+    --accent-color: #61afef;       /* ڕەنگی زیندووی شینی هێمن */
+    --secondary-accent: #3d8c40;   /* سەوزێکی مات بۆ سەرکەوتن (بۆ دوگمەکان) */
+    --border-color: #334155;       /* ڕەنگی سنور و هێڵەکان */
+}
+
 *{
     padding: 0;
     margin: 0;
 }
 .head-div {
-  padding: 0 30px; 
-  background-color: #007bff; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  height: 60px; 
-  display: flex;
-  flex-direction: row; 
-  justify-content: space-between; 
-  align-items: center;
-  color: white;
+    padding: 0 30px;
+    background-color: #1f1f1f; /* Dark Header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 6.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    flex-shrink: 0;
 }
 
 .logo-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none; 
-  padding: 0 10px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; /* White logo */
+    text-decoration: none;
+    padding: 0 10px;
 }
 
 .nav-links {
-  display: flex;
-  gap: 25px; 
-  align-items: center;
+    display: flex;
+    gap: 25px;
+    align-items: center;
 }
 
 .btn-head {
-  font-size: 18px; 
-  font-weight: 500;
-  color: white;
-  text-decoration: none; 
-  padding: 5px 0; 
-  transition: color 0.3s ease; 
-  position: relative;
+    font-size: 18px;
+    font-weight: 500;
+    color: #cccccc; /* Light gray navigation text */
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+    position: relative;
 }
 
 .btn-head:hover {
-  color: #ffc107; 
+    color: #9d57ff; /* Modern Accent Color (e.g., Violet/Purple) */
 }
 
 .btn-head::after {
-  content: '';
-  position: absolute;
-  right: 0; 
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #ffc107;
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #9d57ff; /* Modern Accent Color */
+    transition: width 0.3s ease;
 }
 
 .btn-head:hover::after {
-  width: 100%;
-  right: 0; 
+    width: 100%;
+    right: 0;
 }
-
 
 
 
 body {
-    font-family: 'Arial', sans-serif; /* دەتوانیت فۆنتێکی کوردی لێرە دابنێیت */
-    direction: rtl; /* بۆ زمانی کوردی و ڕاستکردنەوەی لایەنەکان */
+    font-family: 'Arial', sans-serif; 
+    direction: rtl; 
     text-align: right;
-    background-color: #f4f7f6; /* ڕەنگێکی هێمن بۆ پاشخان */
+    background-color: var(--dark-bg-color); /* گۆڕدراوە بۆ دارک مۆد */
+    color: var(--light-text-color); /* گۆڕدراوە بۆ دارک مۆد */
 }
 
-/* دیزاینی سەرەکی کۆنتەینەری 'additem' */
+/* دیزاینی سەرەکی کۆنتەینەری 'additem' (فۆڕم) */
 .additem {
-    background-color: #ffffff;
-    padding: 5px;
-    border: 1px solid #e0e0e0;
+    background-color: var(--card-bg-color); /* گۆڕدراوە */
+    padding: 20px; /* کراوە بە 20px بۆ گونجاندن لەگەڵ دیزاینێکی مۆدێرن */
+    border: 1px solid var(--border-color); /* گۆڕدراوە */
+    border-radius: 10px; /* زیاد کراوە */
 }
 
 /* ڕێکخستنی ڕیزەکان بۆ سێ ستوون */
 .input-row {
     display: flex;
-    gap: 20px; /* دووری نێوان ستوونەکان */
+    gap: 20px; 
     margin-bottom: 20px;
-    flex-wrap: wrap; /* ئەگەر پانی کەم بوو، با بشکێتەوە بۆ خوارەوە */
+    flex-wrap: wrap; 
 }
 
 /* دیزاینی هەر یەکێک لە فۆڕم-گرووپەکان */
 .form-group {
-    flex: 1; /* یەکسانکردنی پانی سێ گرووپەکە لە یەک ڕیزدا */
-    min-width: 280px; /* کەمترین پانی بۆ گرووپەکە (بۆ شاشە بچووکەکان) */
+    flex: 1; 
+    min-width: 280px; 
 }
 
 /* دیزاینی لێبڵەکان */
 .form-group label {
-    display: block; /* لێبڵەکە بەتەنیا ڕیزی خۆی بگرێت */
+    display: block; 
     margin-bottom: 8px;
     font-weight: bold;
-    color: #333333;
+    color: var(--light-text-color); /* گۆڕدراوە */
     font-size: 15px;
 }
 
@@ -104,27 +121,27 @@ body {
 .form-group select {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #cccccc;
+    border: 1px solid var(--border-color); /* گۆڕدراوە */
     border-radius: 8px;
     font-size: 15px;
-    color: #555555;
+    color: var(--light-text-color); /* گۆڕدراوە */
     transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #f9f9f9;
-    box-sizing: border-box; /* زۆر گرنگە بۆ ڕێکخستنی پانی */
+    background-color: #273445; /* ڕەنگێکی تۆختر بۆ ناوەوەی ئینپوت */
+    box-sizing: border-box;
 }
 
 /* دیزاینی سەرنجڕاکێشتر کاتێک کلیکی لەسەر دەکرێت */
 .form-group input:focus,
 .form-group select:focus {
-    border-color: #007bff; /* ڕەنگی شین بۆ فۆکەس */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-    outline: none; /* لابردنی سنوری ستاندارد */
-    background-color: #ffffff;
+    border-color: var(--accent-color); /* گۆڕدراوە */
+    box-shadow: 0 0 5px rgba(97, 175, 239, 0.4); /* سێبەر بە ڕەنگی نوێ */
+    outline: none; 
+    background-color: #273445; /* ڕەنگ ناگۆڕێت */
 }
 
 /* دیزاین بۆ placeholder (نێو ئینپوت) */
 ::placeholder {
-    color: #aaaaaa;
+    color: var(--soft-text-color); /* گۆڕدراوە */
     font-style: italic;
 }
 
@@ -136,12 +153,12 @@ body {
 
 
 /* ------------------------------------------- */
-/* دیزاینی دوگمە و ژمارەی بەردەست          */
+/* دیزاینی دوگمە و ژمارەی بەردەست          */
 /* ------------------------------------------- */
 
 /* ڕێکخستنی کۆنتەینەری ناوی ئایتم بۆ ئەوەی ڕیزێکی تەواو بێت (وەک ناوی ئایتم) */
 .full-width-item {
-    width: 100%; /* دڵنیابوون لەوەی 100%ی پانی دایگرتووە */
+    width: 100%; 
     margin-bottom: 20px;
     box-sizing: border-box;
 }
@@ -154,62 +171,54 @@ body {
 }
 
 .input-and-button input {
-    flex-grow: 1; /* ئینپوتەکە زۆرترین شوێنی ڕیزەکە دەگرێت */
+    flex-grow: 1; 
 }
 
 
 /* دیزاینی دوگمەی سەرەکی (زیاد کردن) */
 .add-button {
-    flex-shrink: 0; /* ڕێگە نادات دوگمەکە بچووک بێتەوە */
-    background-color: #28a745; /* ڕەنگی سەوز (سەوزێکی مۆدێرن) */
+    flex-shrink: 0; 
+    background-color: var(--secondary-accent); /* گۆڕدراوە بۆ سەوزێکی مات */
     color: white;
     font-weight: bold;
-    padding: 12px 30px; /* قەبارەی دوگمەکە */
+    padding: 12px 30px; 
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease, transform 0.1s ease;
-    box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3); /* سێبەرێکی جوان */
+    box-shadow: 0 4px 10px rgba(61, 140, 64, 0.4); /* سێبەر بە ڕەنگی نوێ */
 }
 
 /* دیزاینی دوگمەکە کاتێک ماوس دەچێتە سەری */
 .add-button:hover {
-    background-color: #218838; /* ڕەنگێکی تۆختر */
-    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+    background-color: #317234; /* ڕەنگێکی تۆختر */
+    box-shadow: 0 6px 15px rgba(61, 140, 64, 0.5);
 }
 
 /* دیزاینی دوگمەکە کاتێک کلیکی لەسەر دەکرێت */
 .add-button:active {
-    background-color: #1e7e34;
-    transform: translateY(1px); /* جووڵەیەکی کەم بۆ ئەوەی هەست بکەیت کە کرتەت لەسەر کردووە */
+    background-color: #2a612d;
+    transform: translateY(1px); 
 }
 
 
+/* ------------------------------------------- */
+/* ناوەڕۆکی سەرەکی و گەڕان (Inventory) */
+/* ------------------------------------------- */
 
-
-
-
-
-/* ... هەموو کۆدەکانی پێشوو لێرە ماونەتەوە ... */
-
-/* لابردنی دیزاینی additem چونکە ئیتر پێویست نییە لە inventory.html نوێدا */
-/* .additem { ... } */
-/* .input-row { ... } */ 
-
-/* ناونیشان و گەڕان */
 .main-inventory-content {
     padding: 20px;
     max-width: 1400px;
     margin: 20px auto;
-    background-color: #ffffff;
+    background-color: var(--card-bg-color); /* گۆڕدراوە */
     border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
 }
 
 .page-title {
-    color: #333;
-    border-bottom: 2px solid #007bff;
+    color: var(--light-text-color); /* گۆڕدراوە */
+    border-bottom: 2px solid var(--accent-color); /* گۆڕدراوە */
     padding-bottom: 10px;
     margin-bottom: 20px;
     text-align: right;
@@ -222,49 +231,57 @@ body {
 .search-input {
     width: 100%;
     padding: 12px 15px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color); /* گۆڕدراوە */
     border-radius: 8px;
     font-size: 16px;
     box-sizing: border-box;
+    background-color: #273445; /* گۆڕدراوە */
+    color: var(--light-text-color); /* گۆڕدراوە */
 }
-/* ... هەموو کۆدەکانی پێشوو وەک head-div و .main-inventory-content ... */
+.search-input:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px rgba(97, 175, 239, 0.4);
+    outline: none;
+}
 
-/* لابردنی ستاڵی خشتەی کۆن و جێگرتنەوەی بە کارد */
+
+/* ------------------------------------------- */
+/* کاردەکانی کاڵا (Inventory Cards) */
+/* ------------------------------------------- */
+
 .inventory-table-container {
     padding: 10px 0;
 }
 
 .inventory-card-grid {
     display: grid;
-    /* پیشاندانی سێ ستوون لەسەر شاشەی گەورە */
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
     gap: 25px;
     margin-top: 20px;
 }
 
 .inventory-card {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    background-color: #273445; /* گۆڕدراوە بۆ ڕەنگێکی جیاوازتر */
+    border: 1px solid var(--border-color); 
     border-radius: 10px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     transition: transform 0.2s, box-shadow 0.2s;
-    /* دیزاینی سنوری لای ڕاست (وەک وێنەکە) */
-    border-right: 8px solid #ffc107; 
+    border-right: 8px solid var(--accent-color); /* گۆڕدراوە */
     display: flex;
     flex-direction: column;
 }
 
 .inventory-card:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid #334155; /* هێڵێکی تاریک */
     padding-bottom: 10px;
     margin-bottom: 15px;
 }
@@ -272,7 +289,7 @@ body {
 .item-name {
     font-size: 1.4em;
     font-weight: 700;
-    color: #333;
+    color: var(--light-text-color); /* گۆڕدراوە */
     margin: 0;
 }
 
@@ -285,18 +302,18 @@ body {
     transition: color 0.2s;
 }
 
-.edit-card-btn { color: #007bff; }
-.edit-card-btn:hover { color: #0056b3; }
+.edit-card-btn { color: var(--accent-color); } /* گۆڕدراوە بۆ شینی زیندوو */
+.edit-card-btn:hover { color: #87adff; }
 
-.delete-card-btn { color: #dc3545; }
-.delete-card-btn:hover { color: #a71d2a; }
+.delete-card-btn { color: #e04a5f; } /* سورێکی مات بۆ سڕینەوە */
+.delete-card-btn:hover { color: #ff6681; }
 
 .card-body .info-group {
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
     padding-bottom: 4px;
-    border-bottom: 1px dashed #f0f0f0;
+    border-bottom: 1px dashed #334155; /* هێڵێکی تاریک */
 }
 
 .info-group:last-child {
@@ -306,7 +323,7 @@ body {
 
 .info-label {
     font-weight: 500;
-    color: #666;
+    color: var(--soft-text-color); /* گۆڕدراوە */
     display: flex;
     align-items: center;
 }
@@ -317,45 +334,42 @@ body {
 
 .info-value {
     font-weight: bold;
-    color: #333;
+    color: var(--light-text-color); /* گۆڕدراوە */
 }
 
 .quantity-value {
-    color: #28a745; /* سەوز بۆ بڕی بەردەست */
+    color: var(--secondary-accent); /* سەوز بۆ بڕی بەردەست */
     font-size: 1.1em;
 }
 
 .total-value {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #334155; /* هێڵێکی تاریک */
 }
 .total-cost-value {
-    color: #e0a800; /* زەردی گەش بۆ کۆی بەها */
+    color: #ffd700; /* زەردێکی گەش بۆ کۆی بەها */
     font-size: 1.2em;
 }
 
-.location-group, .note-group {
-    margin-top: 10px;
-    display: block; /* وا دەکات لە ڕیزێکی تەواودا دەرکەوێت */
-}
 .location-group .info-value, .note-group .info-value {
-    display: block;
+    color: var(--soft-text-color); /* گۆڕدراوە */
     font-weight: normal;
     font-style: italic;
-    color: #555;
     margin-top: 5px;
     font-size: 0.95em;
 }
 
 
+/* ------------------------------------------- */
 /* دیزاینی کۆی گشتی مەخزەن (لە خوار کارتەکان) */
+/* ------------------------------------------- */
 .inventory-total-summary {
     text-align: center;
     margin-top: 30px;
     padding: 15px;
-    background-color: #fff9e6; /* ڕەنگی پاشخانێکی کاڵ */
-    border: 2px solid #ffc107;
+    background-color: #273445; /* گۆڕدراوە */
+    border: 2px solid var(--accent-color); /* گۆڕدراوە */
     border-radius: 8px;
     font-size: 1.2em;
     font-weight: bold;
@@ -365,30 +379,29 @@ body {
 }
 
 .total-label {
-    color: #333;
+    color: var(--light-text-color); /* گۆڕدراوە */
 }
 
 .total-value-final {
-    color: #e0a800;
+    color: #ffd700; /* زەردی گەش */
     font-size: 1.2em;
 }
 
-/* دیزاینی فۆڕمی زیادکردنی کاڵای مەخزەن */
+/* دیزاینی فۆڕمی زیادکردنی کاڵای مەخزەن (ناو additem) */
 .add-to-warehouse-form {
-    /* هەمان ستاڵی پێشوو بمێنێتەوە */
-    background-color: #f7f7f7;
+    background-color: var(--card-bg-color); /* گۆڕدراوە */
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color); /* گۆڕدراوە */
 }
 
 
-
-
-/* inventory.css - زیادکردنی ئەم ستاێلانە */
+/* ------------------------------------------- */
+/* بەشی گواستنەوە (Transfer Section) */
+/* ------------------------------------------- */
 
 .transfer-section {
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid var(--border-color); /* گۆڕدراوە */
     padding-top: 15px;
     margin-top: 15px;
 }
@@ -400,17 +413,14 @@ body {
 }
 
 .transfer-input {
-    flex-grow: 1;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: #273445; /* گۆڕدراوە */
+    color: var(--light-text-color); /* گۆڕدراوە */
+    border: 1px solid var(--border-color); /* گۆڕدراوە */
     text-align: center;
-    max-width: 100px;
-    font-size: 14px;
 }
 
 .transfer-btn {
-    background-color: #007bff; /* شین */
+    background-color: var(--accent-color); /* گۆڕدراوە بۆ شینی زیندوو */
     color: white;
     border: none;
     padding: 8px 15px;
@@ -422,7 +432,7 @@ body {
 }
 
 .transfer-btn:hover {
-    background-color: #0056b3;
+    background-color: #4b8cdb;
 }
 
 .transfer-btn i {

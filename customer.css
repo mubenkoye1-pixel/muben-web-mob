@@ -1,112 +1,113 @@
+/* ------------------------------------------- */
+/* 🌙 CUSTOMER PAGE LAYOUT - DARK MODE STYLES 🌙 */
+/* ------------------------------------------- */
 
-*{
-  padding: 0;
-  margin: 0;
+/* --- HEADER STYLES (Retained/Adjusted for consistency) --- */
+
+/* دڵنیابوونەوە لە بەکارهێنانی گۆڕاوە گشتییەکان */
+/* تێبینی: ئەم بەشەی خوارەوە پێویستە لەگەڵ کۆدی یەکخراوی پڕۆژەکەدا بێت */
+:root {
+    --main-bg: #0d1117;       /* پاشخانی سەرەکی قووڵ */
+    --card-bg: #161b22;       /* ڕەنگی کارد و توخمەکان */
+    --input-bg: #21262d;      /* پاشخانی خانەی نووسین (Input) */
+    --text-light: #c9d1d9;    /* ڕەنگی نووسینی سەرەکی ڕووناک */
+    --text-muted: #8b949e;    /* ڕەنگی نووسینی کاڵ/لێبڵەکان */
+    --border-color: #30363d;  /* ڕەنگی سنور و هێڵەکان */
+    --accent-blue: #58a6ff;   /* شینی زیندوو بۆ چالاکییەکان */
+    --success-green: #3fb950; /* سەوز بۆ سەرکەوتن */
+    --expense-color: #f77c00; /* پرتەقاڵی بۆ لابردن/تێچوون */
+    --hover-bg: #21262d;      /* پاشخانی هۆڤەر */
 }
 
+/* Header styles already merged, ensuring they use var(--card-bg) etc. */
 .head-div {
-  padding: 0 30px; 
-  background-color: #007bff; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  height: 60px; 
-  display: flex;
-  flex-direction: row; 
-  justify-content: space-between; 
-  align-items: center;
-  color: white;
+    padding: 0 30px; 
+    background-color: var(--card-bg); 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); 
+    height: 60px; 
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between; 
+    align-items: center;
+    color: var(--text-light);
 }
 
 .logo-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none; 
-  padding: 0 10px;
+    color: var(--text-light);
+    text-decoration: none; 
 }
 
 .nav-links {
-  display: flex;
-  gap: 25px; 
-  align-items: center;
+    display: flex;
+    gap: 25px; 
+    align-items: center;
 }
 
 .btn-head {
-  font-size: 18px; 
-  font-weight: 500;
-  color: white;
-  text-decoration: none; 
-  padding: 5px 0; 
-  transition: color 0.3s ease; 
-  position: relative;
+    color: var(--text-light);
+    text-decoration: none; 
+    transition: color 0.3s ease; 
+    position: relative;
 }
 
 .btn-head:hover {
-  color: #ffc107; 
+    color: var(--accent-blue); /* شینی گەش */
 }
 
 .btn-head::after {
-  content: '';
-  position: absolute;
-  right: 0; 
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #ffc107;
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    right: 0; 
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--accent-blue);
+    transition: width 0.3s ease;
 }
 
 .btn-head:hover::after {
-  width: 100%;
-  right: 0; 
+    width: 100%;
+    right: 0; 
 }
 
-
-
-
-
-
-
-
-
-
-
-/* --- CUSTOMER PAGE LAYOUT --- */
+/* ------------------------------------------- */
+/* CUSTOMER PAGE LAYOUT */
+/* ------------------------------------------- */
 .customer-layout {
     display: flex;
     justify-content: space-between;
-    flex-direction: row-reverse; /* Form on the right, list on the left */
+    flex-direction: row-reverse; 
     padding: 30px;
     gap: 30px;
-    background-color: #f4f7f6; /* پاشبنەمای سادە */
+    background-color: var(--main-bg); /* گۆڕدراوە بۆ دارک مۆد */
+    min-height: 100vh; /* دڵنیابوونەوە لە داپۆشینی هەموو شاشەکە */
 }
 
+/* ------------------------------------------- */
 /* --- Customer Form Area (40% wide) --- */
+/* ------------------------------------------- */
 
 .customer-form-area {
     width: 40%;
-    background-color: white;
+    background-color: var(--card-bg); /* گۆڕدراوە بۆ ڕەنگی کارد */
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); 
+    border-radius: 12px; /* گۆڕدراوە بۆ 12px بۆ یەکگرتن */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* سێبەرێکی تاریکتر */
     height: fit-content;
 }
 
 .customer-form-area h1 {
     font-size: 1.4em;
-    color: #007bff; 
-    border-bottom: 2px solid #e0e0e0;
+    color: var(--accent-blue); /* گۆڕدراوە بۆ شینی گەش */
+    border-bottom: 2px solid var(--border-color); /* سنورێکی تاریک */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
 /* Input Styles */
-.customer-form-area .form-group {
-    margin-bottom: 15px;
-}
-
 .customer-form-area label {
     font-weight: 600;
-    color: #555;
+    color: var(--text-muted); /* گۆڕدراوە بۆ ڕەنگی کاڵ */
     display: block;
     margin-bottom: 5px;
 }
@@ -114,52 +115,52 @@
 .customer-form-area input[type="text"] {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid var(--border-color); /* سنورێکی تاریک */
+    border-radius: 8px; /* گۆڕدراوە بۆ 8px بۆ یەکگرتن */
     font-size: 1em;
+    background-color: var(--input-bg); /* پاشخانی تاریک بۆ ئینپوت */
+    color: var(--text-light); /* نووسینی ڕووناک */
     transition: border-color 0.2s;
 }
 
 .customer-form-area input[type="text"]:focus {
-    border-color: #007bff;
+    border-color: var(--accent-blue); /* شینی گەش بۆ فۆکەس */
+    box-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
     outline: none;
 }
 
 /* Form Actions (Submit Button) */
-.customer-form-area .form-actions {
-    margin-top: 25px;
-    text-align: left; 
-}
-
 .customer-form-area .submit-btn {
-    background-color: #28a745; 
+    background-color: var(--success-green); /* گۆڕدراوە بۆ سەوزی سەرکەوتن */
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px; /* کەمێک گەورەتر کراوە */
     border: none;
-    border-radius: 6px;
+    border-radius: 8px; /* گۆڕدراوە بۆ 8px بۆ یەکگرتن */
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .customer-form-area .submit-btn:hover {
-    background-color: #218838;
+    background-color: #31a441; /* سەوزێکی تۆختر */
 }
 
+/* ------------------------------------------- */
 /* --- Customer List Area (60% wide) --- */
+/* ------------------------------------------- */
 
 .customer-list-area {
     width: 60%;
-    background-color: white;
+    background-color: var(--card-bg); /* گۆڕدراوە بۆ ڕەنگی کارد */
     padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 12px; /* گۆڕدراوە بۆ 12px بۆ یەکگرتن */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .customer-list-area h1 {
     font-size: 1.4em;
-    color: #333;
-    border-bottom: 2px solid #e0e0e0;
+    color: var(--text-light); /* گۆڕدراوە بۆ نووسینی ڕووناک */
+    border-bottom: 2px solid var(--border-color); /* سنورێکی تاریک */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -172,27 +173,38 @@
 }
 
 .customer-table th, .customer-table td {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color); /* گۆڕدراوە بۆ سنوری تاریک */
     padding: 12px;
     text-align: right;
     font-size: 0.9em;
+    color: var(--text-light); /* نووسینی ڕووناک بۆ خانەکان */
 }
 
 .customer-table th {
-    background-color: #f0f7ff;
-    color: #333;
-}
-
-.customer-table .delete-btn {
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: var(--input-bg); /* گۆڕدراوە بۆ ڕەنگی هێدەری تاریک */
+    color: var(--text-light);
     font-weight: 600;
 }
 
+.customer-table td {
+    background-color: var(--card-bg); /* پاشخانی خانەکان */
+}
+
+.customer-table tbody tr:hover td {
+    background-color: var(--hover-bg); /* پاشخانی هۆڤەری تاریک */
+}
+
+.customer-table .delete-btn {
+    background-color: var(--expense-color); /* گۆڕدراوە بۆ پرتەقاڵی (سڕینەوە) */
+    color: white;
+    border: none;
+    padding: 8px 15px; /* کەمێک گەورەتر کراوە */
+    border-radius: 8px; /* گۆڕدراوە بۆ 8px بۆ یەکگرتن */
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s;
+}
+
 .customer-table .delete-btn:hover {
-    background-color: #c82333;
+    background-color: #e66b00; /* پرتەقاڵییەکی تۆختر */
 }
