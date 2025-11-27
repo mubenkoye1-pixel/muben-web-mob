@@ -1,9 +1,19 @@
-/* --- EXPENSES PAGE STYLES (expenses.css) --- */
+/* --- EXPENSES PAGE STYLES (expenses.css) - DARK MODE --- */
 :root {
-    --expense-red: #dc3545; 
-    --expense-light: #f8d7da;
-    --neutral-gray: #6c757d;
-    --dark-text: #343a40;
+    /* Global Dark Mode Variables */
+    --background-dark: #121212; /* Very Dark Background */
+    --card-dark: #1e1e1e; /* Card/Surface Dark */
+    --input-bg: #2c2c2c; /* Input field background */
+    --text-light: #f0f0f0; /* Main text color */
+    --muted: #a0a0a0; /* Muted/Label Color */
+    --border-dark: #383838; /* Border/Divider Color */
+    --hover-bg: #282828; /* Hover color */
+
+    /* Expense Specific Colors (Red) */
+    --expense-red: #ef5350; /* Brighter Red for visibility in Dark Mode */
+    --expense-light: #382c2c; /* Darker, slightly reddish background for tables/alerts */
+    --neutral-gray: #a0a0a0;
+    --dark-text: #f0f0f0; /* Use light text for headers */
 }
 
 .expenses-layout {
@@ -11,8 +21,9 @@
     flex-direction: column;
     padding: 30px 20px;
     gap: 25px;
-    background-color: #f8f9fa; /* Light Gray Background */
+    background-color: var(--background-dark); /* Dark Background */
     min-height: calc(100vh - 60px);
+    color: var(--text-light);
 }
 
 /* --- KPI Summary Bar --- */
@@ -23,18 +34,18 @@
 }
 
 .total-kpi-card {
-    background-color: white;
+    background-color: var(--card-dark); /* Dark Card Background */
     border-radius: 12px;
     padding: 25px;
     flex: 0 0 350px; 
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Darker Shadow */
     border-left: 8px solid var(--expense-red); /* Red line for Expense Focus */
     text-align: right;
 }
 
 .total-kpi-card h3 {
     font-size: 1.1em;
-    color: var(--neutral-gray);
+    color: var(--neutral-gray); /* Lighter gray for labels */
     margin-bottom: 10px;
 }
 
@@ -50,7 +61,7 @@
 .form-and-list-wrapper {
     display: flex;
     gap: 25px;
-    flex-direction: row-reverse; /* Form on the right, list on the left */
+    flex-direction: row-reverse; 
     align-items: flex-start;
     flex-grow: 1;
 }
@@ -58,13 +69,13 @@
 .expense-form-container, .expense-list-container {
     padding: 30px;
     border-radius: 12px;
-    background-color: white;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-dark); /* Dark Card Background */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     height: fit-content;
 }
 
 .expense-form-container {
-    width: 35%; /* بچووککردنەوەی فۆڕم */
+    width: 35%; 
 }
 
 .expense-list-container {
@@ -73,15 +84,22 @@
 
 .expense-form-container h1, .expense-list-container h1 {
     font-size: 1.5em;
-    color: var(--dark-text); 
+    color: var(--text-light); /* Light text for headers */
     border-bottom: 3px solid var(--expense-red); 
     padding-bottom: 10px;
     margin-bottom: 25px;
 }
 
-/* Input & Button Styles */
+/* Input Styles */
+.form-group input, .form-group select, .form-group textarea {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+}
+
+/* Button Styles */
 .expense-form-container .submit-btn {
-    background-color: var(--expense-red); 
+    background-color: var(--expense-red); /* Red for Submit (Expense focus) */
     color: white;
     padding: 12px 20px;
     border: none;
@@ -91,27 +109,33 @@
     transition: background-color 0.3s;
 }
 
+.expense-form-container .submit-btn:hover {
+    background-color: #c62828; /* Darker red on hover */
+}
+
+
 /* Table Style */
 .expense-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    color: var(--text-light);
 }
 
 .expense-table th, .expense-table td {
     padding: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-dark); /* Dark border */
     text-align: right;
 }
 
 .expense-table th {
-    background-color: var(--expense-light); 
-    color: var(--dark-text);
+    background-color: var(--expense-light); /* Dark reddish background for header */
+    color: var(--text-light);
     font-weight: 600;
 }
 
 .expense-table tbody tr:hover {
-    background-color: #fff8f8; 
+    background-color: var(--hover-bg); /* Darker hover */
 }
 
 .expense-table .amount-col {
@@ -121,7 +145,7 @@
 }
 
 .expense-table .delete-btn {
-    background-color: var(--neutral-gray);
+    background-color: #5a6268; /* Darker gray for delete */
     color: white;
     padding: 6px 12px;
     border: none;
@@ -129,4 +153,6 @@
     font-size: 13px;
 }
 
-
+.expense-table .delete-btn:hover {
+    background-color: #727b82;
+}

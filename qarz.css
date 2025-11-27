@@ -1,31 +1,45 @@
-/* --- LOAN PAGE STYLES (loan.css) - MODERN & CLEAN DESIGN --- */
-*{
+/* --- LOAN PAGE STYLES (loan.css) - DARK MODE --- */
 
-     overflow-y: auto;
+:root {
+    /* Variables for Dark Mode consistency */
+    --primary-blue: #6a9bd8; 
+    --profit-green: #4caf50; 
+    --expense-red: #ef5350; 
+    --secondary-gray: #a0a0a0; 
+    --background-dark: #1e1e1e; /* Main dark background */
+    --card-dark: #2c2c2c; /* Card/Panel dark background */
+    --text-light: #f0f0f0; /* Light text for readability */
+    --border-dark: #444444; /* Darker borders/dividers */
+}
+
+* {
+    /* لابردنی overflow-y: auto؛ لە * بۆ Body/Main Container باشترە */
+    overflow-y: auto;
 }
 
 .loan-layout {
     display: flex;
     flex-direction: column;
-padding: 0;
+    padding: 30px 20px; /* زیادکردنی پادینگ بۆ گونجان لەگەڵ شێوازی ڕاپۆرتەکان */
     gap: 25px;
-    background-color: #f8f9fa; /* Light Gray Background */
-    min-height: calc(100vh - 60px); /* Fullscreen height */
+    background-color: var(--background-dark); /* Dark Background */
+    min-height: calc(100vh - 60px); 
+    color: var(--text-light); /* Default text color */
 }
 
 /* --- Main Content Wrapper --- */
 .loan-content-wrapper {
-    background-color: white;
+    background-color: var(--card-dark); /* Dark Card Background */
+    padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Darker Shadow */
     flex-grow: 1; 
-   
 }
 
 .loan-header {
     font-size: 1.8em;
-    color: #007bff;
-    border-bottom: 3px solid #eee; 
+    color: var(--primary-blue); /* Primary Accent Blue */
+    border-bottom: 3px solid var(--border-dark); /* Darker border */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -43,46 +57,57 @@ padding: 0;
 .customer-loan-table th, .customer-loan-table td {
     padding: 15px;
     text-align: right;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #383838; /* Darker row separator */
 }
 
 .customer-loan-table th {
-    background-color: #007bff;
-    color: white;
+    background-color: #383838; /* Darker header background */
+    color: var(--primary-blue); /* Blue text for headers */
     font-weight: 700;
 }
 
+.customer-loan-table td {
+    background-color: var(--card-dark); /* Default cell background */
+}
+
 .customer-loan-table tbody tr:hover {
-    background-color: #e9f5ff; 
+    background-color: #383838; /* Slightly lighter on hover */
     cursor: pointer;
 }
 
 .loan-amount-total {
     font-weight: 900;
-    color: #dc3545; /* Red for Debt */
+    color: var(--expense-red); /* Red for Debt */
     font-size: 1.1em;
 }
 
 /* --- Details View (Level 2 & 3) --- */
 .detail-back-btn {
-    background-color: #6c757d; 
+    background-color: #5a6268; /* Darker Gray */
     color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     margin-bottom: 25px;
+    font-weight: 600;
 }
 
 /* --- Invoice Display Styling --- */
 .loan-invoice-card {
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-dark); /* Dark Border */
+    background-color: #383838; /* Darker background for invoice card */
     border-radius: 8px;
     margin-bottom: 15px;
+    cursor: pointer;
+}
+
+.loan-invoice-card:hover {
+    background-color: #444444; /* Darker hover effect */
 }
 
 .loan-invoice-card .transaction-header {
-    background-color: #f1f1f1;
+    background-color: #333333; /* Darker header for transactions */
     padding: 15px;
     font-weight: bold;
     display: flex;
@@ -90,7 +115,7 @@ padding: 0;
 }
 
 .pay-loan-btn {
-    background-color: #28a745; 
+    background-color: var(--profit-green); /* Green for Payment */
     color: white;
     padding: 8px 15px;
     border: none;
@@ -107,97 +132,7 @@ padding: 0;
     display: flex;
     justify-content: space-between;
     padding: 5px 0;
-    border-bottom: 1px dashed #eee;
-}
-
-
-/* --- LOAN PAGE STYLES (loan.css) - MODERN & CLEAN DESIGN --- */
-
-.loan-layout {
-    display: flex;
-    flex-direction: column;
-    padding: 30px 20px;
-    gap: 25px;
-    background-color: #f8f9fa; /* Light Gray Background */
-    min-height: calc(100vh - 60px); 
-}
-
-/* --- Main Content Wrapper (Used for loan details/overview) --- */
-.loan-content-wrapper {
-    background-color: white;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    flex-grow: 1; 
-}
-
-.loan-header {
-    font-size: 1.8em;
-    color: #007bff;
-    border-bottom: 3px solid #eee; 
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-/* --- Customer Overview Table (Level 1) --- */
-.customer-loan-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    border-radius: 10px;
-    overflow: hidden; 
-    margin-top: 20px;
-}
-
-.customer-loan-table th {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-}
-
-.customer-loan-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-    background-color: white;
-    cursor: pointer;
-}
-
-.loan-amount-total {
-    font-weight: 900;
-    color: #dc3545; /* Red for Debt */
-}
-
-/* --- Details View (Level 2 & 3) --- */
-
-.detail-back-btn {
-    background-color: #6c757d; 
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 25px;
-    font-weight: 600;
-}
-
-/* Styling for Invoice Cards */
-.loan-invoice-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    cursor: pointer;
-}
-
-.loan-invoice-card:hover {
-    background-color: #f0f8ff;
-}
-
-.loan-invoice-card .transaction-header {
-    background-color: #f1f1f1;
-    padding: 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
+    border-bottom: 1px dashed #555555; /* Dark dashed line */
 }
 
 /* Table for Single Invoice Items (Level 3) */
@@ -205,16 +140,17 @@ padding: 0;
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
+    color: var(--text-light);
 }
 
 .invoice-items-table th, .invoice-items-table td {
     padding: 10px;
-    border: 1px solid #eee;
+    border: 1px solid #383838; /* Dark table borders */
 }
 
 .single-invoice-details {
-    background-color: #fffaf0;
-    border: 1px solid #ffc107;
+    background-color: #383838; /* Dark background */
+    border: 1px solid #ccaa00; /* Darker Amber/Yellow border */
     padding: 15px;
     border-radius: 8px;
     margin-bottom: 20px;
@@ -223,55 +159,45 @@ padding: 0;
 .final-total {
     font-size: 1.8em;
     font-weight: 900;
-    color: #dc3545; /* Red for final total */
+    color: var(--expense-red); /* Red for final total (Debt) */
     display: block;
     margin-top: 15px;
-    border-top: 2px solid #ccc;
+    border-top: 2px solid #555555;
     padding-top: 10px;
 }
 
-
-/* --- دیزاینی دوگمەی پلاس --- */
+/* --- دیزاینی دوگمەی پلاس (Plus Button) --- */
 .plus-btn {
-    /* فۆنتی دوگمەکە گەورەتر دەکەین */
     font-size: 24px; 
-    /* دیزاینی بنەڕەتی */
-    background-color: #28a745; /* سەوزێکی سەرکەوتوو */
+    background-color: var(--profit-green); 
     color: white;
     border: none;
-    border-radius: 50%; /* شێوەی خڕ */
+    border-radius: 50%;
     width: 45px;
     height: 45px;
     line-height: 45px;
     text-align: center;
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4); /* Darker Shadow */
     transition: all 0.2s ease-in-out;
-    /* دانانی لە لای ڕاستی سەرەوە */
 }
 
-/* بۆ زمانی کوردی وەک ئێستا (RTL), Left دەبێتە شوێنی ڕاست */
-
-
-
 .plus-btn:hover {
-    background-color: #1e7e34; /* گۆڕینی ڕەنگ کاتێک ماوسەکە دێت بەسەردا */
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    background-color: #388e3c; /* Darker Green on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5);
     transform: scale(1.05);
 }
 
 /* --- دیزاینی ڕیزە نوێیەی قەرز (Draft Row) --- */
-
 .new-draft-card {
-    /* ڕەنگێکی جیاواز بۆ جیاکردنەوە لە وەسڵە کۆنەکان */
-    border: 2px dashed #17a2b8; /* شینێکی کاڵ بۆ ئاگادارکردنەوە */
-    background-color: #f8f9fa;
+    border: 2px dashed #00bfff; /* Bright Blue dashed line (Alert/Draft) */
+    background-color: #383838; /* Dark background */
     margin-bottom: 20px;
 }
 
 .new-draft-header {
     display: flex;
-    flex-wrap: wrap; /* ڕێگەدان بە شکاندنەوە بۆ هێڵی نوێ لە شاشەی بچووکدا */
+    flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
@@ -280,27 +206,28 @@ padding: 0;
 .input-group {
     flex-grow: 1;
     margin: 0 10px;
-    min-width: 200px; /* دڵنیابوون لەوەی بەشی داخڵکردنە دەرناکەوێت */
+    min-width: 200px;
 }
 
 .loan-input-field {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ced4da;
+    border: 1px solid #555555; /* Darker border */
     border-radius: 5px;
     font-size: 1em;
     text-align: right;
     transition: border-color 0.2s;
+    background-color: #444444; /* Input field background */
+    color: var(--text-light); /* White text */
 }
 
 .loan-input-field:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.2rem rgba(106, 155, 216, 0.25);
     outline: none;
 }
 
 /* --- دیزاینی دوگمەکانی تۆمارکردن و هەڵوەشاندنەوە --- */
-
 .loan-action-btn {
     padding: 8px 15px;
     border: none;
@@ -309,27 +236,26 @@ padding: 0;
     margin-right: 5px;
     transition: background-color 0.2s;
     font-weight: bold;
+    color: white;
 }
 
 .save-btn {
-    background-color: #007bff; /* شینی سەرەکی */
-    color: white;
+    background-color: var(--primary-blue); 
 }
 
 .save-btn:hover {
-    background-color: #0056b3;
+    background-color: #548cd8; 
 }
 
 .cancel-btn {
-    background-color: #6c757d; /* خۆڵەمێشی */
-    color: white;
+    background-color: #5a6268; /* Darker Gray */
 }
 
 .cancel-btn:hover {
-    background-color: #5a6268;
+    background-color: #4d5459;
 }
 
-/* --- ئەنیمەیشنی هاتنە ژوورەوە --- */
+/* --- ئەنیمەیشنی هاتنە ژوورەوە (Animations) --- */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -340,23 +266,21 @@ padding: 0;
 }
 
 /* --- دیزاینی تایبەت بۆ وەسڵەکانی دانەوەی قەرز (مامەڵەی سالب) --- */
-
 .loan-invoice-card--payment {
-    /* ڕەنگێکی جیاواز بۆ دانەوە (سالب) */
-    background-color: #d4edda; /* سەوزێکی کاڵ بۆ ئەرێنی/گەڕاوە */
-    border-left: 5px solid #28a745; /* هێڵێکی ئەستووری سەوز لە لای چەپ */
-    color: #155724; /* ڕەنگی نووسینێکی تۆختر */
-    opacity: 0.9;
+    background-color: #2b452c; /* Dark Green background for payment */
+    border-left: 5px solid var(--profit-green); 
+    color: var(--text-light); 
+    opacity: 1;
 }
 
 /* بۆ زمانی کوردی (RTL) هێڵە ئەستوورەکە دەخەینە لای ڕاست */
 [dir="rtl"] .loan-invoice-card--payment {
     border-left: none;
-    border-right: 5px solid #28a745; 
+    border-right: 5px solid var(--profit-green); 
 }
 
 /* گۆڕینی ڕەنگی بڕی پارەکە لە ناو مامەڵەی سالبدا بۆ سەوز */
 .loan-invoice-card--payment .total-sale {
     font-weight: bold;
-    color: #1e7e34 !important; /* سەوزی تاریک */
+    color: var(--profit-green) !important; /* Green for Payment */
 }

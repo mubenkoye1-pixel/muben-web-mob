@@ -1,262 +1,256 @@
 /* --- Custom Scrollbar Design --- */
 ::-webkit-scrollbar {
     width: 10px;
-    background: #f4f7f6;
+    background: #1e1e1e; /* Dark Scrollbar Track */
     border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb {
-    background: #c1c7cd;
+    background: #3c3c3c; /* Dark Scrollbar Thumb */
     border-radius: 8px;
     min-height: 40px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    border: 2px solid #f4f7f6;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4); /* Darker Shadow */
+    border: 2px solid #1e1e1e; /* Border matching the track */
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #a3aab5;
+    background: #555555; /* Slightly lighter hover color */
 }
 ::-webkit-scrollbar-corner {
-    background: #f4f7f6;
+    background: #1e1e1e;
 }
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap');
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-      
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 body {
-  background-color: #f4f7f6;
-  font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
-  direction: rtl;
-  overflow: hidden; /* **دڵنیابوونەوە لەوەی Body سکرۆڵی نییە** */
-  height: 100vh; /* **دەبێت تەواوی درێژایی شاشە بگرێتەوە** */
-  display: flex; /* زیادکراوە */
-  flex-direction: column; /* زیادکراوە */
+    background-color: #0d0d0d; /* Very Dark Background */
+    font-family: 'Noto Sans Arabic', Tahoma, Arial, sans-serif;
+    direction: rtl;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #f0f0f0; /* Default Text Color: Light White */
 }
 
 .all-div {
-  height: 100%; /* ئێستا وەک پێشوو ڕێگەی پێدەدەین تەواوی 100%ی Body بگرێتەوە */
-  display: flex;
-  flex-direction: column;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
-
-
+/* --- Footer --- */
 .footer-div {
-  padding: 0 30px;
-  background-color: #3c3f51;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); /* گۆڕینی سێبەر بۆ سەرەوە */
-  height: 5vh; /* گۆڕانکاری: کردوومە بە 5%ی درێژایی شاشە */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  flex-shrink: 0; /* دڵنیابوون لەوەی قەبارەی ناگۆڕێت */
+    padding: 0 30px;
+    background-color: #1a1a1a; /* Darker Footer */
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.4);
+    height: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #aaaaaa; /* Lighter text for footer */
+    flex-shrink: 0;
 }
 
-
-
-
-
-
+/* --- Header --- */
 .head-div {
-  padding: 0 30px;
-  background-color: #007bff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 6.5vh; /* گۆڕانکاری: کردوومە بە 10%ی درێژایی شاشە */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  color: white;
-  flex-shrink: 0; /* دڵنیابوون لەوەی قەبارەی ناگۆڕێت */
+    padding: 0 30px;
+    background-color: #1f1f1f; /* Dark Header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 6.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    flex-shrink: 0;
 }
 
 .logo-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none; 
-  padding: 0 10px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; /* White logo */
+    text-decoration: none;
+    padding: 0 10px;
 }
 
 .nav-links {
-  display: flex;
-  gap: 25px; 
-  align-items: center;
+    display: flex;
+    gap: 25px;
+    align-items: center;
 }
 
 .btn-head {
-  font-size: 18px; 
-  font-weight: 500;
-  color: white;
-  text-decoration: none; 
-  padding: 5px 0; 
-  transition: color 0.3s ease; 
-  position: relative;
+    font-size: 18px;
+    font-weight: 500;
+    color: #cccccc; /* Light gray navigation text */
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+    position: relative;
 }
 
 .btn-head:hover {
-  color: #ffc107; 
+    color: #9d57ff; /* Modern Accent Color (e.g., Violet/Purple) */
 }
 
 .btn-head::after {
-  content: '';
-  position: absolute;
-  right: 0; 
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #ffc107;
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #9d57ff; /* Modern Accent Color */
+    transition: width 0.3s ease;
 }
 
 .btn-head:hover::after {
-  width: 100%;
-  right: 0; 
+    width: 100%;
+    right: 0;
 }
 
-
-.main-div {
-  display: flex;
-  flex-direction: row;
-  flex-grow: 1; /* **ئەمە تەواوی پانتایی نێوان سەر و خوار دەگرێتەوە** */
-  overflow-y: hidden; /* **گرنگ: ڕێگری لە سکرۆڵی زیادە لەسەر main-div** */
-}
-
-
-.left-div{
-  background-color: rgb(138, 146, 153);
-  width: 50%;
-
-  display: flex;
-}
-.right-div{
-  width: 50%;
-  
- 
-    cursor: pointer;
-  
-
-}
-
+/* --- Main Content Sections --- */
 .main-div {
     display: flex;
-    flex-direction: row; 
+    flex-direction: row;
+    flex-grow: 1;
+    overflow-y: hidden;
+}
+
+.left-div {
+    background-color: #1f1f1f; /* Dark background for left (Cart) */
+    width: 50%;
+    display: flex;
+}
+
+.right-div {
+    width: 50%;
+    cursor: pointer;
+    background-color: #1f1f1f; /* Dark background for right (Items) */
 }
 
 .left-div.cart-div {
-  /* لادانی: height: 723px; */
-  width: 50%;
-  padding: 5px;
-  background-color: #e9ecef;
-  border-right: 1px solid #ddd;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1; /* گەورەبوون بۆ گرتنەوەی تەواوی درێژایی بەشی ناوەڕاست */
+    width: 50%;
+    padding: 5px;
+    background-color: #1f1f1f; /* Dark background */
+    border-right: 1px solid #333333; /* Darker border */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .right-div.item-list-div {
-  width: 50%;
-  padding: 4px;
-  background-color: white;
-  display: flex;
-  flex-direction: column; /* بۆ ڕێکخستنی ستوونی */
+    width: 50%;
+    padding: 4px;
+    background-color: #1f1f1f; /* Dark background */
+    display: flex;
+    flex-direction: column;
 }
 
 .item-list-div h2 {
-    color: #333;
-    border-bottom: 2px solid #ddd;
+    color: #e0e0e0; /* Light heading text */
+    border-bottom: 2px solid #333333; /* Darker border */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
 
+/* --- Filters & Search --- */
 .filters-and-search {
     display: flex;
+    flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #2c2c2c; /* Slightly lighter container background */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.search-input {
+    flex-grow: 1;
+    min-width: 250px;
+    padding: 10px 15px;
+    border: 2px solid #555555; /* Dark border */
+    border-radius: 25px;
+    font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    background-color: #383838; /* Darker input field */
+    color: #ffffff; /* White text for input */
+}
+
+.search-input::placeholder {
+    color: #999999;
+}
+
+.search-input:focus {
+    border-color: #6a0dad; /* Modern Accent: Deep Purple */
+    box-shadow: 0 0 0 3px rgba(106, 13, 173, 0.2);
+    outline: none;
 }
 
 .filter-select {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
+    padding: 8px 12px;
+    border: 1px solid #54616f;
+    border-radius: 25px;
+    background-color: #383838; /* Darker select background */
+    color: #ffffff; /* White text */
+    font-size: 0.95em;
+    cursor: pointer;
+    appearance: none;
+    padding-right: 2;
 }
 
-
-
-
-
-
-
-
-    
-
-    
-
-   
-
-    
-
-   
-
-        
-
-
-
-
-
+/* --- Items Grid --- */
 .items-grid {
-     gap:10px;
+    gap: 10px;
     align-items: start;
     justify-items: center;
-  /* ... شێوازەکانی تری هەر وەک خۆی ... */
-  flex-grow: 1; /* زیادکردن بۆ ئەوەی پانتایی بەردەست بگرێتەوە */
-  overflow-y: auto; /* گەڕۆک تەنها لەم بەشەدا کار دەکات */
-  max-height: none; /* لادانی max-height: calc(100vh - 0.1px); */
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: wrap;
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: none;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .sales-item-card {
-
-    padding: 1px; 
+    padding: 1px;
     border-radius: 8px;
-    border: none;
+    border: 1px solid #333333; /* Add a slight border for definition */
     width: 11.57875vw;
-    height: 230px; 
+    height: 230px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
-    color: white; 
+    color: white;
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     overflow: hidden;
     position: relative;
+    background-color: #2c2c2c; /* Dark Card Background */
 }
 
 .sales-item-card:hover {
-    transform: translateY(-5px); 
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
 }
 
 .sales-item-card .stock-count {
     position: absolute;
     left: 3px;
-    width: auto; 
+    width: auto;
     height: 35px;
-    background-color: rgba(0, 0, 0, 0.127); 
-    color: white;
+    background-color: rgba(255, 255, 255, 0.1); /* Light transparency */
+    color: #ffffff;
     font-size: 1.2em;
     font-weight: 900;
-    border-radius: 50px; 
+    border-radius: 50px;
     padding: 4px;
     margin: 2px;
     display: flex;
@@ -265,99 +259,44 @@ body {
     box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.sales-item-card .item-model-name {
-    font-size: 1.4em;
-    font-weight: 800;
-    margin-bottom: 5px;
-    line-height: 1.2;
-    padding-top: 5px; 
-}
-
-.sales-item-card .main-info-group {
-    flex-grow: 1; 
-    margin-top: 5px;
-}
-
-.sales-item-card .detail-line {
-    font-size: 1em;
-    line-height: 1.6;
-    border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
-    padding-bottom: 2px;
-    font-weight: 300;
-}
-
-.sales-item-card .brand-name,
-.sales-item-card .type-name,
-.sales-item-card .quality-name {
-    font-weight: 700;
-}
-
-
 .sales-item-card .price-box {
-    background-color: rgba(0, 0, 0, 0.281);
-padding-right: 5px;
-    text-align: right; 
-    margin-top: 15px; 
+    background-color: rgba(0, 0, 0, 0.35); /* Slightly darker price box */
+    padding-right: 5px;
+    text-align: right;
+    margin-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.sales-item-card .price-value {
-    font-size: 2.2em; 
-    font-weight: 900;
-    line-height: 1;
-}
-
-.sales-item-card .currency {
-    font-size: 0.8em;
-    margin-top: -5px;
-    display: block;
-}
-
 .sales-item-card.out-of-stock {
-    opacity: 0.6;
-    filter: grayscale(80%); 
+    opacity: 0.5;
+    filter: grayscale(80%);
     transform: none;
     cursor: not-allowed;
-    border: none;
+    border: 1px dashed #555555;
 }
 
+/* --- Cart List --- */
 .cart-items-list {
-  flex-grow: 1;
-  overflow-y: auto; /* **تەنها ئەم لیستە دەتوانێت سکرۆڵ بکات** */
-  /* لادانی max-height: calc(69vh - 2px); */
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .cart-item {
     height: 40PX;
     padding: 2px;
     margin-bottom: 3px;
-    border-right: 5px solid #ccc;
+    border-right: 5px solid #444444; /* Darker separator */
 }
-.tablethead{
+
+.tablethead {
     justify-content: space-between;
-  height: 40PX;
+    height: 40PX;
     padding: 2px;
     margin-bottom: 3px;
 }
-.cart-item .title {
-    font-weight: bold;
-    font-size: 0.8em;
-    width: 50%;
-    
-}
-.cart-item .span{
-    font-weight: bold;
-    font-size: 0.8em;
-    width: 4%;
-}
-.item-id{
-font-weight: bold;
-    font-size: 0.8em;
-    width: 50%;
-
-}
 
 .cart-item .details {
+    color: #e0e0e0; /* Light text for item details */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -365,13 +304,14 @@ font-weight: bold;
 }
 
 .cart-summary {
-   flex-shrink: 0;
-    border-top: 1px solid #ccc;
+    flex-shrink: 0;
+    border-top: 1px solid #444444;
     text-align: center;
+    color: #f0f0f0; /* Light text for summary */
 }
 
 .checkout-btn {
-    background-color: #00a005;
+    background-color: #008000; /* Darker Green for Checkout */
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -382,187 +322,110 @@ font-weight: bold;
     border: none;
 }
 
-.checkout-btn:hover{
-    background-color: #03ba00ba;
+.checkout-btn:hover {
+    background-color: #009000;
 }
-
-.fa-solidfa-trash{
-  display: block;
-
-}
-
 
 .cart-item .remove-btn {
-background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی تۆ یان ڕوون (transparent) */
-    color: #e74c3c; /* ڕەنگی سوور بۆ هێماکە (کە گونجاوترە بۆ سڕینەوە) */
+    background-color: transparent;
+    color: #ff5555; /* Brighter Red for Remove (Danger) */
     border: none;
-    padding: 8px; /* پادینگ کەمتر دەکەینەوە چونکە تەنها هێمایە */
+    padding: 8px;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 1.2em; /* قەبارەی هێماکە گەورەتر دەکەین */
+    font-size: 1.2em;
     transition: color 0.3s, background-color 0.3s;
-    line-height: 1; /* بۆ دڵنیابوون لەوەی هێماکە لە ناوەڕاستدا دەردەکەوێت */
-
-
-    
+    line-height: 1;
 }
 
 .cart-item .remove-btn:hover {
-    color: rgba(201, 16, 16, 0.433); 
+    color: #ff8888;
 }
-
-.cart-item .remove-btn:active {
-    transform: translateY(1px);
-}
-
-
-/* --- Search & Filter Container --- */
-.filters-and-search {
-    display: flex;
-    flex-wrap: wrap; 
-    gap: 15px; /* پانتایی نێوان توخمەکان */
-    margin-bottom: 20px;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f0f7ff; /* ڕەنگی پاشبنەمای شینی کاڵ */
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-/* --- Search Input Styling --- */
-.search-input {
-    flex-grow: 1; /* وا دەکات پانتایی زیاتر بگرێتەوە */
-    min-width: 250px;
-    padding: 10px 15px;
-    border: 2px solid #ccc; /* سنوورێکی سادە */
-    border-radius: 25px; /* گۆشەی بازنەیی */
-    font-size: 1em;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: white;
-}
-
-.search-input::placeholder {
-    color: #999;
-}
-
-.search-input:focus {
-    border-color: #007bff; /* شینێکی دیارتر لەکاتی کلیککردن */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* سێبەرێکی سووک */
-    outline: none;
-}
-
-/* --- Filter Dropdowns Styling --- */
-.filter-select {
-    padding: 8px 12px;
-    border: 1px solid #007bff; /* سنووری شین بۆ جیاکردنەوە */
-    border-radius: 25px; /* گۆشەی بازنەیی وەک گەڕانەکە */
-    background-color: #e3f2fd; /* شینی زۆر کاڵ */
-    color: #333;
-    font-size: 0.95em;
-    cursor: pointer;
-    appearance: none; /* لادانی دیزاینی سەرەکی سیستەم */
-    /* کەمێک پانتایی بۆ ئەوەی بەشی سێگۆشەیی (Arrow) دیاربێت */
-    padding-right: 2;
-}
-
-
-
 
 /* --- SALES CART MODIFICATIONS --- */
-
-/* Input بۆ نرخی ئایتم لەناو سەبەتە (Cart Item Price Input) */
 .cart-item-price-input {
-    color: #007bff;
+    color: #9d57ff; /* Modern Accent Color */
     font-size: 0.8rem;
     border: none;
     background-color: transparent;
-    width: 80px; 
+    width: 80px;
     padding: 3px;
     margin-right: 5px;
     text-align: center;
     font-weight: bold;
 }
 
-
-
 .discount-input {
+    background-color: #2c2c2c;
     width: 100px;
     height: 45px;
     padding: 6px;
-    border: 2px solid #dc3545; /* Red border for discount */
+    border: 2px solid #772222; /* Darker Red border for discount */
     border-radius: 4px;
     text-align: center;
     font-weight: 700;
-    color: #dc3545;
+    color: #ffffff;
     font-size: 1rem;
 }
 
-/* کۆی گشتی کۆتایی */
 .final-total-line {
     font-size: 1em;
-    color: #28a745; /* Green for the final price */
-   
+    color: #38b44a; /* Slightly lighter Green for the final price */
 }
 
 /* --- LOAN / CREDIT SALE DESIGN (Inside cart-summary) --- */
-
 .loan-toggle-area {
-    /* هەمان شێوازی پێشوو کە لە HTML دا زیاد کرا */
-    border-top: 1px dashed #ccc;
-    border-bottom: 1px dashed #ccc;
+    border-top: 1px dashed #444444;
+    border-bottom: 1px dashed #444444;
     margin-bottom: 10px;
     display: flex;
-    flex-direction: column; /* ڕێکخستنی ستوونی */
-    align-items: flex-end; /* لای ڕاست */
+    flex-direction: column;
+    align-items: flex-end;
     gap: 10px;
 }
 
 .loan-toggle-area label {
-    
     font-size: 1em;
     font-weight: 700;
-    color: #dc3545; /* ڕەنگی سوور بۆ وشەی 'قەرز' */
+    color: #ff5555; /* Brighter Red for 'قەرز' */
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
-/* Checkbox (سەحمەکە) */
 .loan-toggle-area input[type="checkbox"] {
-    /* گەورەترکردنی سەحمەکە بۆ باشتر کارکردن */
     width: 20px;
     height: 20px;
-    accent-color: #dc3545; /* ڕەنگی سوور بۆ سەحمەکە */
+    accent-color: #ff5555; /* Brighter Red for Checkbox */
     cursor: pointer;
 }
 
-/* Input بۆ ناوی کریار (Customer Name) */
 .loan-toggle-area .customer-input {
-    width: 100%; /* پانتایی تەواو بگرێتەوە */
+    width: 100%;
     padding: 10px 12px;
-    border: 2px solid #ffc107; /* سنووری زەرد بۆ ئاگادارکردنەوە */
+    border: 2px solid #555555;
     border-radius: 8px;
     font-size: 1em;
     font-weight: 500;
-    color: #333;
+    color: #ffffff; /* White text */
+    background-color: #383838; /* Darker input background */
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .loan-toggle-area .customer-input::placeholder {
-    color: #888;
+    color: #999;
 }
 
 .loan-toggle-area .customer-input:focus {
-    border-color: #dc3545; /* سوور کاتێک کلیک دەکرێتە سەری */
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+    border-color: #ff5555;
+    box-shadow: 0 0 0 3px rgba(255, 85, 85, 0.2);
     outline: none;
 }
 
-
-
-
-.invoice-btn{
-    background-color: #000678;
+/* --- Invoice Button --- */
+.invoice-btn {
+    background-color: #003399; /* Darker Blue for Invoice */
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -571,43 +434,39 @@ background-color: transparent; /* ڕەنگێکی شین وەک وێنەکەی ت
     margin-top: 10px;
     cursor: pointer;
     border: none;
-    
 }
 
-.invoice-btn:hover{
-    background-color: #000678bc;
+.invoice-btn:hover {
+    background-color: #0044bb;
 }
 
-
-
-
-.head-tr{
-  
-    background-color: rgb(29, 29, 30);
+/* --- Table Header --- */
+.head-tr {
+    background-color: #2c2c2c; /* Darker row header */
     height: 5vh;
 }
 
-.teblhed{
+.teblhed {
+    color: #ffffff; /* White text for table header */
     padding: 0px;
     align-items: center;
     width: 100%;
     display: flex;
-background-color: #999;
-height: 40px;
-justify-content: space-around;
+    height: 40px;
+    justify-content: space-around;
 }
-.titlehed{
- font-weight: bold;
+
+.titlehed {
+    font-weight: bold;
     font-size: 0.8em;
     width: 50%;
-    }
+}
 
 .btnfro {
-  display: flex;
-  gap: 5px;
-  justify-content: center;
-  /* لادانی position: fixed; و bottom: 5vh; */
-  margin-top: auto; /* پاڵنانیان بۆ کۆتایی */
-  padding-bottom: 5px;
-  flex-shrink: 0;
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    margin-top: auto;
+    padding-bottom: 5px;
+    flex-shrink: 0;
 }

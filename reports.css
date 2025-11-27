@@ -1,9 +1,13 @@
-/* --- REPORTS PAGE STYLES (reports.css) --- */
+/* --- REPORTS PAGE STYLES (reports.css) - DARK MODE --- */
 :root {
-    --primary-blue: #007bff;
-    --profit-green: #28a745;
-    --expense-red: #dc3545;
-    --secondary-gray: #6c757d;
+    --primary-blue: #6a9bd8; /* New Blue: Brighter for Dark Mode */
+    --profit-green: #4caf50; /* New Green: Clearer profit indicator */
+    --expense-red: #ef5350; /* New Red: Clearer expense indicator */
+    --secondary-gray: #a0a0a0; /* Lighter Gray for labels */
+    --background-dark: #1e1e1e; /* Main dark background */
+    --card-dark: #2c2c2c; /* Card/Panel dark background */
+    --text-light: #f0f0f0; /* Light text for readability */
+    --border-dark: #444444; /* Darker borders/dividers */
 }
 
 .reports-layout {
@@ -11,21 +15,22 @@
     flex-direction: column;
     padding: 30px 20px;
     gap: 30px;
-    background-color: #f8f9fa; 
+    background-color: var(--background-dark); /* Dark background */
     min-height: calc(100vh - 60px);
+    color: var(--text-light); /* Default light text color */
 }
 
 /* --- Filter Panel --- */
 .reports-filter-panel {
-    background-color: white;
+    background-color: var(--card-dark); /* Dark Card Background */
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Darker Shadow */
 }
 
 .filter-header {
     font-size: 1.3em;
-    color: var(--primary-blue);
+    color: var(--primary-blue); /* Primary Accent Blue */
     margin-bottom: 15px;
     display: flex;
     align-items: center;
@@ -40,14 +45,16 @@
 
 .date-inputs-group label {
     font-weight: 600;
-    color: var(--secondary-gray);
+    color: var(--secondary-gray); /* Lighter gray for labels */
 }
 
 .date-inputs-group input[type="date"] {
     padding: 10px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-dark); /* Dark border for input */
     border-radius: 6px;
     font-size: 1em;
+    background-color: #383838; /* Slightly lighter dark background for input */
+    color: var(--text-light);
 }
 
 /* --- KPI Reports Summary --- */
@@ -58,27 +65,28 @@
 }
 
 .kpi-box {
-    background-color: white;
+    background-color: var(--card-dark); /* Dark Card Background */
     border-radius: 12px;
     padding: 20px;
     flex: 1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border-left: 5px solid; /* For color indicator */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Darker Shadow */
+    border-left: 5px solid;
     text-align: right;
 }
 
 .kpi-box h4 {
     font-size: 0.9em;
-    color: var(--secondary-gray);
+    color: var(--secondary-gray); /* Lighter gray for headers */
     margin-bottom: 10px;
 }
 
 .report-value {
     font-size: 2em;
     font-weight: 900;
+    color: var(--text-light); /* Ensure value text is light */
 }
 
-/* Color Coding */
+/* Color Coding - Updated for Dark Mode */
 .total-revenue { border-color: var(--primary-blue); }
 .total-revenue .primary-color { color: var(--primary-blue); }
 
@@ -94,16 +102,16 @@
 
 /* --- Detailed Reports Area --- */
 .detailed-reports-area {
-    background-color: white;
+    background-color: var(--card-dark); /* Dark Card Background */
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .report-header {
     font-size: 1.5em;
-    color: var(--dark-text);
-    border-bottom: 1px solid #ddd;
+    color: var(--text-light); /* Light text for header */
+    border-bottom: 1px solid var(--border-dark); /* Darker separator */
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
