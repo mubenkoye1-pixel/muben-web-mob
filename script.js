@@ -3,7 +3,12 @@
 
 function getFromStorage(key, defaultValue = []) {
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : defaultValue;
+    // ⚠️ گۆڕانکاری بچووک: باشترکردنی هەڵگرتنی JSON
+    try {
+        return data ? JSON.parse(data) : defaultValue;
+    } catch (e) {
+        return defaultValue;
+    }
 }
 
 function saveToStorage(key, data) {
@@ -11,27 +16,24 @@ function saveToStorage(key, data) {
 }
 
 function getTransactions() {
-    const transactions = localStorage.getItem('salesTransactions');
-    return transactions ? JSON.parse(transactions) : [];
+    return getFromStorage('salesTransactions', []);
 }
 
 function saveTransactions(transactions) {
-    localStorage.setItem('salesTransactions', JSON.stringify(transactions));
+    saveToStorage('salesTransactions', transactions);
 }
 
 function getLoanTransactions() {
-    const loans = localStorage.getItem('loanTransactions');
-    return loans ? JSON.parse(loans) : [];
+    return getFromStorage('loanTransactions', []);
 }
 
 function saveLoanTransactions(loans) {
-    localStorage.setItem('loanTransactions', JSON.stringify(loans));
+    saveToStorage('loanTransactions', loans);
 }
 
 function getCustomers() {
     // This assumes customer.js has loaded and defined this function globally
-    const customers = localStorage.getItem('customerData');
-    return customers ? JSON.parse(customers) : [];
+    return getFromStorage('customerData', []);
 }
 
 
@@ -39,25 +41,30 @@ function getCustomers() {
 // --- SALES PAGE LOGIC (sales.html) ---
 // ==========================================================
 
-let salesCart = []; 
+let salesCart = []; 
 
 // Function to populate Type and Brand filters on sales page
 function populateSalesFilters() {
+    // ⚠️ گۆڕانکاری: وەرگرتنی شێوازی object بۆ Types بۆ دەستەبەرکردنی ناوی ڕاست
     const brands = getFromStorage('brands', []);
-    const types = getFromStorage('types', []);
+    const typesObjects = getFromStorage('types', []);
     
+    // Convert array of objects/strings to array of names for select options
+    const brandNames = brands.map(b => (typeof b === 'object' ? b.name : b)).filter(Boolean);
+    const typeNames = typesObjects.map(t => (typeof t === 'object' ? t.name : t)).filter(Boolean);
+
     const filterBrandSelect = document.getElementById('filterBrand');
     const filterTypeSelect = document.getElementById('filterType');
 
     if (filterBrandSelect && filterTypeSelect) {
         filterBrandSelect.innerHTML = '<option value="all">هەموو براندەکان</option>';
-        brands.forEach(b => {
+        brandNames.forEach(b => {
             filterBrandSelect.innerHTML +=` <option value="${b}">${b}</option>;`
         });
 
         filterTypeSelect.innerHTML = '<option value="all">هەموو جۆرەکان</option>';
-        types.forEach(t => {
-            filterTypeSelect.innerHTML +=` <option value="${t.name}">${t.name}</option>`;
+        typeNames.forEach(t => {
+            filterTypeSelect.innerHTML +=` <option value="${t}">${t}</option>`;
         });
     }
 }
@@ -81,7 +88,7 @@ function populateCustomerDropdown() {
 
 // Function to toggle the customer name input visibility (Loan Checkbox)
 function toggleCustomerInput() {
-    const isLoan = document.getElementById('isLoanSale').checked; 
+    const isLoan = document.getElementById('isLoanSale').checked; 
     const customerInput = document.getElementById('customerNameInput');
     
     if (customerInput) {
@@ -98,8 +105,8 @@ function toggleCustomerInput() {
 
 // Function to display items on the sales page (Search and Filter Logic)
 function displaySalesItems() {
-    const itemsContainer = document.getElementById('salesItemsContainer'); 
-    if (!itemsContainer) return; 
+    const itemsContainer = document.getElementById('salesItemsContainer'); 
+    if (!itemsContainer) return; 
 
     const items = getFromStorage('inventory', []);
     
@@ -107,20 +114,33 @@ function displaySalesItems() {
     const selectedType = document.getElementById('filterType') ? document.getElementById('filterType').value : 'all';
     
     const searchInput = document.getElementById('searchInput');
-    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : ''; 
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : ''; 
 
 
-    itemsContainer.innerHTML = ''; 
+    itemsContainer.innerHTML = ''; 
 
     const filteredItems = items.filter(item => {
+        // 1. پشکنینی فلتەرەکانی براند و جۆر
         const matchesFilters = (selectedBrand === 'all' || item.brand === selectedBrand) &&
                                (selectedType === 'all' || item.type === selectedType);
 
-        const itemText = [item.name, item.brand, item.type, item.quality].join(' ').toLowerCase();
+        // 2. گەڕان بەدوای ناوی سەرەکی، براند، جۆر، کوالێتی، و ناوی جێگرەوەکان
+        let searchableText = [
+            item.name, 
+            item.brand, 
+            item.type, 
+            item.quality
+        ].join(' ').toLowerCase();
+
+        // ✅ لۆژیکی ناوی جێگرەوەکان: زیادکردنی بۆ گەڕان
+        if (Array.isArray(item.alternativeNames) && item.alternativeNames.length > 0) {
+            const altNamesString = item.alternativeNames.join(' ').toLowerCase();
+            searchableText += ' ' + altNamesString;
+        }
+
+        const matchesSearch = searchTerm === '' || searchableText.includes(searchTerm);
         
-        const matchesSearch = searchTerm === '' || itemText.includes(searchTerm);
-        
-        return matchesFilters && matchesSearch;
+        return matchesFilters && matchesSearch; // گەڕان و فلتەر دەبێت ڕێک بکەون
     });
 
     if (filteredItems.length === 0) {
@@ -132,9 +152,9 @@ function displaySalesItems() {
         const outOfStockClass = item.quantity <= 0 ? 'out-of-stock' : '';
         
         const card = document.createElement('div');
-        card.className = `sales-item-card ${outOfStockClass}`; 
+        card.className = `sales-item-card ${outOfStockClass}`; 
         
-        card.style.backgroundColor = item.color || '#ccc'; 
+        card.style.backgroundColor = item.color || '#ccc'; 
         
         card.onclick = () => {
             if (item.quantity > 0) {
@@ -162,9 +182,9 @@ function displaySalesItems() {
             <p class="item-model-name">${item.name || ' '}</p>
 
 
-<p class="storage-location-text">شوێن: 
-                <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
-            </p>
+<p class="storage-location-text">شوێن: 
+                    <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
+                </p>
 
 
             
@@ -218,11 +238,11 @@ function addToCart(itemId) {
             id: itemToAdd.id, // INVENTORY ID (Crucial for data.js edit/delete)
             name: itemToAdd.name,
             salePrice: itemToAdd.salePrice, // Start with default sale price
-            purchasePrice: itemToAdd.purchasePrice, 
+            purchasePrice: itemToAdd.purchasePrice, 
             color: itemToAdd.color,
-            brand: itemToAdd.brand, 
-            type: itemToAdd.type,   
-            quality: itemToAdd.quality, 
+            brand: itemToAdd.brand, 
+            type: itemToAdd.type,   
+            quality: itemToAdd.quality, 
             quantity: 1
         });
     }
@@ -249,7 +269,7 @@ function manualPriceEdit(inputElement) {
     inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
 
     const itemId = parseInt(inputElement.getAttribute('data-item-id'));
-    const newPrice = parseInt(inputElement.value) || 0; 
+    const newPrice = parseInt(inputElement.value) || 0; 
 
     const cartItem = salesCart.find(i => i.id === itemId);
 
@@ -286,29 +306,29 @@ function updateCartDisplay() {
     }
 
     salesCart.forEach(item => {
-        const currentSalePrice = parseInt(item.salePrice) || 0; 
+        const currentSalePrice = parseInt(item.salePrice) || 0; 
         const itemTotal = currentSalePrice * item.quantity;
         subTotalSale += itemTotal;
 
         const cartElement = document.createElement('div');
-        cartElement.className = 'cart-item'; 
+        cartElement.className = 'cart-item'; 
         cartElement.style.borderRight = `5px solid ${item.color || '#ccc'}`;
         
         cartElement.innerHTML = `
-      
+        
             <div class="details">
             <p class="title">${item.name}</p>
                 <span>${item.quantity}</span>
                 <span style="font-weight: bold;"> ${itemTotal.toLocaleString()}</span>
                 
-                <input type="text" 
-                       value="${currentSalePrice}" 
+                <input type="text" 
+                       value="${currentSalePrice}" 
                        data-item-id="${item.id}"
                        onblur="manualPriceEdit(this)"
                        class="cart-item-price-input"
-                       pattern="[0-9]*" 
-                       inputmode="numeric"> 
-                       
+                       pattern="[0-9]*" 
+                       inputmode="numeric"> 
+                        
                 <button class="remove-btn" onclick="removeFromCart(${item.id})"><i class="fa-solidfa-trash"></i>X</button>
             </div>
         `;
@@ -327,7 +347,7 @@ function updateCartDisplay() {
 
 // لە script.js: جێگەی فەنکشنی checkout() بگرەوە
 
-function checkout() { 
+function checkout() { 
     if (salesCart.length === 0) {
         alert('سەبەتەکە بەتاڵە، ناتوانیت فرۆشتن تەواو بکەیت.');
         return;
@@ -353,25 +373,25 @@ function checkout() {
     // 1. وەرگرتنی داتای سەرەکی (Sync)
     let items = getFromStorage('inventory');
     let transactions = getTransactions();
-    let loans = getLoanTransactions(); 
+    let loans = getLoanTransactions(); 
 
     const transactionId = Date.now();
     let totalSalePrice = 0;
     let totalProfitForTransaction = 0;
     let totalItemsCount = 0;
-    let soldItemsDetails = []; 
+    let soldItemsDetails = []; 
 
     // 2. Update stock and calculate profit for the transaction
     salesCart.forEach(cartItem => {
         // دۆزینەوەی ئایتمەکە لە عەمباردا (بە ID)
-        const inventoryItemIndex = items.findIndex(i => i.id === cartItem.id); 
+        const inventoryItemIndex = items.findIndex(i => i.id === cartItem.id); 
         const itemSalePrice = parseInt(cartItem.salePrice) || 0;
         
         if (inventoryItemIndex !== -1) {
             const inventoryItem = items[inventoryItemIndex];
             
             // کەمکردنەوەی ستۆک
-            inventoryItem.quantity -= cartItem.quantity; 
+            inventoryItem.quantity -= cartItem.quantity; 
 
             const unitProfit = (itemSalePrice - cartItem.purchasePrice);
             const itemProfit = unitProfit * cartItem.quantity;
@@ -382,13 +402,13 @@ function checkout() {
             
             // تۆمارکردنی وردەکاریی فرۆشتن
             soldItemsDetails.push({
-                id: cartItem.id, 
+                id: cartItem.id, 
                 name: cartItem.name,
                 type: cartItem.type,
                 brand: cartItem.brand,
-                quality: cartItem.quality, 
+                quality: cartItem.quality, 
                 quantity: cartItem.quantity,
-                salePrice: itemSalePrice, 
+                salePrice: itemSalePrice, 
                 purchasePrice: cartItem.purchasePrice,
                 profit: itemProfit
             });
@@ -399,18 +419,18 @@ function checkout() {
     const finalSale = subTotalSale - discountAmount;
     const finalProfit = totalProfitForTransaction - discountAmount;
 
-    // 3. Record the complete transaction 
+    // 3. Record the complete transaction 
     const newTransaction = {
         id: transactionId,
-        date: new Date().toLocaleString('ckb-IQ', { timeZone: 'Asia/Baghdad' }), 
-        isLoan: isLoan, 
-        customerName: isLoan ? customerName : null, 
+        date: new Date().toLocaleString('ckb-IQ', { timeZone: 'Asia/Baghdad' }), 
+        isLoan: isLoan, 
+        customerName: isLoan ? customerName : null, 
         subTotalSale: subTotalSale,
-        totalSale: finalSale, 
+        totalSale: finalSale, 
         discount: discountAmount,
-        totalProfit: finalProfit, 
+        totalProfit: finalProfit, 
         totalItemsCount: totalItemsCount,
-        items: soldItemsDetails 
+        items: soldItemsDetails 
     };
     transactions.push(newTransaction);
     
@@ -421,25 +441,25 @@ function checkout() {
             customer: customerName,
             amountDue: finalSale,
             date: newTransaction.date,
-            items: soldItemsDetails 
+            items: soldItemsDetails 
         });
         saveLoanTransactions(loans); // Save loan list
     }
     
     // 5. Save all changes (Inventory and Transactions)
-    saveToStorage('inventory', items); 
-    saveTransactions(transactions); 
+    saveToStorage('inventory', items); 
+    saveTransactions(transactions); 
     
     // 6. Clear the current cart and update displays
     alert("فرۆشتن بە سەرکەوتوویی تەواو بوو!");
 
     salesCart = [];
-    document.getElementById('discountInput').value = 0; 
+    document.getElementById('discountInput').value = 0; 
     document.getElementById('isLoanSale').checked = false;
     document.getElementById('customerNameInput').value = '';
     toggleCustomerInput();
     updateCartDisplay();
-    displaySalesItems(); 
+    displaySalesItems(); 
 }
 
 
@@ -450,14 +470,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('salesItemsContainer')) {
         // Assuming other functions like populateSalesFilters() are defined elsewhere or loaded
         if (typeof populateSalesFilters === 'function') {
-             populateSalesFilters(); 
+             populateSalesFilters(); 
         }
         // CRITICAL: Load customers on sales page startup
         if (typeof populateCustomerDropdown === 'function') {
-             populateCustomerDropdown(); 
+             populateCustomerDropdown(); 
         }
         displaySalesItems();
-        updateCartDisplay(); 
+        updateCartDisplay(); 
     }
 });
 
@@ -479,10 +499,12 @@ function generateInvoiceAndPrint() {
     const subTotal = document.getElementById('sub-total-price').textContent;
     const finalTotal = document.getElementById('final-total-price').textContent;
     const discount = document.getElementById('discountInput').value;
-    const customerName = document.getElementById('isLoanSale').checked 
-    const numcustomer = document.getElementById('customerPhone')
-                        ? document.getElementById('customerNameInput').value.trim() 
-                        : 'کڕیاری گشتی';
+    
+    // ⚠️ چاککردنەوەی شێوازی وەرگرتنی ناوی کڕیار
+    let customerName = 'کڕیاری گشتی';
+    if (document.getElementById('isLoanSale').checked) {
+        customerName = document.getElementById('customerNameInput').value.trim() || 'کڕیاری قەرز (ناوی دیاری نەکراوە)';
+    }
 
     const transactionId = Math.floor(Math.random() * 100000) + 1;
     const currentDate = new Date().toLocaleDateString('ckb-IQ');
@@ -492,7 +514,7 @@ function generateInvoiceAndPrint() {
     const storeName = "SAIFADEN PHONE";
     const storeAddress = "هەولێر : کەلەک شەقامی 20م";
     const storePhone = "07514002080";
-  
+    
 
     // 1. دروستکردنی خشتەی ئایتمەکان
     let itemsTableHTML = '';
@@ -517,24 +539,24 @@ function generateInvoiceAndPrint() {
             <title>وەسڵی فرۆشتن #${transactionId}</title>
             <style>
                 /* فونتی سەرەکی */
-                body { 
-                    font-family: Tahoma, Arial, sans-serif; 
-                    margin: 0; 
-                    padding: 0; 
+                body { 
+                    font-family: Tahoma, Arial, sans-serif; 
+                    margin: 0; 
+                    padding: 0; 
                     background-color: #f7f7f7; /* باکگراوندی سادە */
                 }
 
                 /* قاڵبی وەسڵ */
                 .invoice-box {
-                    max-width: 700px; 
-                    margin: 50px auto; 
-                    padding: 30px; 
+                    max-width: 700px; 
+                    margin: 50px auto; 
+                    padding: 30px; 
                     border: 1px solid #ddd;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, .1); 
-                    font-size: 14px; 
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, .1); 
+                    font-size: 14px; 
                     line-height: 20px;
-                    color: #333; 
-                    background: #fff; 
+                    color: #333; 
+                    background: #fff; 
                     direction: rtl;
                 }
 
@@ -624,10 +646,10 @@ function generateInvoiceAndPrint() {
                 }
 
                 /* ژێرەوە */
-                .footer { 
-                    text-align: center; 
-                    margin-top: 30px; 
-                    font-size: 12px; 
+                .footer { 
+                    text-align: center; 
+                    margin-top: 30px; 
+                    font-size: 12px; 
                     color: #777;
                     border-top: 1px solid #eee;
                     padding-top: 10px;
@@ -635,15 +657,15 @@ function generateInvoiceAndPrint() {
 
                 /* چاودێری چاپکردن (چاپی سپی و ڕەش) */
                 @media print {
-                    body { 
-                        background: #fff; 
+                    body { 
+                        background: #fff; 
                         -webkit-print-color-adjust: exact;
                         print-color-adjust: exact;
                     }
-                    .invoice-box { 
-                        box-shadow: none; 
-                        border: none; 
-                        margin: 0; 
+                    .invoice-box { 
+                        box-shadow: none; 
+                        border: none; 
+                        margin: 0; 
                         padding: 0;
                     }
                     .items-table th {
@@ -674,7 +696,7 @@ function generateInvoiceAndPrint() {
 
                 <div class="client-info">
                     <p><strong>ناوی کڕیار:</strong> ${customerName}</p>
-                   
+                    
                     <p><strong>شێوازی فرۆشتن:</strong> ${document.getElementById('isLoanSale').checked ? 'قەرز' : 'نەقد'}</p>
                 </div>
 
