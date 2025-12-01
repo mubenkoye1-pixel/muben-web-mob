@@ -284,3 +284,153 @@
     font-weight: bold;
     color: var(--profit-green) !important; /* Green for Payment */
 }
+
+
+
+
+
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    
+    /* --- گونجاندنی گشتی (Layout) --- */
+    .loan-layout {
+        padding: 15px 10px; /* کەمکردنەوەی پادینگی دەرەوە */
+        gap: 15px;
+    }
+
+    /* --- Main Content Wrapper --- */
+    .loan-content-wrapper {
+        padding: 15px; /* کەمکردنەوەی پادینگی ناوەوە */
+        border-radius: 8px;
+        box-shadow: none; /* لابردنی سێبەرە گەورەکان بۆ خێرایی */
+    }
+
+    .loan-header {
+        font-size: 1.5em;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+        border-bottom-width: 2px;
+    }
+
+    /* --- خشتەی کڕیارەکان (Loan Overview Table - Level 1) --- */
+    /* لابردنی شێوازی خشتە بۆ نمایشکردن وەک کارتی سەربەخۆ لەسەر مۆبایل */
+    .customer-loan-table {
+        border-radius: 0;
+        overflow: hidden;
+        /* زۆرجار لەسەر مۆبایل باشترە خشتە کراس سکرۆڵ بێت یان شێوازی کارت بەکار بێت */
+        display: block; /* گۆڕینی خشتە بۆ شێوازێکی زیاتر Flexible */
+        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی بۆ خشتەکە */
+        min-width: 600px; /* دڵنیابوون لەوەی خشتەکە بەشی ناوەڕۆکەکە دەبێت */
+    }
+
+    .customer-loan-table th, .customer-loan-table td {
+        padding: 10px 8px;
+        font-size: 0.9em;
+    }
+    
+    .customer-loan-table thead {
+        display: table-header-group; /* دڵنیابوون لە دەرکەوتنی سەردێڕی خشتە */
+    }
+
+    .loan-amount-total {
+        font-size: 1em;
+    }
+
+    /* --- دوگمەی گەڕانەوە (Detail Back Button) --- */
+    .detail-back-btn {
+        width: 100%; /* تەواوی پانی دەگرێتەوە */
+        padding: 10px;
+        margin-bottom: 20px;
+        font-size: 1em;
+    }
+
+    /* --- کارتی وەسڵەکان (Loan Invoice Card - Level 2) --- */
+    .loan-invoice-card {
+        margin-bottom: 10px;
+        border-radius: 6px;
+    }
+    
+    .loan-invoice-card .transaction-header {
+        padding: 10px;
+        font-size: 0.9em;
+        flex-wrap: wrap; /* ڕێگەدان بە شکاندنەوەی ناوەڕۆک لە هەدەردا */
+        gap: 5px;
+    }
+
+    .pay-loan-btn {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+
+    .item-sold-list {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+
+    /* --- وردەکارییەکانی وەسڵ (Single Invoice Details - Level 3) --- */
+    .single-invoice-details {
+        padding: 10px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 0.9em;
+    }
+    
+    .invoice-items-table {
+        min-width: 450px; /* دڵنیابوون لە سکڕۆڵی ئاسۆیی */
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .invoice-items-table th, .invoice-items-table td {
+        padding: 8px;
+        font-size: 0.8em;
+    }
+
+    .final-total {
+        font-size: 1.5em;
+        margin-top: 10px;
+        padding-top: 8px;
+    }
+
+    /* --- دروستکردنی قەرزی نوێ (New Draft Card) --- */
+    .new-draft-card {
+        margin-bottom: 15px;
+        padding: 5px;
+    }
+    
+    .new-draft-header {
+        flex-direction: column; /* دانانی بەشەکان بە شێوەی ستوونی */
+        gap: 10px;
+    }
+    
+    .input-group {
+        margin: 0;
+        width: 100%;
+        min-width: 100%;
+    }
+
+    .loan-input-field {
+        padding: 8px;
+    }
+    
+    /* دوگمەی پلاس (Plus Button) و دوگمەکانی Action */
+    .plus-btn {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        font-size: 20px;
+        /* جێگۆڕکێی دوگمەکە بۆ خوارەوەی بەشی فۆرمەکە بۆ دەرکەوتنی باشتر */
+        align-self: flex-start; 
+        margin-top: 10px;
+    }
+    
+    .loan-action-btn {
+        width: 100%; /* تەواوی پانی دەگرێتەوە */
+        margin-top: 5px;
+    }
+    
+}

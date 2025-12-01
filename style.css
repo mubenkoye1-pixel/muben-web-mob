@@ -470,3 +470,148 @@ body {
     padding-bottom: 5px;
     flex-shrink: 0;
 }
+
+
+
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+/* ئەم گۆڕانکاریانە جێبەجێ دەبن کاتێک پانی شاشە 768px یان کەمتر بێت (بۆ مۆبایل و تابلێتی بچووک) */
+@media (max-width: 768px) {
+
+    /* --- شاشەی گشتی (Layout) --- */
+    body {
+        /* لادانی overflow: hidden کاتێک پێویستە بۆ مۆبایل */
+        overflow-y: auto;
+    }
+
+    /* لادانی شریتە لاوەکییەکە کە بۆ کۆمپیوتەر دانرابوو بۆ ئەوەی لەسەر مۆبایل کێشە دروست نەکات */
+    ::-webkit-scrollbar {
+        width: 0px; /* شاردنەوەی سکڕۆڵی کەمپیوتەر لەسەر مۆبایل */
+    }
+
+    /* --- هەدەر (Header) --- */
+    .head-div {
+        height: 8vh; /* بەرزکردنەوەی کەمێک بۆ باشتر دەرکەوتن */
+        padding: 0 15px; /* کەمکردنەوەی پادینگی ڕاست و چەپ */
+    }
+
+    .logo-title {
+        font-size: 20px; /* بچووککردنەوەی قەبارەی لۆگۆ */
+    }
+
+    .nav-links {
+        /* شاردنەوەی لینکەکانی گەشتیاری لە هەدەردا بۆ زیادکردنی شوێن لەسەر مۆبایل */
+        display: none;
+    }
+
+    /* --- ناوەڕۆکی سەرەکی (Main Content) --- */
+    .main-div {
+        flex-direction: column; /* گۆڕینی دابەشکردنی لایەنی (هێڵی) بۆ ستوونی (vertical) */
+        overflow-y: auto; /* ڕێگەدان بە سکڕۆڵی سەرەکی */
+    }
+
+    .left-div.cart-div,
+    .right-div.item-list-div {
+        width: 100%; /* کردن بە تەواوی پانی شاشە */
+        border-right: none; /* لابردنی سنوری دابەشکردن */
+        border-bottom: 1px solid #333333; /* دانانی سنور لە خوارەوە بۆ دابەشکردنی بەشەکان */
+        padding: 10px;
+    }
+
+    /* بۆ ئەوەی بەشی سەلەی کڕین (Cart) سەرەتا دەربکەوێت یان بەشی دیکە */
+    /* ئەگەر دەتەوێت سەلەکە لەسەرەوە بێت: */
+    /* بەشی سەلەکە (left-div) لە یەکەم دابەشکردنی ستوونیدا دێت */
+    .main-div {
+        display: flex; /* دڵنیابوونەوە لە بەکارھێنانی فڵێکس */
+    }
+    .left-div { order: 2; /* سەلە دەنێرێتە خوارەوە (سەرەتا لیستی کەلوپەلەکان دەردەکەوێت) */ }
+    .right-div { order: 1; /* لیستی کەلوپەلەکان دەنێرێتە سەرەوە */ }
+
+
+    /* --- کارتی کەلوپەلەکان (Item Cards) --- */
+    .sales-item-card {
+        width: 45%; /* گونجاندنی دوو کارت لە یەک ڕیزدا (کەمێک لە 50% کەمترە بۆ دانانی بۆشایی) */
+        height: 180px; /* بچووککردنەوەی بەرزی کارتەکان */
+        font-size: 0.8em; /* بچووککردنەوەی قەبارەی فۆنتی ناو کارتەکە */
+        margin-bottom: 10px;
+        flex-shrink: 0;
+    }
+
+    .sales-item-card .stock-count {
+        font-size: 1em;
+        height: 30px;
+        padding: 2px;
+    }
+
+    .items-grid {
+        justify-content: space-around; /* ڕێکخستنی کەلوپەلەکان بە یەکسانی */
+    }
+
+    /* --- فلتەر و گەڕان (Filters & Search) --- */
+    .filters-and-search {
+        flex-direction: column; /* دانانی فلتەر و گەڕان بە شێوەی ستوونی */
+        gap: 10px;
+        padding: 8px;
+    }
+
+    .search-input {
+        min-width: 100%; /* تەواوی پانی دەگرێتەوە */
+    }
+
+    .filter-select {
+        width: 100%; /* تەواوی پانی دەگرێتەوە */
+        text-align: center;
+    }
+
+
+    /* --- لیستی سەلە (Cart List) --- */
+    .cart-item .details {
+        font-size: 0.75em; /* بچووککردنەوەی وردەکارییەکانی ناو سەلە */
+    }
+    
+    .tablethead {
+        height: 30px;
+    }
+    .teblhed {
+        height: 30px;
+    }
+    .titlehed {
+        font-size: 0.7em; /* بچووککردنەوەی فۆنتی سەردێڕی خشتەی سەلە */
+        width: auto;
+    }
+
+    /* --- پوختەی سەلە و دوگمەکان (Cart Summary & Buttons) --- */
+    .cart-summary {
+        padding: 10px 0;
+    }
+
+    .btnfro {
+        flex-direction: column; /* دوگمەکان دەبنە ستوونی لەسەر مۆبایل */
+        gap: 8px;
+        padding-top: 10px;
+    }
+
+    .checkout-btn, .invoice-btn, .discount-input {
+        width: 100%; /* دوگمەکان تەواوی پانی دەگرنەوە */
+        height: 40px;
+        margin-top: 0;
+    }
+    
+    .discount-input {
+        height: 40px;
+    }
+    
+    /* --- فووتەر (Footer) --- */
+    .footer-div {
+        height: 6vh; /* بەرزکردنەوەی کەمێک بۆ باشتر دەرکەوتن */
+        padding: 0 10px;
+        font-size: 0.8em; /* بچووککردنەوەی فۆنت */
+        text-align: center;
+        flex-wrap: wrap; /* ڕێگەدان بە شکاندنەوەی ناوەڕۆکی فووتەر */
+        justify-content: center;
+    }
+    
+}

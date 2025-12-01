@@ -471,3 +471,120 @@ body {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
+
+
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    
+    /* --- هەدەر (Header) --- */
+    .head-div {
+        height: 50px; 
+        padding: 0 10px;
+    }
+
+    .logo-title {
+        font-size: 1.2em; 
+    }
+
+    .nav-links {
+        display: none; /* شاردنەوەی لینکەکانی گەشتیاری */
+    }
+
+
+    /* --- لاپەڕەی خەرجییەکان (Expenses Layout) --- */
+    .expenses-layout {
+        padding: 10px; /* کەمکردنەوەی پادینگی دەرەوە */
+        gap: 15px;
+    }
+
+    /* --- KPI Card (پوختەی خەرجی) --- */
+    .total-kpi-card {
+        padding: 15px; 
+        border-left-width: 5px; /* بچووککردنەوەی ستوونی ڕەنگدار */
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .total-kpi-card h3 {
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    .summary-value {
+        font-size: 1.8em; /* بچووککردنەوەی قەبارەی بڕی پارەکە */
+    }
+
+    /* --- فۆرمی خەرجی (Expense Form) --- */
+    .expense-form-container {
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: none;
+    }
+
+    .expense-form-container h1 {
+        font-size: 1.5em;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+        border-bottom-width: 2px;
+    }
+    
+    /* گونجاندنی inputەکان لەناو فۆرمی خەرجیدا */
+    .expense-form-container .input-row {
+        flex-direction: column; /* گۆڕینی ڕیزەکان بۆ ستوونی */
+        gap: 15px;
+    }
+    
+    .expense-form-container .form-group {
+        min-width: 100%;
+        flex: none;
+    }
+
+    .expense-form-container .submit-btn {
+        width: 100%; /* دوگمەی تۆمارکردن تەواوی پانی دەگرێتەوە */
+        padding: 12px 15px;
+        margin-top: 10px;
+    }
+
+    /* --- کۆنتەینەری خشتە و سکڕۆڵی ستوونی (.list-table-container) --- */
+    .expense-list-container {
+        padding: 10px;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .list-table-container {
+        padding: 10px;
+        border-radius: 8px; 
+        max-height: 300px; /* کەمکردنەوەی بەرزترین بەرزایی بۆ مۆبایل */
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        /* لەسەر مۆبایل، خشتە لەوانەیە پێویستی بە سکڕۆڵی ئاسۆیی بێت */
+        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی */
+    }
+    
+    /* گونجاندنی خشتەکە بۆ سکڕۆڵی ئاسۆیی */
+    .list-table-container table {
+        min-width: 650px; /* پانییەکی کەم بۆ خشتە */
+        border-spacing: 0 6px;
+    }
+
+    .list-table-container th, .list-table-container td {
+        padding: 10px 12px;
+        font-size: 0.9em;
+    }
+    
+    /* دڵنیابوون لەوەی هێدەری جێگیر لە شوێنی خۆی دەمێنێتەوە */
+    .list-table-container th {
+        top: 0;
+        z-index: 10;
+    }
+    
+    /* گونجاندنی دوگمەی لابردن لە خشتەدا */
+    .expense-table .delete-btn {
+        padding: 6px 10px;
+        font-size: 0.85em;
+    }
+}

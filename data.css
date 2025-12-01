@@ -1,17 +1,37 @@
 /* --- NEW SUMMARY BAR STYLES (KPIs under header) --- */
-*{
-  padding: 0;
-  margin: 0;
 
+/* ڕەگەزی گشتی: ڕەشکردنی پاشخان و سپیکردنی دەق */
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* زیادکراوە بۆ باشترکردنی دیزاین */
 }
+
+/* ڕەنگی بنچینەیی تاریک و مۆدێرن */
+:root {
+    --primary-bg: #18191A; /* پاشخانی سەرەکی تاریکی قووڵ */
+    --secondary-bg: #242526; /* پاشخانی کارد و بەشەکان */
+    --text-color: #E4E6EB; /* ڕەنگی دەقی سەرەکی */
+    --accent-blue: #5DADE2; /* شینی مۆدێرنی جەختکردنەوە */
+    --success-green: #4CAF50; /* سەوزی سەرکەوتن */
+    --danger-red: #F44336; /* سووری مەترسی */
+    --border-color: #3A3B3C; /* ڕەنگی سنوری کاڵ */
+    --link-hover: #9D57FF; /* ڕەنگی لینک/هۆڤەری مۆدێرن (وەنەوشەیی) */
+}
+
+body {
+    background-color: var(--primary-bg); /* دانانی ڕەنگی سەرەکی بۆ Body */
+    color: var(--text-color);
+}
+
 .summary-bar-container {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: #3c3c3c; /* Light background */
-    padding: 10px 30px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    border-bottom: 1px solid #eee;
+    background-color: var(--secondary-bg); /* پاشخانی تاریک */
+    padding: 15px 30px; /* زیادکردنی پادینگ بۆ مۆدێرنتر دەربازبوون */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* سێبەری گەورەتر و تاریکتر */
+    border-bottom: 1px solid var(--border-color); /* سنووری تاریک */
 }
 
 .summary-card {
@@ -22,14 +42,15 @@
 
 .summary-card h3 {
     font-size: 0.9em;
-    color: #fdfeff;
+    color: var(--text-color);
     margin-bottom: 5px;
+    opacity: 0.8; /* کەمێک کاڵتر بۆ دەقی بچووک */
 }
 
 .summary-value {
-    font-size: 1.6em;
+    font-size: 1.8em; /* گەورەتر کراوە */
     font-weight: 700;
-    color: #6bb2ff;
+    color: var(--accent-blue); /* شینی مۆدێرن */
 }
 
 /* --- TRANSACTION LIST STYLES --- */
@@ -38,40 +59,45 @@
     display: flex;
     flex-direction: column;
     padding: 30px;
-    background-color: #3e3e3e;
+    background-color: var(--primary-bg); /* پاشخانی سەرەکی */
 }
 
 .data-layout h1 {
-    color: #004d99;
-    border-bottom: 3px solid #bcc1c6;
+    color: var(--accent-blue);
+    border-bottom: 3px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
-    font-size: 1.8em;
+    font-size: 2em; /* گەورەتر کراوە */
 }
 
 .transaction-card {
-    color: white;
-    background-color: #292929;
-    border: 1px solid #494949;
-    border-radius: 8px;
+    color: var(--text-color);
+    background-color: var(--secondary-bg); /* پاشخانی کاردی تاریک */
+    border: 1px solid var(--border-color);
+    border-radius: 10px; /* سنووری چوارگۆشەی مۆدێرن */
     margin-bottom: 15px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* سێبەری مۆدێرنتر */
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.transaction-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 .transaction-header {
-    background-color: #004d99;
+    background-color: #363636; /* کەمێک تاریکتر بۆ هێدیەر */
     display: flex;
     justify-content: space-between;
-    padding: 10px 15px;
-    background-color: #1a1a1a; /* Header background */
-    border-bottom: 1px solid #ddd;
-    font-size:1em;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-color);
+    font-size:1.1em;
 }
 
 .transaction-header .total-profit {
     font-weight: bold;
-    color: #28a745; /* Green for profit */
+    color: var(--success-green); /* سەوز بۆ قازانج */
 }
 
 /* List of items inside the transaction */
@@ -84,9 +110,9 @@
 .item-sold-list li {
     display: flex;
     justify-content: space-between;
-    padding: 8px 15px;
-    border-bottom: 1px dashed #656565;
-    font-size:1.1em;
+    padding: 10px 18px;
+    border-bottom: 1px dashed #3A3B3C; /* هێڵی خاڵخاڵی تاریک */
+    font-size:1em;
 }
 
 .item-sold-list li:last-child {
@@ -98,41 +124,42 @@
     flex-basis: 60%;
 }
 .item-sold-list .item-qty {
-    color: #007bff;
+    color: var(--accent-blue); /* شینی جەختکردنەوە بۆ کوانتێتی */
+    font-weight: bold;
 }
 
 
 .head-div {
     padding: 0 30px;
-    background-color: #1f1f1f; /* Dark Header */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    background-color: #1F1F1F; /* هێدیەری زۆر تاریک */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* سێبەری قووڵتر */
     height: 6.5vh;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    color: #ffffff;
+    color: var(--text-color);
     flex-shrink: 0;
 }
 
 .logo-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #ffffff; /* White logo */
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-color);
     text-decoration: none;
     padding: 0 10px;
 }
 
 .nav-links {
     display: flex;
-    gap: 25px;
+    gap: 30px;
     align-items: center;
 }
 
 .btn-head {
-    font-size: 18px;
+    font-size: 1em;
     font-weight: 500;
-    color: #cccccc; /* Light gray navigation text */
+    color: #B0B3B8; /* ڕەنگی دەقی نەڤیگێشنی کاڵ */
     text-decoration: none;
     padding: 5px 0;
     transition: color 0.3s ease;
@@ -140,7 +167,7 @@
 }
 
 .btn-head:hover {
-    color: #9d57ff; /* Modern Accent Color (e.g., Violet/Purple) */
+    color: var(--link-hover); /* وەنەوشەیی مۆدێرن */
 }
 
 .btn-head::after {
@@ -149,8 +176,8 @@
     right: 0;
     bottom: 0;
     width: 0;
-    height: 2px;
-    background-color: #9d57ff; /* Modern Accent Color */
+    height: 3px; /* کەمێک ئەستوورتر بۆ مۆدێرنتر */
+    background-color: var(--link-hover);
     transition: width 0.3s ease;
 }
 
@@ -169,99 +196,100 @@
 }
 
 .action-btn {
-    padding: 5px 10px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 600;
-    transition: opacity 0.2s;
+    font-size: 0.9em;
+    font-weight: 700;
+    transition: background-color 0.2s, opacity 0.2s;
 }
 
 .action-btn:hover {
-    opacity: 0.8;
+    opacity: 0.9;
 }
 
 .edit-trans-btn {
-    background-color: #ffc107; /* Yellow */
-    color: #333;
+    background-color: #FFC300; /* زەردێکی گەشاوەتر */
+    color: #242526; /* دەقی تاریک */
 }
 
 .delete-trans-btn {
-    background-color: #dc3545; /* Red */
+    background-color: var(--danger-red); /* سووری مۆدێرن */
     color: white;
 }
 
 /* --- MODAL STYLES (Window container) --- */
 
 .modal {
-    display: none; /* Hidden by default - controlled by JS */
+    display: none;
     position: fixed;
-    z-index: 1000; /* Sit on top of everything */
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
-    padding-top: 50px; /* Space from the top */
+    background-color: rgba(0, 0, 0, 0.8); /* تاریکی زیاتر بۆ پاشخان */
+    padding-top: 50px;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto; /* Centered with a bit of space from top */
-    padding: 25px;
-    border: 1px solid #ddd;
+    background-color: var(--secondary-bg);
+    margin: 5% auto;
+    padding: 30px; /* پادینگی زیاتر */
+    border: 1px solid #3A3B3C;
     width: 90%; 
-    max-width: 650px; /* Max width for a clean look */
-    border-radius: 12px; /* Rounded corners */
+    max-width: 700px; /* پانتر کراوە */
+    border-radius: 12px;
     position: relative;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
 }
 
 .modal-content h2 {
-    font-size: 1.5em;
-    color: #007bff;
-    border-bottom: 3px solid #007bff;
+    font-size: 1.8em;
+    color: var(--accent-blue);
+    border-bottom: 3px solid var(--border-color);
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: right;
 }
 
 /* Close button (x) */
 .close-btn {
-    color: #aaa;
-    float: left; /* Aligned to the left in RTL */
-    font-size: 30px;
+    color: #B0B3B8;
+    float: left;
+    font-size: 32px;
     font-weight: bold;
     line-height: 1;
-    margin-right: -5px; /* Pull it slightly to the left */
+    margin-right: -5px;
     transition: color 0.2s;
 }
 
 .close-btn:hover,
 .close-btn:focus {
-    color: #dc3545; /* Red on hover */
+    color: var(--danger-red);
     text-decoration: none;
     cursor: pointer;
 }
 
 /* Alert Message (for validation errors) */
 #modalAlert {
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    background-color: #f8d7da; /* Light red background for errors */
-    color: #721c24; /* Dark red text */
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background-color: #362829; /* پاشخانێکی تاریکی سوور */
+    color: var(--danger-red);
     font-weight: 600;
-    border: 1px solid #f5c6cb;
-    display: block; /* Ensures it takes full width */
+    border: 1px solid #5C3236;
+    display: block;
 }
 
 /* Date and ID Info */
 #edit-date {
     font-weight: 700;
-    color: #333;
+    color: var(--text-color);
+    opacity: 0.7;
     display: block;
     margin-bottom: 15px;
 }
@@ -269,13 +297,13 @@
 /* --- ITEM EDITING CONTAINER --- */
 
 #edit-items-container {
-    max-height: 250px;
-    overflow-y: auto; /* Makes the item list scrollable */
-    padding: 10px;
-    border: 1px solid #ccc;
+    max-height: 300px; /* بەرزتر کراوە */
+    overflow-y: auto;
+    padding: 15px;
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    margin-bottom: 20px;
-    background-color: #f9f9f9;
+    margin-bottom: 25px;
+    background-color: #1F1F1F; /* تاریکتر لە مۆداڵەکە بۆ جیاکردنەوە */
 }
 
 .edit-item-row {
@@ -283,8 +311,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 0;
-    border-bottom: 1px dashed #e0e0e0;
-    font-size: 0.95em;
+    border-bottom: 1px dashed #3A3B3C;
+    font-size: 1em;
 }
 
 .edit-item-row:last-child {
@@ -293,54 +321,54 @@
 
 .edit-item-row span {
     flex-grow: 1;
-    color: #333;
+    color: var(--text-color);
     font-weight: 500;
 }
 
 .edit-item-row input[type="number"] {
-    width: 70px;
-    padding: 6px;
+    width: 80px;
+    padding: 8px;
     text-align: center;
-    border: 1px solid #007bff;
-    border-radius: 4px;
+    border: 1px solid var(--accent-blue);
+    border-radius: 6px;
     font-size: 1em;
+    background-color: #2D2F31; /* ڕەنگی inputی تاریک */
+    color: var(--text-color);
 }
-
-
 
 .modal-content .form-actions {
     display: flex;
     justify-content: flex-end; 
-    gap: 10px;
-    margin-top: 15px;
+    gap: 15px;
+    margin-top: 20px;
 }
 
 .modal-content .submit-btn,
 .modal-content .cancel-btn {
-    padding: 10px 20px;
+    padding: 12px 25px;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     font-weight: 700;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
 .modal-content .submit-btn {
-    background-color: #28a745; 
+    background-color: var(--success-green); 
     color: white;
 }
 
 .modal-content .submit-btn:hover {
-    background-color: #218838;
+    background-color: #43A047;
 }
 
 .modal-content .cancel-btn {
-    background-color: #6c757d; 
+    background-color: #555555; /* سێبەری خۆڵەمێشی تاریک */
     color: white;
 }
 
 .modal-content .cancel-btn:hover {
-    background-color: #5a6268;
+    background-color: #444444;
 }
 
 /* --- DATA TAB STYLES --- */
@@ -348,11 +376,11 @@
 .tab-controls {
     display: flex;
     margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
+    border-bottom: 2px solid var(--border-color);
 }
 
 .tab-btn {
-    padding: 10px 15px;
+    padding: 12px 18px;
     margin-left: 5px;
     border: none;
     background-color: transparent;
@@ -361,79 +389,65 @@
     font-weight: 600;
     transition: color 0.2s;
     border-bottom: 3px solid transparent;
+    color: #B0B3B8;
 }
 
 .tab-btn:hover {
-    color: #007bff;
+    color: var(--accent-blue);
 }
 
 .tab-btn.active {
-    color: #dc3545; /* Red for active loan/transaction tab */
-    border-bottom: 3px solid #dc3545;
+    color: var(--danger-red); /* سوور بۆ ئەکتیڤ بوونی قەرز/مامەڵە */
+    border-bottom: 3px solid var(--danger-red);
 }
 
 /* New KPI Color for Loan */
 #kpi-total-loan-due .summary-value {
-    color: #dc3545; /* Red for amount due */
+    color: var(--danger-red); /* سوور بۆ بڕی شایستە */
 }
 
 /* --- LOAN CARD STYLES (Reusing transaction-card structure) --- */
 
 .loan-card {
-    background-color: #fffaf0; /* Light yellow background for loans */
-    border: 1px solid #ffc107;
-    border-radius: 8px;
+    background-color: #2D2F31; /* پاشخانی تاریک بۆ قەرز */
+    border: 1px solid #FFC300; /* سنووری زەردێکی گەشاوە */
+    border-radius: 10px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
 .loan-card .loan-header {
     display: flex;
     justify-content: space-between;
-    padding: 10px 15px;
-    background-color: #fff3cd; /* Darker yellow header */
-    border-bottom: 1px solid #ffc107;
-    font-size: 0.95em;
+    padding: 12px 18px;
+    background-color: #3C3C3C; /* هێدیەرێکی کەمێک ڕووناکتر */
+    border-bottom: 1px solid #FFC300;
+    font-size: 1em;
     font-weight: 700;
-    color: #856404; /* Dark text */
+    color: #FFC300; /* دەقی زەرد بۆ دیارکردن */
 }
 
 .loan-card .loan-amount {
-    font-size: 1.1em;
-    color: #dc3545; /* Amount due in red */
+    font-size: 1.2em;
+    color: var(--danger-red); /* بڕی شایستە بە سوور */
 }
 
 
-.prnt-trans-btn{
-        background-color: #28a745; /* Green color for Payment/Closing */
+.prnt-trans-btn, .pay-loan-btn {
+    background-color: var(--success-green);
     color: white;
-    padding: 5px 12px;
+    padding: 6px 12px;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 0.9em;
     font-weight: 600;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s;
     margin-right: 5px;
 }
 
-/* --- NEW ACTION BUTTON FOR LOAN PAGE --- */
-
-.pay-loan-btn {
-    background-color: #28a745; /* Green color for Payment/Closing */
-    color: white;
-    padding: 5px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.85em;
-    font-weight: 600;
-    transition: opacity 0.2s;
-    margin-right: 5px;
-}
-
-.pay-loan-btn:hover {
-    background-color: #218838;
+.pay-loan-btn:hover, .prnt-trans-btn:hover {
+    background-color: #43A047;
 }
 
 /* Make actions display flex in loan header if you didn't already */
@@ -442,65 +456,51 @@
     gap: 10px;
     align-items: center;
 }
-/* --- Loan Search Styling (Reusing search-input style) --- */
-.search-loan-area {
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #f1f1f1;
-}
-
-.search-loan-area .search-input {
-    /* Reuses the style from the sales page search input */
-    width: 100%;
-    max-width: 400px;
-    margin: 0;
-}
-
 /* --- Loan Search Styling --- */
-
-/* بەشی گشتی کۆنتەینەر */
 .search-loan-area {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #e0e0e0; /* سنووری جیاکەرەوەی کاڵ */
+    border-bottom: 1px solid var(--border-color);
     padding-top: 10px;
 }
 
 /* Inputـی گەڕان */
 .search-loan-area .search-input {
     width: 100%;
-    max-width: 450px; /* دانانی گەورەترین پانتایی بۆ Input */
-    
-    /* شێوازدانان */
-    padding: 10px 15px;
-    border: 1px solid #ffc107; /* سنووری زەرد بۆ دیارکردن کە ئەمە گەڕانی قەرزە */
+    max-width: 450px;
+    padding: 12px 18px; /* پادینگی زیاتر */
+    border: 2px solid var(--accent-blue); /* شینی جەختکردنەوە */
     border-radius: 8px; 
-    font-size: 1em;
+    font-size: 1.1em;
     font-weight: 500;
     transition: border-color 0.3s, box-shadow 0.3s;
-    background-color: #fffde7; /* پاشبنەمای زەردی زۆر کاڵ */
+    background-color: #2D2F31; /* پاشبنەمای input تاریک */
+    color: var(--text-color);
 }
 
 /* کاریگەری کاتێک ماوس دەبرێتە سەر/کلیک دەکرێت */
 .search-loan-area .search-input:focus {
-    border-color: #dc3545; /* سوور دەبێت لەکاتی نووسین (گرنگی قەرز) */
-    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1); 
+    border-color: var(--link-hover); /* وەنەوشەیی مۆدێرن */
+    box-shadow: 0 0 0 3px rgba(157, 87, 255, 0.3); /* سێبەری مۆدێرن */
     outline: none;
 }
 
 .search-loan-area .search-input::placeholder {
-    color: #999;
+    color: #B0B3B8;
 }
 
 
 /* --- MOTHERBOARD PAGE STYLES (motherboard.css) - FINAL VERSION --- */
 :root {
-    --primary-blue: #007bff;
-    --expense-red: #dc3545;
-    --success-green: #28a745;
-    --neutral-gray: #6c757d;
-    --light-bg: #f8f9fa;
-    --white: #ffffff;
+    --primary-bg: #18191A;
+    --secondary-bg: #242526;
+    --text-color: #E4E6EB;
+    --accent-blue: #5DADE2;
+    --success-green: #4CAF50;
+    --danger-red: #F44336;
+    --neutral-gray: #757575; /* خۆڵەمێشی نوێ */
+    --border-color: #3A3B3C;
+    --white: #E4E6EB; /* گۆڕدراوە بۆ دەقی کاڵ لەسەر ڕەشی قووڵ */
 }
 
 .motherboard-layout {
@@ -508,8 +508,8 @@
     flex-direction: column;
     padding: 30px 20px;
     gap: 30px;
-    background-color: var(--light-bg);
-    min-height: calc(100vh - 60px);
+    background-color: var(--primary-bg);
+    min-height: calc(100vh - 6.5vh); /* بەرزایی ڕێکخراو لە دوای هێدیەر */
 }
 
 /* --- Split View Container --- */
@@ -517,23 +517,23 @@
     display: flex;
     gap: 25px;
     flex-grow: 1; 
-    align-items: stretch; /* بۆ ئەوەی هەموو لایەک بە درێژی یەکسان بێت */
+    align-items: stretch;
 }
 
 /* --- Left Panel: Inventory Management (Board List & Add) --- */
 .motherboard-inventory-panel {
-    flex-basis: 60%; /* بەشی گەورەتر بۆ لیست و زیادکردن */
-    background-color: var(--white);
+    flex-basis: 60%;
+    background-color: var(--secondary-bg);
     padding: 30px;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     display: flex;
     flex-direction: column;
 }
 
 .motherboard-inventory-panel h2 {
-    color: var(--primary-blue);
-    border-bottom: 3px solid var(--primary-blue);
+    color: var(--accent-blue);
+    border-bottom: 3px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 20px;
 }
@@ -541,7 +541,7 @@
 /* --- Right Panel: Transaction/Report (40% width) --- */
 .motherboard-transaction-panel {
     flex-basis: 40%;
-    background-color: var(--light-bg); 
+    background-color: var(--primary-bg); 
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -556,16 +556,21 @@
     padding: 20px;
     margin-bottom: 25px;
     border-radius: 10px;
-    background-color: #e3f2fd; /* Light Blue Background */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: #2D3A4B; /* شینی تاریک بۆ فۆڕم */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .add-board-form input {
     flex: 1;
     min-width: 120px;
     padding: 10px;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--border-color);
     border-radius: 6px;
+    background-color: #1F1F1F;
+    color: var(--text-color);
+}
+.add-board-form input::placeholder {
+    color: #B0B3B8;
 }
 
 .add-board-btn {
@@ -576,6 +581,7 @@
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 /* --- Boards Inventory Table --- */
@@ -591,16 +597,20 @@
 .boards-table th, .boards-table td {
     padding: 12px;
     text-align: right;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #2D2F31; /* سنووری تاریکتر */
 }
 
 .boards-table th {
-    background-color: var(--neutral-gray); /* Darker gray */
+    background-color: #363636;
     color: white;
 }
 
+.boards-table td {
+    background-color: #242526;
+}
+
 .boards-table tbody tr:hover {
-    background-color: #f0f8ff;
+    background-color: #3A3B3C; /* ڕەنگی هۆڤەری تاریک */
     cursor: pointer;
 }
 
@@ -610,63 +620,80 @@
     border-radius: 4px;
 }
 
-.status-active { color: var(--success-green); }
-.status-depleted { color: var(--expense-red); }
+.status-active { color: var(--success-green); background-color: rgba(76, 175, 80, 0.2); }
+.status-depleted { color: var(--danger-red); background-color: rgba(244, 67, 54, 0.2); }
 
 
 /* --- Transaction/Report Panel Styling (Right Side) --- */
 
 .motherboard-transaction-panel h2 {
-    background-color: var(--white);
+    background-color: var(--secondary-bg);
     padding: 15px 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    color: var(--expense-red);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    color: var(--danger-red);
     font-size: 1.5em;
 }
 
 .board-details-area {
-    background-color: var(--white);
+    background-color: var(--secondary-bg);
     padding: 20px;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    flex-grow: 1; /* پڕکردنەوەی پانتایی لە بەشی ڕاستدا */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    flex-grow: 1;
 }
 
 /* --- Component Sale Form/Modal Inside Details Area --- */
 
 .component-sale-form-wrapper {
     padding: 20px;
-    border-top: 1px dashed #ddd;
+    border-top: 1px dashed var(--border-color);
     margin-top: 15px;
-    background-color: #fffaf0; /* Light yellow background */
+    background-color: #363636; /* پاشخانی تاریک بۆ فۆڕمی فرۆشتن */
     border-radius: 8px;
 }
 
 .component-sale-form-wrapper label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px; /* کەمێک زیاتر کراوە */
     font-weight: 600;
+    color: var(--accent-blue); /* ڕەنگی دەقەکە شین کراوە */
 }
 
 .record-sale-btn {
-    background-color: var(--expense-red);
+    background-color: var(--danger-red);
     color: white;
     padding: 10px 15px;
     border: none;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.2s;
+}
+.record-sale-btn:hover {
+    background-color: #D32F2F;
 }
 
 .report-summary-box {
     padding: 15px;
-    background-color: var(--white);
+    background-color: var(--secondary-bg);
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .report-summary-box strong {
-    color: var(--primary-blue);
+    color: var(--success-green); /* ڕاپۆرتەکان سەوز کراون بۆ جەختکردنەوە */
     font-size: 1.2em;
+}
+
+/* زیادکراوە بۆ دیاریکردنی input و select لە فۆرمەکانی ناوەندی وێنەی گشتی */
+.component-sale-form-wrapper input,
+.component-sale-form-wrapper select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: #1F1F1F;
+    color: var(--text-color);
 }

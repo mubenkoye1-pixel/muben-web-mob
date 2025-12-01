@@ -438,3 +438,161 @@ body {
 .transfer-btn i {
     margin-left: 5px;
 }
+
+
+
+
+
+
+
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    
+    /* --- هەدەر (Header) --- */
+    .head-div {
+        height: 50px; /* بەرزییەکی جێگیر */
+        padding: 0 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+
+    .logo-title {
+        font-size: 1.2em; /* بچووککردنەوەی لۆگۆ */
+        padding: 0 5px;
+    }
+
+    .nav-links {
+        display: none; /* شاردنەوەی لینکەکانی گەشتیاری لەسەر مۆبایل */
+    }
+
+    /* --- ناوەڕۆکی سەرەکی (Main Content) --- */
+    .main-inventory-content {
+        padding: 15px; /* کەمکردنەوەی پادینگی دەرەوە */
+        margin: 10px auto;
+        box-shadow: none; /* لابردنی سێبەرە گەورەکان */
+        border-radius: 0; /* لادانی گوشە خڕەکان */
+        width: 100%;
+        max-width: none;
+    }
+    
+    .page-title {
+        font-size: 1.5em;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+    }
+
+    /* --- فۆرمی زیادکردن (Add Item Form) --- */
+    .additem {
+        padding: 15px;
+        border-radius: 8px;
+    }
+
+    /* گۆڕینی input-row بۆ ستوونی لەسەر مۆبایل */
+    .input-row {
+        flex-direction: column; /* ڕێکخستنی ستوونی بۆ هەموو inputەکان */
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        min-width: 100%; /* دڵنیابوون لە تەواوی پانی */
+        flex: none;
+    }
+    
+    .form-group label {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .form-group input, .form-group select {
+        padding: 10px 12px;
+        font-size: 15px;
+    }
+
+    /* ڕێکخستنی دوگمەی زیادکردن */
+    .input-and-button {
+        flex-direction: column; /* input و button یەک لەسەر یەک دێن */
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .input-and-button input {
+        width: 100%;
+    }
+    
+    .add-button {
+        width: 100%; /* دوگمەی زیادکردن تەواوی پانی دەگرێتەوە */
+        padding: 10px 15px;
+        font-size: 15px;
+        box-shadow: 0 2px 5px rgba(61, 140, 64, 0.4);
+    }
+
+    /* --- گەڕان و خشتەی مەخزەن (Search & Cards Grid) --- */
+    .search-container {
+        margin-bottom: 15px;
+    }
+    
+    .search-input {
+        padding: 10px 12px;
+        font-size: 15px;
+    }
+    
+    /* گونجاندنی کارتەکان */
+    .inventory-card-grid {
+        /* ڕێکخستنی بۆ یەک ستوونی لەسەر مۆبایلە بچووکەکان (یەک کارت لە یەک ڕیز) */
+        grid-template-columns: 1fr; 
+        gap: 15px;
+        margin-top: 15px;
+    }
+    
+    .inventory-card {
+        padding: 15px;
+        border-right-width: 5px; /* بچووککردنەوەی ستوونی ڕەنگدار */
+    }
+
+    .item-name {
+        font-size: 1.3em;
+    }
+
+    .action-buttons button {
+        font-size: 1em;
+    }
+    
+    .card-body .info-group {
+        font-size: 0.95em;
+    }
+    
+    /* --- پوختەی گشتی (Total Summary) --- */
+    .inventory-total-summary {
+        margin-top: 25px;
+        padding: 12px;
+        font-size: 1em;
+        flex-direction: column; /* لادانی ستوونی لەناو پوختەکە */
+        gap: 8px;
+    }
+
+    .total-value-final {
+        font-size: 1.1em;
+    }
+
+
+    /* --- بەشی گواستنەوە (Transfer Section) --- */
+    .transfer-section form {
+        flex-direction: column; /* گۆڕینی فۆرمی لایەنی بۆ ستوونی */
+        gap: 10px;
+    }
+    
+    .transfer-section form > * {
+        width: 100%; /* هەموو توخمەکان تەواوی پانی دەگرنەوە */
+    }
+    
+    .transfer-btn {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+}

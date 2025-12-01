@@ -387,3 +387,141 @@ padding: 0;
 .fa-tags{
     color: var(--accent);
 }
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    /* --- گشتی و هەدەر (General & Header) --- */
+    
+    /* ڕێکخستنی body بۆ گونجاندن لەسەر مۆبایل */
+    body {
+        /* ڕێگەدان بە سکڕۆڵی ستوونی لەسەر مۆبایل */
+        overflow-y: auto !important; 
+    }
+
+    /* لابردنی پادینگی سەرەوەی main-div کە بەهۆی هەدەری جێگیرەوە دروست بوو */
+    .main-div {
+        padding-top: 10px; 
+        flex-direction: column; /* ڕێکخستنی ستوونی بۆ main-div ئەگەر پێویست بوو */
+        gap: 15px;
+    }
+
+    /* بچووککردنەوەی هەدەر */
+    .head-div {
+        height: 50px; /* بەرزییەکی جێگیر بۆ مۆبایل */
+        padding: 0 10px;
+    }
+
+    .logo-title {
+        font-size: 20px;
+        padding: 0 5px;
+    }
+
+    .nav-links {
+        display: none; /* شاردنەوەی لینکەکانی گەشتیاری لەسەر مۆبایل */
+    }
+
+    /* --- فۆرمی سەرەکی (Item Form Container) --- */
+    .item-form-container {
+        padding: 15px; /* کەمکردنەوەی پادینگی ناوەوە */
+        box-shadow: none; /* لابردنی سێبەرە گەورەکان بۆ خێرایی */
+        border-radius: 0; /* لابردنی گوشە خڕەکان بۆ تەواوی شاشە */
+        width: 100%; /* دڵنیابوون لە تەواوی پانی */
+    }
+
+    .item-form-container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    /* گۆڕینی فۆرمی دابەشکراو بۆ ستوونی */
+    .form-grid {
+        grid-template-columns: 1fr; /* تەنها یەک ستوون بۆ هەموو inputەکان */
+        gap: 12px;
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+        padding: 10px;
+        font-size: 0.95rem;
+    }
+
+    .form-actions {
+        flex-direction: column; /* دانانی دوگمەکان بە شێوەی ستوونی */
+        gap: 10px;
+    }
+    
+    .submit-btn, .cancel-btn {
+        width: 100%; /* تەواوی پانی دەگرنەوە */
+        padding: 12px;
+    }
+
+    /* --- پانێڵی لاوەکی (Component Box) --- */
+    /* پانێڵەکە لە ژێر فۆرمەکەدا دەردەکەوێت */
+    .component-box {
+        padding: 12px;
+        margin-bottom: 15px;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .component-box h3 {
+        font-size: 1.2rem;
+    }
+
+    .add-form {
+        flex-direction: column; /* input و دوگمەی زیادکردن دێنە سەر یەک */
+        gap: 10px;
+    }
+    
+    .add-btn {
+        width: 100%; /* دوگمەی زیادکردن تەواوی پانی دەگرێتەوە */
+    }
+
+    /* --- گەڕان و کۆنتڕۆڵەکان (Search and Controls) --- */
+    .search-and-controls {
+        flex-direction: column;
+        padding: 0 10px;
+        margin-bottom: 15px;
+    }
+
+    .search-and-controls .search-input {
+        width: 100%;
+        max-width: none;
+        font-size: 1rem;
+    }
+
+
+    /* --- خشتەی کاڵاکان (Item Table) --- */
+    .itemListTableContainer {
+        overflow-x: auto; /* سکڕۆڵی ئاسۆیی بۆ خشتەی زۆر گەورە */
+        padding: 0 10px;
+    }
+
+    .item-table {
+        /* لەسەر مۆبایل، خشتەکە ڕەنگە پانی زیاتری بوێت */
+        min-width: 600px; 
+    }
+
+    .item-table th, .item-table td {
+        padding: 10px 8px;
+        font-size: 0.9em;
+    }
+    
+    .action-btns {
+        flex-direction: column; /* دوگمەکانی Action دێنە سەر یەک */
+        gap: 5px;
+    }
+    
+    .edit-btn, .delete-item-btn {
+        padding: 8px; 
+        font-size: 0.8em;
+    }
+
+    /* --- مۆداڵ (Modal) --- */
+    .modal-content {
+        width: 95%; /* فراوانکردنی مۆداڵ بۆ گونجاندنی مۆبایل */
+        margin: 20px auto;
+    }
+}

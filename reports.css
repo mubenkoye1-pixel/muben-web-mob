@@ -121,3 +121,89 @@
     color: var(--secondary-gray);
     padding: 30px;
 }
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    
+    /* --- گونجاندنی گشتی (Layout) --- */
+    .reports-layout {
+        padding: 15px 10px; /* کەمکردنەوەی پادینگی دەرەوە */
+        gap: 15px; /* کەمکردنەوەی بۆشایی نێوان بەشەکان */
+    }
+
+    /* --- پانێڵی فلتەر (Filter Panel) --- */
+    .reports-filter-panel {
+        padding: 15px; /* کەمکردنەوەی پادینگی ناوەوە */
+        border-radius: 8px; /* بچووککردنەوەی گوشە خڕەکان */
+    }
+    
+    .filter-header {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+    }
+
+    /* گۆڕینی بەشی ڕێکەوت بۆ ستوونی لەسەر مۆبایل */
+    .date-inputs-group {
+        flex-direction: column; /* ڕێکخستنی ستوونی */
+        gap: 15px;
+        align-items: flex-start; /* ڕێکخستنی بۆ لای ڕاست (لە RTL) */
+    }
+
+    .date-inputs-group label {
+        width: 100%; /* لابێڵ تەواوی پانی دەگرێتەوە */
+    }
+
+    .date-inputs-group input[type="date"] {
+        width: 100%; /* input تەواوی پانی دەگرێتەوە */
+        padding: 8px;
+        font-size: 0.95em;
+    }
+
+
+    /* --- پوختەی ڕاپۆرتەکانی KPI (Summary Boxes) --- */
+    .kpi-reports-summary {
+        flex-direction: column; /* گۆڕینی ڕیزەکە بۆ ستوونی (یەک لەسەر یەک) */
+        gap: 15px;
+    }
+
+    .kpi-box {
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* بچووککردنەوەی سێبەر */
+        border-left-width: 3px; /* بچووککردنەوەی ستوونی ڕەنگدار */
+    }
+    
+    .kpi-box h4 {
+        font-size: 0.85em; /* بچووککردنەوەی فۆنتی سەردێڕی KPI */
+        margin-bottom: 5px;
+    }
+
+    .report-value {
+        font-size: 1.7em; /* بچووککردنەوەی فۆنتی بڕەکە */
+    }
+    
+    /* --- بەشی ڕاپۆرتە وردەکان (Detailed Reports Area) --- */
+    .detailed-reports-area {
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        /* ئەگەر خشتەیەکت لەم بەشەدا هەبێت، پێویستە سکڕۆڵی ئاسۆیی بۆ زیاد بکرێت.
+           بۆ نموونە، ئەگەر خشتەکە لەناو divێک بە ناوی .report-table-container بێت: */
+    }
+
+    .report-table-container { 
+        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی بۆ خشتەی گەورە */
+    }
+
+    .report-header {
+        font-size: 1.3em;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .no-data-msg {
+        padding: 15px;
+        font-size: 0.9em;
+    }
+
+}

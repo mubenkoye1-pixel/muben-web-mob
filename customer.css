@@ -208,3 +208,112 @@
 .customer-table .delete-btn:hover {
     background-color: #e66b00; /* پرتەقاڵییەکی تۆختر */
 }
+
+
+
+
+
+
+/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
+@media (max-width: 768px) {
+    
+    /* --- هەدەر (Header) - بۆ یەکگرتن لەگەڵ کۆدی پێشوو --- */
+    .head-div {
+        height: 50px; 
+        padding: 0 10px;
+    }
+
+    .logo-title {
+        font-size: 1.2em; 
+    }
+
+    .nav-links {
+        display: none; /* شاردنەوەی لینکەکانی گەشتیاری */
+    }
+    
+    /* --- گونجاندنی سەرەکی لاپەڕەکە (Customer Layout) --- */
+    .customer-layout {
+        flex-direction: column; /* گۆڕینی لایەنی بۆ ستوونی (یەک لەسەر یەک) */
+        padding: 15px 10px; /* کەمکردنەوەی پادینگ */
+        gap: 15px; /* کەمکردنەوەی بۆشایی نێوان بەشەکان */
+        min-height: auto;
+    }
+
+    /* --- بەشی فۆرمی کڕیار (Customer Form Area) --- */
+    .customer-form-area {
+        width: 100%; /* تەواوی پانی دەگرێتەوە */
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        /* فۆرمەکە دەخرێتە سەرەوەی لاپەڕە */
+    }
+
+    .customer-form-area h1 {
+        font-size: 1.3em;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+    }
+    
+    /* ڕێکخستنی inputەکان */
+    .customer-form-area input[type="text"] {
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    .customer-form-area .submit-btn {
+        width: 100%; /* دوگمەی تۆمارکردن تەواوی پانی دەگرێتەوە */
+        padding: 10px;
+        font-size: 1em;
+        margin-top: 10px;
+        border-radius: 6px;
+    }
+
+    /* --- بەشی خشتەی کڕیارەکان (Customer List Area) --- */
+    .customer-list-area {
+        width: 100%; /* تەواوی پانی دەگرێتەوە */
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .customer-list-area h1 {
+        font-size: 1.3em;
+        padding-bottom: 8px;
+        margin-bottom: 15px;
+    }
+
+    /* --- گونجاندنی خشتە بۆ سکڕۆڵی ئاسۆیی (Horizontal Scroll Table) --- */
+    .customer-table-wrapper {
+        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی */
+        width: 100%;
+    }
+
+    .customer-table {
+        min-width: 600px; /* دڵنیابوونەوە لە پانی خشتەکە بۆ دەرکەوتنی سکڕۆڵ */
+        border-collapse: separate; /* گۆڕینی بۆ separate بۆ گوشە خڕەکان (ئەگەر هەبێت) */
+        border-spacing: 0;
+        margin-top: 10px;
+    }
+
+    .customer-table th, .customer-table td {
+        padding: 10px;
+        font-size: 0.85em;
+        /* لابردنی سنورە ڕاست و چەپەکان بۆ ڕێکی زیاتر لەسەر مۆبایل */
+        border-left: none; 
+        border-right: none;
+    }
+    
+    /* دڵنیابوونەوە لە دەرکەوتنی دوگمەکە لەسەر مۆبایل */
+    .customer-table .delete-btn {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        border-radius: 6px;
+    }
+    
+    /* شاردنەوەی هەندێک ستوون لەسەر مۆبایل (ئەگەر پێویست بێت)
+       بۆ نموونە، ئەگەر ستوونی 'تێبینی' زۆر گەورە بێت:
+    .customer-table .note-col {
+        display: none;
+    } 
+    */
+}
