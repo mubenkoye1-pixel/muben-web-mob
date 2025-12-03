@@ -104,9 +104,10 @@ function toggleCustomerInput() {
 }
 
 // Function to display items on the sales page (Search and Filter Logic)
+// Function to display items on the sales page (Search and Filter Logic)
 function displaySalesItems() {
-    const itemsContainer = document.getElementById('salesItemsContainer'); 
-    if (!itemsContainer) return; 
+    const itemsContainer = document.getElementById('salesItemsContainer');  
+    if (!itemsContainer) return;  
 
     const items = getFromStorage('inventory', []);
     
@@ -114,48 +115,82 @@ function displaySalesItems() {
     const selectedType = document.getElementById('filterType') ? document.getElementById('filterType').value : 'all';
     
     const searchInput = document.getElementById('searchInput');
-    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : ''; 
+    const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : '';  
 
 
-    itemsContainer.innerHTML = ''; 
+    itemsContainer.innerHTML = '';  
+    
+    // ** گۆڕانکاری سەرەکی: بۆ هەڵگرتنی ئایتمەکانی ڕێککەوتوو لەگەڵ زانیاریی زیاتر **
+    let itemsToDisplay = [];
 
-    const filteredItems = items.filter(item => {
+    items.forEach(item => {
         // 1. پشکنینی فلتەرەکانی براند و جۆر
         const matchesFilters = (selectedBrand === 'all' || item.brand === selectedBrand) &&
                                (selectedType === 'all' || item.type === selectedType);
+        
+        if (!matchesFilters) return;
 
-        // 2. گەڕان بەدوای ناوی سەرەکی، براند، جۆر، کوالێتی، و ناوی جێگرەوەکان
-        let searchableText = [
-            item.name, 
-            item.brand, 
-            item.type, 
-            item.quality
-        ].join(' ').toLowerCase();
-
-        // ✅ لۆژیکی ناوی جێگرەوەکان: زیادکردنی بۆ گەڕان
-        if (Array.isArray(item.alternativeNames) && item.alternativeNames.length > 0) {
-            const altNamesString = item.alternativeNames.join(' ').toLowerCase();
-            searchableText += ' ' + altNamesString;
+        // ئەگەر هیچ گەڕانێک نەبوو، هەموویان پیشان دەدرێن
+        if (searchTerm === '') {
+            itemsToDisplay.push({ ...item, isAlternativeMatch: false });
+            return;
         }
 
-        const matchesSearch = searchTerm === '' || searchableText.includes(searchTerm);
+
+        // 2. گەڕان بەدوای ناوی سەرەکی، براند، جۆر، کوالێتی، و ناوی جێگرەوەکان
         
-        return matchesFilters && matchesSearch; // گەڕان و فلتەر دەبێت ڕێک بکەون
+        // پشکنینی ڕێککەوتنی ناوی سەرەکی، براند، جۆر، کوالێتی
+        const mainSearchText = [item.name, item.brand, item.type, item.quality].join(' ').toLowerCase();
+        let matchesMain = mainSearchText.includes(searchTerm);
+        
+        let matchesAlternative = false;
+
+        // ✅ لۆژیکی ناوی جێگرەوەکان: پشکنینی توند بۆ ناوی جێگرەوە
+        if (Array.isArray(item.alternativeNames) && item.alternativeNames.length > 0) {
+            const altNamesString = item.alternativeNames.join(' ').toLowerCase();
+            
+            // ئەگەر لە ناوی سەرەکی ڕێکنەکەوتبوو، پشکنینی ناوی جێگرەوە دەکەین
+            if (!matchesMain && altNamesString.includes(searchTerm)) {
+                matchesAlternative = true;
+            } else if (matchesMain) {
+                // ئەگەر لەگەڵ ناوی سەرەکی ڕێککەوتبوو، پێویست ناکات بە ناوی جێگرەوە دابنرێت
+                matchesAlternative = false; 
+            }
+        }
+        
+        // ئەگەر ڕێککەوتنی سەرەکی یان جێگرەوە هەبوو
+        if (matchesMain || matchesAlternative) {
+             itemsToDisplay.push({ ...item, isAlternativeMatch: matchesAlternative });
+        }
     });
 
-    if (filteredItems.length === 0) {
+
+    if (itemsToDisplay.length === 0) {
         itemsContainer.innerHTML = '<p style="text-align: center; color: #555;">هیچ ئایتمێک بەو فلتەرە بەردەست نییە.</p>';
         return;
     }
 
-    filteredItems.forEach(item => {
+    itemsToDisplay.forEach(item => { // لێرەوە filterItems گۆڕدرا بۆ itemsToDisplay
         const outOfStockClass = item.quantity <= 0 ? 'out-of-stock' : '';
         
         const card = document.createElement('div');
-        card.className = `sales-item-card ${outOfStockClass}`; 
         
-        card.style.backgroundColor = item.color || '#ccc'; 
+        // ** گۆڕانکاری سەرەکی لێرەدایە: زیادکردنی کڵاسێکی جیاواز **
+        const altMatchClass = item.isAlternativeMatch ? 'alt-search-match' : '';
+
+        card.className = `sales-item-card ${outOfStockClass} ${altMatchClass}`;  
         
+        // بەشێکی تری گۆڕانکاری: ئەگەر ناوی جێگرەوە بوو، ڕەنگێکی تر بدەیتێ یان ستایلێک 
+        if (item.isAlternativeMatch) {
+            // بۆ نموونە: گۆڕینی ڕەنگی پشتەوە
+            card.style.backgroundColor = item.color || '#ccc';  // یان هەر ڕەنگێکی تر
+        } else {
+            card.style.backgroundColor = item.color || '#ccc';  
+        }
+
+
+        // ... بەردەوامی دروستکردنی کاردەکان
+
         card.onclick = () => {
             if (item.quantity > 0) {
                 addToCart(item.id);
@@ -173,7 +208,9 @@ function displaySalesItems() {
         } else if (quantity <= 5) {
             stockStatusClass = 'stock-low';
         }
-
+        
+        // ... (HTMLی نێو کاردەکە هەر بەو شێوەیە دەمێنێتەوە)
+        
         card.innerHTML = `
             <span class="stock-count" style="background-color: ${quantity <= 5 ? (quantity === 0 ? '#dc3545' : '#ffc107') : 'rgba(0,0,0,0.4)'}">
                 ${quantity}
@@ -182,9 +219,9 @@ function displaySalesItems() {
             <p class="item-model-name">${item.name || ' '}</p>
 
 
-<p class="storage-location-text">شوێن: 
-                    <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
-                </p>
+<p class="storage-location-text">شوێن:  
+                    <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
+                </p>
 
 
             
@@ -198,13 +235,6 @@ function displaySalesItems() {
                 <p class="currency">دینار</p>
             </div>
         `;
-
-
-
-
-
-
-
 
         itemsContainer.appendChild(card);
     });

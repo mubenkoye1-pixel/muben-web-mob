@@ -615,3 +615,10 @@ body {
     }
     
 }
+
+
+.sales-item-card.alt-search-match {
+    border: 3px solid #089b00; /* سنوورێکی شین دابنێ */
+    box-shadow: 0 0 10px rgba(36, 155, 0, 0.5); /* سێبەرێکی شین بۆ سەرنجڕاکێشان */
+    transition: all 0.2s ease-in-out; /* جووڵەی گۆڕانکارییەکە نەرم بێت */
+}
