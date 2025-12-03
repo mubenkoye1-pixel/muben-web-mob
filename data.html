@@ -31,18 +31,7 @@
         </div>
 
 
-        <div class="summary-bar-container">
-            <div class="summary-card">
-                <h3>کۆی گشتی فرۆش</h3>
-                <p class="summary-value" id="kpi-total-revenue">0 IQD</p>
-            </div>
-            
-            <div class="summary-card">
-                <h3>کۆی گشتی قەرز (نەگەڕاوە)</h3>
-                <p class="summary-value" id="kpi-total-loan-due">0 IQD</p>
-            </div>
-        </div>
-        
+      
         <div class="main-div data-layout">
             
             <div class="tab-controls">
@@ -50,13 +39,41 @@
                 <button class="tab-btn" onclick="showTab('loan-transactions', this)">وەسڵەکانی قەرز</button>
                 
             </div>
-
-            <div id="all-transactions" class="tab-content active">
-                <h1>لیستی هەموو مامەڵە تەواوکراوەکان</h1>
-                <div id="transactionsListContainer" class="list-group">
-                    <p class="no-data">هیچ فرۆشتنێک تۆمار نەکراوە.</p>
-                </div>
+   <div class="summary-bar-container">
+            <div class="summary-card">
+                <h3 style="color: white;">کۆی گشتی فرۆش</h3>
+                <p class="summary-value" id="kpi-total-revenue" style="color: green;">0 IQD</p>
             </div>
+            
+            <div class="summary-card">
+                <h3 style="color: white;">کۆی گشتی قەرز (نەگەڕاوە)</h3>
+                <p class="summary-value" id="kpi-total-loan-due" style="color: rgb(253, 192, 9);">0 IQD</p>
+            </div>
+        </div>
+    <div id="all-transactions" class="tab-content active">
+    <div class="search-area">
+        <div class="filter-controls">
+            <select id="dateRangeFilter" onchange="filterTransactionsByDate()" class="filter-select">
+                <option value="all">📅 هەموو کات</option>
+                <option value="today">☀️ ئەمڕۆ</option>
+                <option value="yesterday">🌤️ دوێنێ</option>
+                <option value="this-week">🗓️ ئەم هەفتەیە</option>
+            </select>
+            
+    <input type="date" 
+    id="specificDateFilter" 
+    onchange="setSpecificFilterAndRun()" class="filter-date-input" dir="ltr">
+        </div>
+
+        <input type="text" 
+            id="transactionSearchInput" 
+            placeholder="گەڕان بە ناوی ئایتم، براند، یان کڕیار..." 
+            oninput="filterTransactions()" 
+            class="search-input">
+    </div>
+    <div id="transactionsListContainer" class="list-group"></div>
+    <h1>لیستی هەموو مامەڵە تەواوکراوەکان</h1>
+    </div>
             
             <div id="loan-transactions" class="tab-content" style="display:none;">
                 <h1>وەسڵەکانی قەرزی نەگەڕاوە</h1>
@@ -96,7 +113,7 @@
             </form>
         </div>
     </div>
-    
+ 
     <script src="customer.js"></script>
     <script src="script.js"></script>
       <script src="data.js"></script>

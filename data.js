@@ -34,13 +34,211 @@ function getInventory() { return getFromStorage('inventory', []); }
 let currentTransactionBeingEdited = null; 
 
 // Initial Load Dispatcher (Must be defined early)
-function loadDataPage() {
-    analyzeInventory(); 
-    const defaultTabButton = document.querySelector('.tab-btn');
-    if (defaultTabButton) {
-        showTab('all-transactions', defaultTabButton);
-    }
+// یارمەتیدەر بۆ وەرگرتنی بەرواری ئەمڕۆ بە فۆرماتی (YYYY-MM-DD)
+function getTodayDateString() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
+
+
+
+
+
+
+
+
+// --- Date Utility Functions ---
+
+// یارمەتیدەر بۆ وەرگرتنی بەرواری ئەمڕۆ بە فۆرماتی (YYYY-MM-DD)
+// یارمەتیدەر بۆ وەرگرتنی بەرواری ئەمڕۆ بە فۆرماتی (YYYY-MM-DD)
+// یارمەتیدەر بۆ وەرگرتنی بەرواری ئەمڕۆ بە فۆرماتی (YYYY-MM-DD)
+function getTodayDateString() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+// وەرگرتنی ڕۆژی هەفتەی ڕابردوو
+function getStartOfWeekDateString() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const day = today.getDay(); // 0 (یەکشەممە) تا 6 (شەممە)
+    // 61200000 ملیسانیەیەک بۆ (18 کاتژمێر) زیاد کراوە تا ڕۆژەکە نیشان بدات
+    const diff = today.getDate() - day + (day === 0 ? -6 : 1); // گەڕانەوە بۆ ڕۆژی شەممە
+    const startOfWeek = new Date(today.setDate(diff));
+    startOfWeek.setHours(0, 0, 0, 0);
+    return startOfWeek.toISOString().split('T')[0];
+}
+
+// فەنکشنی سەرەکی بۆ فیلتەرکردن بەپێی بەروار
+// فەنکشنی سەرەکی بۆ فیلتەرکردن بەپێی بەروار (نوێکراوە)
+// ئەمە چارەسەری کۆتایی کێشەی Timezone و فۆرماتی بەرواری تۆمارکراوە
+function isDateInFilter(transactionDate, filterType, specificDate) {
+    
+    // 1. وەرگرتنی بەشی بەروار و گۆڕینی بۆ فۆرماتی YYYY-MM-DD
+    // فۆرماتی تۆمارکراو: DD/MM/YYYY, HH:MM:SS
+    const parts = transactionDate.split(','); 
+    const datePart = parts[0].trim(); // وەرگرتنی بەشی DD/MM/YYYY
+    
+    const dateElements = datePart.split('/'); 
+    
+    if (dateElements.length !== 3) {
+        console.warn("Invalid transaction date format:", transactionDate);
+        return filterType === 'all';
+    }
+    
+    const day = dateElements[0].padStart(2, '0');
+    const month = dateElements[1].padStart(2, '0');
+    const year = dateElements[2];
+    
+    // دروستکردنی YYYY-MM-DD string بۆ بەراوردکردن
+    const transDateString = `${year}-${month}-${day}`;
+    
+    // 2. وەرگرتنی بەرواری ئێستا، دوێنێ، و سەرەتای هەفتە بە هەمان فۆرماتی YYYY-MM-DD
+    const today = new Date();
+    const oneDay = 24 * 60 * 60 * 1000;
+    
+    // یارمەتیدەر بۆ فۆرماتکردنی کاتی لۆکاڵی
+    const formatToYMD = (date) => {
+        const y = date.getFullYear();
+        const m = String(date.getMonth() + 1).padStart(2, '0');
+        const d = String(date.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+    };
+    
+    const todayString = formatToYMD(today);
+    
+    // دوێنێ
+    const yesterdayDate = new Date(today.getTime() - oneDay);
+    const yesterdayString = formatToYMD(yesterdayDate);
+    
+    // سەرەتای هەفتە (شەممە)
+    const dayOfWeek = today.getDay(); // 0=Sunday, 6=Saturday
+    // بۆ گەیشتن بە شەممە (ڕۆژی 6)
+    const diffToSaturday = dayOfWeek === 6 ? 0 : dayOfWeek + 1;
+    const startOfWeekDate = new Date(today.getTime() - diffToSaturday * oneDay);
+    const startOfWeekString = formatToYMD(startOfWeekDate);
+
+    // ********** لۆجیکی فلتەرکردن بە String **********
+    
+    if (filterType === 'all') {
+        return true;
+    }
+
+
+if (filterType === 'specific') {
+        // specificDate لە HTMLـەوە بە فۆرماتی YYYY-MM-DD دێت
+        return transDateString === specificDate;
+    }
+
+    
+    if (filterType === 'today') {
+        return transDateString === todayString;
+    }
+    
+    if (filterType === 'yesterday') {
+        return transDateString === yesterdayString;
+    }
+    
+    if (filterType === 'this-week') {
+        return transDateString >= startOfWeekString && transDateString <= todayString;
+    }
+
+    
+    
+    return false;
+}
+// فەنکشنێک بۆ کۆکردنەوەی هەردوو فلتەری بەروار و گەڕان
+function filterTransactions() {
+    const searchTerm = document.getElementById('transactionSearchInput').value.trim().toLowerCase();
+    
+    // وەرگرتنی بەرواری دیاریکراو
+    const specificDate = document.getElementById('specificDateFilter').value;
+    
+    // وەرگرتنی جۆری فلتەر
+    let dateFilterType = document.getElementById('dateRangeFilter').value;
+    
+    // 💡 گۆڕانکاری لێرەدایە: ئەگەر specificDate هەبێت، جۆری فلتەرەکە بە زۆر دەبێتە 'specific'
+    if (specificDate && specificDate !== '') {
+        dateFilterType = 'specific';
+    }
+
+    const transactions = getTransactions();
+
+    const filtered = transactions.filter(t => {
+        // 1. فلتەرکردن بەپێی بەروار
+        const isDateMatch = isDateInFilter(t.date, dateFilterType, specificDate);
+        if (!isDateMatch) {
+            return false;
+        }
+
+        // 2. گەڕان بەپێی تێکست (Search Term)
+        if (searchTerm === '') {
+            return true; // ئەگەر وشەی گەڕان نەبوو، هەموو بەروارە فلتەرکراوەکان بگێڕەوە.
+        }
+
+        // گەڕان بە ناوی کڕیار
+        if (t.customerName && t.customerName.toLowerCase().includes(searchTerm)) {
+            return true;
+        }
+
+        // گەڕان بە ناوی ئایتم، براند، یان جۆر
+        return (t.items || []).some(item => {
+            const itemName = (item.name || '').toLowerCase();
+            const itemBrand = (item.brand || '').toLowerCase();
+            const itemType = (item.type || '').toLowerCase();
+            
+            return itemName.includes(searchTerm) || 
+                   itemBrand.includes(searchTerm) || 
+                   itemType.includes(searchTerm);
+        });
+    });
+
+    displayTransactions(filtered);
+}
+
+
+// --- ئیڤێنتی onchange بۆ هەڵبژاردنی بەروار ---
+// --- ئیڤێنتی onchange بۆ هەڵبژاردنی ماوە کاتییەکان ---
+// --- ئیڤێنتی onchange بۆ هەڵبژاردنی ماوە کاتییەکان ---
+function filterTransactionsByDate() {
+    const dateFilterType = document.getElementById('dateRangeFilter').value;
+    // 💡 گۆڕانکاری لێرەدایە: وەرگرتنی خودی توخمەکە نەک تەنها بەهاکەی
+    const specificDateInput = document.getElementById('specificDateFilter'); 
+    
+    // کاتێک یەکێک لە ماوە کاتییەکان هەڵدەبژێریت، خانەی بەرواری دیاریکراو بەتاڵ دەکەیتەوە.
+    if (dateFilterType !== 'all') { 
+        specificDateInput.value = ''; // ئێستا دەتوانرێت بگۆڕدرێت
+    } 
+    
+    // پاشان فەنکشنی سەرەکی فلتەرکردن بانگ دەکەینەوە
+    filterTransactions();
+}
+
+
+
+// --- ئیڤێنتی onchange بۆ هەڵبژاردنی بەرواری دیاریکراو ---
+function setSpecificFilterAndRun() {
+    const specificDateInput = document.getElementById('specificDateFilter');
+    const dateRangeFilter = document.getElementById('dateRangeFilter');
+
+    // ئەگەر بەروارێکی دیاریکراو هەبێت، سەلەکتەکە دەبێتە 'all' بۆ ئەوەی فلتەرەکە لۆجیکی specificDate بەکاربهێنێت.
+    if (specificDateInput.value) {
+        dateRangeFilter.value = 'all'; 
+    }
+    
+    // بانگکردنی فەنکشنی سەرەکی فلتەر
+    filterTransactions();
+}
+
+
+
+
+
 
 
 // --- Core Analysis Function (Synchronous) ---
@@ -162,7 +360,153 @@ function displayTransactions(transactions) {
         `;
         container.innerHTML += cardHTML;
     });
+
+
+
+    updateKpiSalesSummary(transactions);
 }
+
+
+// فەنکشنی نوێ بۆ حیسابکردن و نیشاندانی کۆی گشتی فرۆش بەپێی داتای فلتەرکراو
+// فەنکشنی نوێ بۆ حیسابکردن و نیشاندانی کۆی گشتی فرۆش بەپێی داتای فلتەرکراو
+function updateKpiSalesSummary(transactions) {
+    let totalRevenue = 0;
+    let totalLoanDueInFilter = 0; // کۆی قەرزەکانی ناو ئەم ماوە فلتەرکراوە
+
+    transactions.forEach(t => {
+        // 💡 چاکسازی: دڵنیابوونەوە لە بەکار هێنانی t.totalSale
+        const saleAmount = t.totalSale || 0; 
+        
+        // حیسابکردنی کۆی داهات (Revenue)
+        totalRevenue += saleAmount; 
+        
+        // حیسابکردنی قەرزی ناو فلتەرەکە
+        // گریمانە: ئەگەر isLoan یەکسان بێت بە true
+        if (t.isLoan === true) {
+            totalLoanDueInFilter += saleAmount; 
+        } 
+    });
+
+    // 1. نوێکردنەوەی کۆی گشتی فرۆش (Revenue)
+    const revenueElement = document.getElementById('kpi-total-revenue');
+    if (revenueElement) {
+        revenueElement.textContent = `${totalRevenue.toLocaleString()} IQD`;
+    }
+    
+    // 2. نوێکردنەوەی کۆی قەرزەکانی ناو فلتەرەکە
+    const loanElement = document.getElementById('kpi-total-loan-due');
+    if (loanElement) {
+        loanElement.textContent = `${totalLoanDueInFilter.toLocaleString()} IQD`;
+    }
+}
+
+// ==========================================================
+// --- TRANSACTION SEARCH LOGIC (New) ---
+// ==========================================================
+
+function searchTransactions() {
+    const transactions = getTransactions();
+    const searchTerm = document.getElementById('transactionSearchInput').value.trim().toLowerCase();
+    
+    // ئەگەر خانەی گەڕان بەتاڵ بێت، هەموو مامەڵەکان پیشان دەدات.
+    if (searchTerm === '') {
+        displayTransactions(transactions);
+        return;
+    }
+
+    const filteredTransactions = transactions.filter(t => {
+        // گەڕان بە ناوی کڕیار
+        if (t.customerName && t.customerName.toLowerCase().includes(searchTerm)) {
+            return true;
+        }
+
+        // گەڕان بە ناوی ئایتم، براند، یان جۆر
+        return (t.items || []).some(item => {
+            const itemName = (item.name || '').toLowerCase();
+            const itemBrand = (item.brand || '').toLowerCase();
+            const itemType = (item.type || '').toLowerCase();
+            
+            return itemName.includes(searchTerm) || 
+                   itemBrand.includes(searchTerm) || 
+                   itemType.includes(searchTerm);
+        });
+    });
+
+    displayTransactions(filteredTransactions);
+}
+
+// ==========================================================
+// --- MODIFIED displayTransactions FUNCTION ---
+// ==========================================================
+// پێویستە فەنکشنی displayTransactions بگۆڕین تا بە داتای فیلتەرکراو کار بکات.
+// تێبینی: لە کۆدەکەی پێشووتدا، فەنکشنی displayTransactions هەبوو.
+// دڵنیابە لەوەی کە ئەم فەنکشنەی خوارەوە جێگەی فەنکشنە کۆنەکەی دەگرێتەوە.
+
+function displayTransactions(transactions) {
+    const container = document.getElementById('transactionsListContainer');
+    if (!container) return;
+
+    if (transactions.length === 0) {
+        // پەیامی گونجاو نیشان دەدات بەپێی ئەوەی گەڕان هەیە یان نا
+        const searchTerm = document.getElementById('transactionSearchInput')?.value.trim();
+        if (searchTerm) {
+            container.innerHTML = `<p class="no-data">هیچ مامەڵەیەک نەدۆزرایەوە بۆ: <strong>${searchTerm}</strong></p>`;
+        } else {
+             container.innerHTML = '<p class="no-data">هیچ فرۆشتنێک تۆمار نەکراوە.</p>';
+        }
+        // نوێکردنەوەی KPIs بە سفر کاتێک هیچ داتایەک نەدۆزرایەوە
+        updateKpiSalesSummary([]); 
+        return;
+    }
+
+    container.innerHTML = ''; 
+    transactions.sort((a, b) => b.id - a.id); 
+
+    transactions.forEach(t => {
+        const profitClass = (t.totalProfit || 0) >= 0 ? 'total-profit' : 'total-profit profit-negative';
+        
+        let itemsListHTML = '';
+        t.items.forEach(item => {
+            itemsListHTML += `
+                <li>
+                    <span class="item-name-details">${item.name} (${item.brand} / ${item.type})</span>
+                    <span class="item-qty">x${item.quantity || 0}</span>
+                    <span class="item-price">${(item.salePrice || 0).toLocaleString()} IQD</span>
+                </li>
+            `;
+        });
+        
+        // زیادکردنی ناوی کڕیار بۆ کارتی مامەڵەکە 
+        const customerDisplay = t.customerName ? `<span class="customer-name-display">کڕیار: ${t.customerName}</span>` : '';
+
+
+        const cardHTML = `
+            <div class="transaction-card">
+                <div class="transaction-header">
+                    <span class="transaction-date">بەروار: ${t.date}</span>
+                    <div class="actions">
+                        <button class="action-btn edit-trans-btn" onclick="editTransaction(${t.id})">دەستکاری</button>
+                        <button class="action-btn prnt-trans-btn" onclick="generateInvoiceFromTransaction(${t.id})">🖨️ وەسڵ</button> 
+                        <button class="action-btn delete-trans-btn" onclick="deleteTransaction(${t.id})">سڕینەوە</button>
+                    </div>
+                </div>
+                ${customerDisplay} <ul class="item-sold-list">
+                    ${itemsListHTML}
+                </ul>
+                <div class="transaction-header" style="background-color: #000000ff;">
+                    <span class="total-sale">کۆی فرۆش: ${(t.totalSale || 0).toLocaleString()} IQD</span>
+                    <span class="total-count">کۆی عدد: ${t.totalItemsCount || 0}</span>
+                </div>
+            </div>
+        `;
+        container.innerHTML += cardHTML;
+    });
+    
+    // 💡 بانگکردنی فەنکشنەکە بۆ نوێکردنەوەی KPI بەپێی داتای فلتەرکراو
+    updateKpiSalesSummary(transactions); 
+}
+
+
 
 
 // --- LOAN DISPLAY AND ACTIONS (FIXED FOR DATA PAGE) ---
