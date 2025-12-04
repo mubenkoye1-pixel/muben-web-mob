@@ -1,0 +1,276 @@
+/*
+===================================
+1. RESET & بنەماکان
+===================================
+*/
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box; /* دڵنیابوون لەوەی ستایلەکان بە دروستی حیساب دەکرێن */
+}
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    direction: rtl;
+    width: 100%; /* دڵنیابوون لەوەی تەواوی شاشەکە دەگرێتەوە */
+}
+
+/* ===================================
+2. Header & Navigation (سەرپەڕ)
+===================================
+*/
+.head-div {
+    padding: 0 30px;
+    background-color: #1f1f1f; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 6.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+.logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; 
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.btn-head {
+    font-size: 18px;
+    font-weight: 500;
+    color: #cccccc; 
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.btn-head:hover {
+    color: #9d57ff; 
+}
+
+.btn-head::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #9d57ff; 
+    transition: width 0.3s ease;
+}
+
+.btn-head:hover::after {
+    width: 100%;
+    right: 0;
+}
+
+/* ===================================
+3. Purchase Container (کۆنتێنەری کڕین)
+===================================
+*/
+.purchase-container {
+    padding: 20px 40px; /* زیادکردنی پادینگی ڕاست و چەپ */
+    width: 100%; /* ئەمە دڵنیایی دەدات کە تەواوی شاشەکە دەگرێتەوە */
+    max-width: none; /* لابردنی سنووری قەبارە */
+    margin: 0; /* لابردنی مارجینی ئۆتۆماتیکی */
+    background-color: #121212; /* وا دەکەین کە پشتەوەی کۆنتێنەرەکە هاوشێوەی body بێت */
+    flex-grow: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- سەرپەڕی کۆنتێنەر (Head Div - بۆ دوگمە و کۆی گشتی) --- */
+.headr-div{
+    width: 100%;
+    background-color: #1f1f1f;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: space-around;
+    align-items: center; 
+    border-radius: 8px; /* زیادکردنی ستایل بۆ ناوەڕاستی پەڕەکە */
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+.purchase-add{
+    width: 150px;
+    background-color: #9d57ff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 25px;
+    transition: background-color 0.3s ease;
+}
+.purchase-add:hover{
+    background-color: #7a3ed1;
+}
+.add-list{
+    width: 50px; 
+    height: 50px;
+    background-color: #9d57ff;
+    color: white;
+    border: none;
+    padding: 0;
+    border-radius: 50%; 
+    cursor: pointer;
+    font-size: 30px;
+    line-height: 50px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+}
+.add-list:hover{
+    background-color: #7a3ed1;
+}
+
+.headr-div h1 {
+    font-size: 20px;
+    color: #e0e0e0;
+    margin: 0 10px;
+}
+
+.headr-div h1 span {
+    color: #4CAF50; 
+    font-weight: bold;
+}
+
+/* ===================================
+4. Item Rows (ڕیزەکانی ئایتم)
+===================================
+*/
+.main-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background-color: #1f1f1f; /* بۆ ئەوەی ڕیزەکان لەسەر ڕوویەکی ڕوونتر بن */
+    border-radius: 8px;
+    flex-grow: 1; /* دڵنیابوون لەوەی تەواوی جێگاکە دەگرێتەوە */
+    overflow-y: auto; /* زیادکردنی سکرۆڵبار ئەگەر ڕیزەکان زۆر بوون */
+}
+
+/* --- ستایلی ڕیزێکی نوێی ئایتم --- */
+.item-row {
+    background-color: #2a2a2a;
+    padding: 10px 15px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    /* دابەشکردنی بۆشایی نێوان کێڵگەکان بە شێوەیەکی دادپەروەرانە */
+    justify-content: space-between; 
+    gap: 15px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    min-height: 60px;
+}
+
+/* --- ستایلی ئینپووتەکان و سێلێکت --- */
+.item-row input[type="number"], 
+.item-row .item-select {
+    padding: 8px 12px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #333;
+    color: #fff;
+    font-size: 16px;
+    height: 40px; 
+}
+
+/* ڕێکخستنی پانی کێڵگەکان بۆ ئەوەی لەسەر شاشە گەورەکە باشتر دەربکەون */
+.item-row .item-select {
+    flex-grow: 2; /* با کێڵگەی هەڵبژاردنی ئایتم گەورەتر بێت */
+    min-width: 300px;
+}
+.item-row .buy-price {
+    flex-grow: 1;
+    max-width: 200px;
+}
+
+.item-row .quantity {
+    flex-grow: 0;
+    width: 80px; 
+    text-align: center;
+}
+
+/* کۆی گشتی ڕیزەکە */
+.row-total-amount {
+    font-size: 18px;
+    font-weight: bold;
+    color: #9d57ff; 
+    width: 150px; /* فراوانترکردن بۆ ڕوونتر بوون */
+    text-align: center;
+    background-color: #333;
+    padding: 8px 12px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+/* دوگمەی سڕینەوە */
+.delete-row-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    color: #e0e0e0;
+    flex-shrink: 0;
+}
+.delete-row-btn:hover {
+    transform: scale(1.1);
+    color: #dc3545;
+}
+
+/* ===================================
+5. Select2 Override (بۆ شێوازی تاریک)
+===================================
+*/
+.select2-container {
+    flex-grow: 1; 
+}
+.select2-container--default .select2-selection--single {
+    height: 40px;
+    border: 1px solid #444 !important;
+    background-color: #333 !important;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #fff !important;
+    line-height: 40px !important;
+    padding-right: 15px !important; 
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 38px !important;
+    width: 25px !important;
+}
+.select2-dropdown {
+    background-color: #333 !important;
+    border: 1px solid #444 !important;
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #9d57ff !important;
+    color: white !important;
+}
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+}
+.select2-search input {
+    background-color: #2a2a2a !important;
+    color: #fff !important;
+    border: 1px solid #444 !important;
+}

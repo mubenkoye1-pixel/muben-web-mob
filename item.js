@@ -285,9 +285,7 @@ function displayItemsTable(items) {
                     <th>جۆر</th>
                     <th>براند</th>
                     <th>کوالێتی</th>
-                    <th>نرخی کڕین</th>
                     <th>نرخی فرۆشتن</th>
-                    <th>قازانجی یەکەیی</th>
                     <th>بەردەست (عدد)</th>
                     <th>شوێنی هەڵگرتن</th>
                     <th>کرارەکان</th>
@@ -315,9 +313,7 @@ function displayItemsTable(items) {
                 <td>${item.type}</td>
                 <td>${item.brand}</td>
                 <td>${item.quality}</td>
-                <td>${purchasePrice.toLocaleString()}</td>
                 <td>${salePrice.toLocaleString()}</td>
-                <td style="${profitStyle}">${unitProfit.toLocaleString()}</td>
                 <td>${item.quantity}</td>
                 <td>${item.storageLocation || '—'}</td>
                    <td>
@@ -341,6 +337,10 @@ function displayItemsTable(items) {
     container.innerHTML = tableHTML;
 }
 
+
+// ----------------------
+// Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
+// ----------------------
 
 // ----------------------
 // Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
@@ -407,40 +407,48 @@ function addInlineRow(prefill = null) {
         qualitySelect.value = prefill.quality || '';
     }
 
-    const purchaseInput = createInput(prefill?.purchasePrice || '', 'number', { min: 0, placeholder: 'قیمەتی کڕین' });
-    const saleInput = createInput(prefill?.salePrice || '', 'number', { min: 0, placeholder: 'نرخ' });
-    const qtyInput = createInput(prefill?.quantity || 1, 'number', { min: 1, placeholder: 'ژمارە' });
+    // 🛑 لابردنی purchaseInput و qtyInput
+    // ⚠️ نرخی فرۆشتن دەمێنێتەوە
+    const saleInput = createInput(prefill?.salePrice || '', 'number', { min: 0, placeholder: 'نرخی فرۆشتن' });
+    
+    // 🛑 لابردنی quantityInput
+    
     const storageInput = createInput(prefill?.storageLocation || '', 'text', { placeholder: 'شوێن' });
     
     const altNamesValue = Array.isArray(prefill?.alternativeNames) ? prefill.alternativeNames.join(', ') : '';
-    const alternativeNamesInput = createInput(altNamesValue, 'text', { placeholder: 'ناوه‌ جێگره‌وه‌كان (به‌ كۆما)' });
+    // 🛑 لابردنی alternativeNamesInput لێرە، چونکە لۆژیکەکە دەڵێت لە فۆرمی جیاوازدا بێت
 
-
+    
+    // 🛑 گۆڕینی حیسابکردنی قازانج: تەنها بە نرخی فرۆشتن حیساب دەکرێت، نرخی کڕین وەک سفر سەیر دەکرێت.
     const profitCell = document.createElement('td');
     const updateProfit = () => {
-        const pp = parseInt(purchaseInput.value) || 0;
+        // وادادەنێین نرخی کڕینی سەرەتایی 0 بێت لە پەڕەی ئایتم.
+        const pp = 0; 
         const sp = parseInt(saleInput.value) || 0;
         profitCell.textContent = (sp - pp).toLocaleString();
     };
-    purchaseInput.addEventListener('input', updateProfit);
     saleInput.addEventListener('input', updateProfit);
-    updateProfit();
+    updateProfit(); // بانگکردنی بۆ نرخی سەرەتایی
 
     // Build cells 
     tr.innerHTML = `<td style="width:10px;background:#eee"></td>`;
-    // 🛑 گۆڕینی Input بۆ Select
-    const tdName = document.createElement('td'); tdName.appendChild(modelSelect); tr.appendChild(tdName); 
     
+    const tdName = document.createElement('td'); tdName.appendChild(modelSelect); tr.appendChild(tdName); 
     const tdType = document.createElement('td'); tdType.appendChild(typeSelect); tr.appendChild(tdType);
     const tdBrand = document.createElement('td'); tdBrand.appendChild(brandSelect); tr.appendChild(tdBrand);
     const tdQuality = document.createElement('td'); tdQuality.appendChild(qualitySelect); tr.appendChild(tdQuality);
-    const tdPurchase = document.createElement('td'); tdPurchase.appendChild(purchaseInput); tr.appendChild(tdPurchase);
+    
+    // 🛑 لابردنی خانەی نرخی کڕین
+    // tr.appendChild(tdPurchase); 
+
     const tdSale = document.createElement('td'); tdSale.appendChild(saleInput); tr.appendChild(tdSale);
+    
     tr.appendChild(profitCell);
-    const tdQty = document.createElement('td'); tdQty.appendChild(qtyInput); tr.appendChild(tdQty);
+    
+    // 🛑 لابردنی خانەی ژمارە (Quantity)
+    // tr.appendChild(tdQty); 
+    
     const tdStorage = document.createElement('td'); tdStorage.appendChild(storageInput); tr.appendChild(tdStorage);
-    // 🛑 لابردنی کێڵگەی ناوی جێگرەوەکان لەم خشتەیە بۆ کورتکردنەوەی خشتەکە
-    // لەبری ئەوە، دەتوانرێت فۆرمێکی تری بۆ بکرێتەوە.
     
     const tdActions = document.createElement('td');
     const saveBtn = document.createElement('button'); saveBtn.textContent = '💾'; saveBtn.className = 'submit-btn';
@@ -457,22 +465,28 @@ function addInlineRow(prefill = null) {
         const brand = brandSelect.value;
         const type = typeSelect.value;
         const quality = qualitySelect.value;
-        const purchasePrice = parseInt(purchaseInput.value) || 0;
-        const salePrice = parseInt(saleInput.value) || 0;
-        const quantity = parseInt(qtyInput.value) || 0;
-        const storageLocation = storageInput.value.trim();
-        // ⚠️ کێڵگەی ناوی جێگرەوە لێرە بەتاڵە چونکە لابراوە لە UI، بەڵام دەبێت داتای کۆن بهێڵێتەوە
         
-        if (!name || !brand || !type || !quality || quantity < 1) {
-            alert('تکایە خانەکان پڕبکە تا رێک بێت (مۆدێل, براند, جۆر, کوالێتی, ژمارە).');
+        // 🛑 لێرەدا نرخی کڕین و ژمارە بە 0 دادەنرێت بۆ ئەوەی لە پەڕەی کڕینەوە نوێ بکرێتەوە
+        const purchasePrice = prefill?.purchasePrice || 0; 
+        const salePrice = parseInt(saleInput.value) || 0;
+        const quantity = prefill?.quantity || 0; // وەک خۆی بهێڵرێتەوە یان بە 0 دابنرێت
+        
+        const storageLocation = storageInput.value.trim();
+        
+        // وەرگرتنەوەی ناوی جێگرەوەی کۆن گەر دەستکاری کرابێت (بۆ ئەوەی نەفەوتێت)
+        let alternativeNames = prefill?.alternativeNames || []; 
+
+        if (!name || !brand || !type || !quality) {
+            alert('تکایە خانە سەرەکییەکان پڕبکە (مۆدێل, براند, جۆر, کوالێتی).');
             return;
         }
         
-        // وەرگرتنەوەی ناوی جێگرەوەی کۆن گەر دەستکاری کرابێت (بۆ ئەوەی نەفەوتێت)
-        let alternativeNames = [];
+        // وەرگرتنەوەی نرخی کڕین و ژمارەی کۆن لە کاتی دەستکاریکردندا
         if(prefill && prefill.id){
             const originalItem = getInventory().find(i => i.id === prefill.id);
-            alternativeNames = originalItem.alternativeNames || [];
+            // پاراستنی نرخی کڕین و ژمارە لەکاتی دەستکاریکردنی تەنها زانیاری وەسفی.
+            purchasePrice = originalItem.purchasePrice || 0; 
+            quantity = originalItem.quantity || 0;
         }
 
 
@@ -482,7 +496,10 @@ function addInlineRow(prefill = null) {
         if (editingId) {
             updateItemInline(parseInt(editingId), itemObj);
         } else {
-            addOrMergeItem(itemObj);
+            // لە کاتی زیادکردنی ئایتمی نوێدا، نرخی کڕین و ژمارە بە 0 دادەنرێت
+            itemObj.purchasePrice = 0;
+            itemObj.quantity = 0;
+            addOrMergeItem(itemObj); // ئەگەر ئایتمەکە نەبوو، زیاد دەکرێت.
         }
 
         tr.remove();

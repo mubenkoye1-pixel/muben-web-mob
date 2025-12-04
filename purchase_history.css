@@ -1,0 +1,170 @@
+/*
+===================================
+1. RESET & بنەماکان (Global Styles)
+===================================
+*/
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212; /* زەمینەی تاریک */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    direction: rtl; /* بۆ کوردی و عەرەبی */
+    color: #ffffff;
+}
+
+/* ===================================
+2. Header & Navigation (سەرپەڕ)
+===================================
+*/
+.head-div {
+    padding: 0 30px;
+    background-color: #1f1f1f; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 6.5vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; 
+    text-decoration: none;
+    padding: 0 10px;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.btn-head {
+    font-size: 18px;
+    font-weight: 500;
+    color: #cccccc;
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.btn-head:hover {
+    color: #9d57ff; /* ڕەنگی مۆدێرنی مۆر */
+}
+
+/* ===================================
+3. History Container (کۆنتێنەری سەرەکی)
+===================================
+*/
+.history-container {
+    padding: 30px;
+    width: 95%;
+    max-width: 1400px; /* فراوانترکردن بۆ بینینی داتای زیاتر */
+    margin: 30px auto;
+    background-color: #1f1f1f;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+    flex-grow: 1;
+}
+
+.receipts-list {
+    display: grid;
+    /* دابەشکردنی وەسڵەکان بەسەر دوو ستووندا لە شاشەی گەورەدا */
+    grid-template-columns: repeat(auto-fit, minmax(550px, 1fr)); 
+    gap: 25px;
+}
+
+/* ===================================
+4. Receipt Card (کارتی وەسڵ)
+===================================
+*/
+.receipt-card {
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+    border: 1px solid #333;
+}
+
+.receipt-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.receipt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.receipt-header h3 {
+    font-size: 18px;
+    color: #9d57ff;
+}
+
+.receipt-date {
+    font-size: 14px;
+    color: #cccccc;
+}
+
+/* ===================================
+5. Items Table (خشتەی ئایتمەکان)
+===================================
+*/
+.items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.items-table th, .items-table td {
+    padding: 10px;
+    text-align: right;
+    border-bottom: 1px solid #3a3a3a;
+}
+
+.items-table th {
+    background-color: #333;
+    color: #e0e0e0;
+    font-weight: 600;
+}
+
+.items-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===================================
+6. Receipt Footer (ژێرپەڕی وەسڵ)
+===================================
+*/
+.receipt-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 2px dashed #333; /* هێڵێکی جوانی داشدار */
+}
+
+.grand-total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #4CAF50; /* ڕەنگی سەوز بۆ کۆی گشتی */
+    background-color: #3a3a3a;
+    padding: 5px 10px;
+    border-radius: 4px;
+}

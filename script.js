@@ -348,8 +348,8 @@ function updateCartDisplay() {
         
             <div class="details">
             <p class="title">${item.name}</p>
-                <span>${item.quantity}</span>
-                <span style="font-weight: bold;"> ${itemTotal.toLocaleString()}</span>
+               <span class="qnt">${item.quantity}</span>
+                <span style="font-weight: bold;" class="koygshty"> ${itemTotal.toLocaleString()}</span>
                 
                 <input type="text" 
                        value="${currentSalePrice}" 
@@ -357,7 +357,7 @@ function updateCartDisplay() {
                        onblur="manualPriceEdit(this)"
                        class="cart-item-price-input"
                        pattern="[0-9]*" 
-                       inputmode="numeric"> 
+                       inputmode="numeric" class="nrx"> 
                         
                 <button class="remove-btn" onclick="removeFromCart(${item.id})"><i class="fa-solidfa-trash"></i>X</button>
             </div>
