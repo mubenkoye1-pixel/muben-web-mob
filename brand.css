@@ -90,250 +90,354 @@ body{
 }
 
 
-/* ------------------------------------------- */
-/* --- بەشەکانی تر (بێ گۆڕانکاری) --- */
-/* ------------------------------------------- */
-.container{max-width:1200px;margin:28px auto;padding:0 18px}
-.page-card{display:flex;gap:26px}
-
-/* --- Side panels (Lists) --- */
-.side-panel{width:320px}
-.panel{
-    background:var(--surface);
-    border-radius:14px;
-    padding:18px;
-    box-shadow:0 8px 30px rgba(0,0,0,0.3);
+.content-div {
+    display: flex;
+    height: 93.5vh;
+    width: 100%;}
+.div-model{
+    width: 25%;
+    background-color: var(--border-dark);
 }
-.panel h3{
-    margin:0 0 12px;
-    color:var(--accent-1);
-    font-size:1.05rem
+.div-catagore{
+    width: 25%;
+    background-color: var(--input-bg);
 }
-
-.list{list-style:none;margin:0;padding:0;max-height:420px;overflow:auto}
-.list li{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px;
-    border-radius:10px;
-    margin-bottom:8px;
-    background:var(--hover-bg); 
-    box-shadow:0 2px 8px rgba(0,0,0,0.15);
+.div-quality{
+    width: 25%;
+    background-color: var(--border-dark);
 }
-.list li:hover {
-    background: #333333; 
+.div-brand{
+    width: 25%;
+    background-color: var(--input-bg);
 }
-
-.list li .meta{display:flex;align-items:center;gap:10px}
-.color-dot{
-    width:18px;
-    height:18px;
-    border-radius:50%;
-    border:2px solid var(--card-dark); 
-    box-shadow:0 1px 4px rgba(0,0,0,0.2)
+.head-model{
+    height: 8%;
+    border-bottom: 1px solid var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.small-muted{font-size:0.92rem;color:var(--muted)}
-
-.btns{display:flex;gap:8px}
-.action{border:none;padding:8px 10px;border-radius:8px;cursor:pointer;font-weight:700}
-.action.edit{
-    background:linear-gradient(90deg,#ffc107,#ffaa00);
-    color:#111;
+.head-catagore{
+    height: 8%;
+    border-bottom: 1px solid var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.action.del{
-    background:linear-gradient(90deg,#ff8a8f,var(--accent-2)); 
-    color:#fff
+.head-quality{
+    height: 8%;
+    border-bottom: 1px solid var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.head-brand{
+    height: 8%;
+    border-bottom: 1px solid var(--text-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-/* --- Main area (Form Card) --- */
-.main{flex:1}
-.card{
-    background:var(--surface);
-    border-radius:14px;
-    padding:22px;
-    box-shadow:0 10px 36px rgba(0,0,0,0.4); 
+.add-quality , .add-brand , .add-model , .add-catagore{
+    margin: 10px;
+    padding: 10px;
+    background-color: var(--hover-bg);
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    border-radius: 5px;
 }
-.card h2{margin:0 0 10px;color:var(--accent-1)}
-
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-group{display:flex;flex-direction:column}
-.form-group label{
-    font-weight:700;
-    margin-bottom:6px;
-    color:var(--muted);
-}
-.input,textarea,select{
-    padding:12px;
-    border-radius:10px;
-    border:1.5px solid var(--border-dark);
-    background:var(--input-bg);
-    color:var(--text-light);
-    font-size:1rem;
-}
-textarea{min-height:90px;resize:vertical}
-
-.controls{display:flex;gap:12px;align-items:center}
-.primary{
-    background:linear-gradient(90deg,var(--accent-1),#4477aa); 
-    border:none;
-    padding:10px 16px;
-    border-radius:10px;
-    color:#fff;
-    font-weight:800;
-    cursor:pointer
-}
-.secondary{
-    background:#444444; 
-    border:1px solid var(--border-dark);
-    padding:10px 14px;
-    border-radius:10px;
-    cursor:pointer;
-    color:var(--text-light);
+.search-model , .search-catagore , .search-quality , .search-brand{
+    width: 90%;
+    margin: 10px;
+    padding: 8px;
+    background-color: var(--bg);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    border-radius: 5px;
 }
 
-/* Search Bar */
-.search-row{display:flex;gap:12px;align-items:center;margin-bottom:18px}
-.search-row input{
-    flex:1;
-    padding:12px;
-    border-radius:12px;
-    border:2px solid var(--accent-1);
-    background:var(--input-bg);
-    color:var(--text-light);
+/* --- ستایلی لیستە نوێیەکان --- */
+.body-model, .body-catagore, .body-quality, .body-brand {
+    height: 92%; /* 100% - head-div height */
+    overflow-y: auto; /* ڕێگەدان بە سکڕۆڵکردن */
+    padding: 10px;
 }
 
-.kv{display:flex;gap:8px;align-items:center}
-.kv b{color:var(--text-light)}
-
-/* Responsive */
-@media (max-width: 980px){
-    .page-card{flex-direction:column}
-    .side-panel{width:100%}
-    .form-row{grid-template-columns:1fr}
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
-/* Tiny UI helpers */
-.empty{
-    padding:18px;
-    background:var(--hover-bg);
-    border-radius:10px;
-    color:var(--muted);
-    text-align:center
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    background-color: var(--surface); /* ڕەنگی بنەڕەتی بۆ ئایتمەکان */
+    border-radius: 4px;
+    border-right: 3px solid var(--accent-1); /* ڕەنگێکی جیاکەرەوە */
+    transition: background-color 0.2s ease;
 }
 
-/* accessibility focus outlines */
-.input:focus,textarea:focus,select:focus,button:focus{
-    outline:3px solid rgba(106,155,216,0.3); 
-    outline-offset:2px
+.list-item:hover {
+    background-color: var(--hover-bg);
 }
 
+.list-item .meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
+.list-item .meta strong {
+    font-size: 16px;
+}
 
+.list-item .meta .small-muted {
+    font-size: 12px;
+    color: var(--muted);
+    direction: rtl; /* دڵنیابوون لەوەی بە RTL کار دەکات */
+}
 
+.color-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
 
+.list-item .btns {
+    display: flex;
+    gap: 5px;
+}
 
+.list-item .btns .action {
+    background: none;
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    padding: 5px 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
 
-/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
-@media (max-width: 768px) {
-    
-    /* --- هەدەر (Header) - بۆ یەکگرتن لەگەڵ کۆدی پێشوو --- */
-    .head-div {
-        height: 50px; 
-        padding: 0 10px;
-    }
+.list-item .btns .action:hover {
+    background-color: var(--input-bg);
+}
 
-    .logo-title {
-        font-size: 1.2em; 
-    }
+.list-item .btns .del:hover {
+    color: var(--accent-2); /* ڕەنگی سوور بۆ سڕینەوە */
+}
 
-    .nav-links {
-        display: none; /* شاردنەوەی لینکەکانی گەشتیاری */
-    }
-    
-    /* --- گونجاندنی سەرەکی لاپەڕەکە (Customer Layout) --- */
-    .customer-layout {
-        flex-direction: column; /* گۆڕینی لایەنی بۆ ستوونی (یەک لەسەر یەک) */
-        padding: 15px 10px; /* کەمکردنەوەی پادینگ */
-        gap: 15px; /* کەمکردنەوەی بۆشایی نێوان بەشەکان */
-        min-height: auto;
-    }
+/* ستایل بۆ گەڕان و زیادکردن */
+.add-quality , .add-brand , .add-model , .add-catagore {
+    background-color: var(--accent-1);
+    color: var(--text-light);
+    font-weight: bold;
+}
+.add-quality:hover , .add-brand:hover , .add-model:hover , .add-catagore:hover {
+    opacity: 0.8;
+}
 
-    /* --- بەشی فۆرمی کڕیار (Customer Form Area) --- */
-    .customer-form-area {
-        width: 100%; /* تەواوی پانی دەگرێتەوە */
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-        /* فۆرمەکە دەخرێتە سەرەوەی لاپەڕە */
-    }
+/* --- ستایلی تایبەت بۆ Inputی نوێی زیادکردن --- */
 
-    .customer-form-area h1 {
-        font-size: 1.3em;
-        padding-bottom: 8px;
-        margin-bottom: 15px;
-    }
-    
-    /* ڕێکخستنی inputەکان */
-    .customer-form-area input[type="text"] {
-        padding: 10px;
-        border-radius: 6px;
-    }
+/* دڵنیابوون لەوەی body-divەکان شێوازی لیست دەپارێزن */
+.body-model, .body-catagore, .body-quality, .body-brand {
+    height: 92%;
+    overflow-y: auto;
+    padding: 10px;
+    /* زیادکردنی flex بۆ ئەوەی ڕیزی نوێ بچێتە سەرەوەی لیستەکە */
+    display: flex;
+    flex-direction: column; 
+}
 
-    .customer-form-area .submit-btn {
-        width: 100%; /* دوگمەی تۆمارکردن تەواوی پانی دەگرێتەوە */
-        padding: 10px;
-        font-size: 1em;
-        margin-top: 10px;
-        border-radius: 6px;
-    }
+/* ستایلی گشتی لیستی ئایتمەکان */
+.item-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    /* دڵنیابوون لەوەی لیستەکە ڕاستەوخۆ دەست پێ دەکات دوای فۆرمی نوێ */
+    display: flex;
+    flex-direction: column;
+}
 
-    /* --- بەشی خشتەی کڕیارەکان (Customer List Area) --- */
-    .customer-list-area {
-        width: 100%; /* تەواوی پانی دەگرێتەوە */
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    }
-    
-    .customer-list-area h1 {
-        font-size: 1.3em;
-        padding-bottom: 8px;
-        margin-bottom: 15px;
-    }
+/* ستایلی فۆرمی زیادکردنی نوێ (کە بەشێکی list-item ە) */
+.list-item.new-item-form {
+    background-color: var(--surface); /* ڕەنگێکی جیاواز بۆ فۆرمی نوێ */
+    border-right: 3px solid var(--accent-2); /* هێڵی سوور بۆ جیاکردنەوە */
+    margin-bottom: 15px; /* بۆ دوورکەوتنەوە لە لیستەکە */
+    order: -1; /* دڵنیابوون لەوەی دەچێتە سەرەوەی لیستی ul */
+}
 
-    /* --- گونجاندنی خشتە بۆ سکڕۆڵی ئاسۆیی (Horizontal Scroll Table) --- */
-    .customer-table-wrapper {
-        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی */
-        width: 100%;
-    }
+.new-item-input {
+    flex-grow: 1; /* پڕکردنەوەی بۆشاییەکە */
+    padding: 8px 12px;
+    margin: 0 10px;
+    background-color: var(--bg);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    border-radius: 4px;
+    font-size: 16px;
+    /* ستایلی تایبەت بۆ RTL */
+    text-align: right;
+}
 
-    .customer-table {
-        min-width: 600px; /* دڵنیابوونەوە لە پانی خشتەکە بۆ دەرکەوتنی سکڕۆڵ */
-        border-collapse: separate; /* گۆڕینی بۆ separate بۆ گوشە خڕەکان (ئەگەر هەبێت) */
-        border-spacing: 0;
-        margin-top: 10px;
-    }
+/* ستایلی دوگمەکانی ناو فۆرمی نوێ */
+.new-item-form .action {
+    background: none;
+    border: none;
+    font-size: 20px;
+    padding: 0 5px;
+}
 
-    .customer-table th, .customer-table td {
-        padding: 10px;
-        font-size: 0.85em;
-        /* لابردنی سنورە ڕاست و چەپەکان بۆ ڕێکی زیاتر لەسەر مۆبایل */
-        border-left: none; 
-        border-right: none;
-    }
-    
-    /* دڵنیابوونەوە لە دەرکەوتنی دوگمەکە لەسەر مۆبایل */
-    .customer-table .delete-btn {
-        padding: 6px 10px;
-        font-size: 0.8em;
-        border-radius: 6px;
-    }
-    
-    /* شاردنەوەی هەندێک ستوون لەسەر مۆبایل (ئەگەر پێویست بێت)
-       بۆ نموونە، ئەگەر ستوونی 'تێبینی' زۆر گەورە بێت:
-    .customer-table .note-col {
-        display: none;
-    } 
-    */
+.new-item-form .save-new {
+    color: #4CAF50; /* سەوز بۆ پاشکەوتکردن */
+}
+
+.new-item-form .cancel-new {
+    color: var(--accent-2); /* سوور بۆ هەڵوەشاندنەوە */
+}
+
+/* ************************************************** */
+/* ئەو ستایلانەی پێشتر بۆ لیستەکان دانراون، لێرە دووبارەیان دەکەینەوە بۆ دڵنیایی: */
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    background-color: var(--surface);
+    border-radius: 4px;
+    border-right: 3px solid var(--accent-1); 
+    transition: background-color 0.2s ease;
+}
+
+.list-item:hover {
+    background-color: var(--hover-bg);
+}
+
+.list-item .meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- ستایلی گشتی مۆدال (Edit Modal) --- */
+.modal {
+    display: none; /* شاردنەوە بە شێوەی بنەڕەتی */
+    position: fixed;
+    z-index: 10; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4); /* تەڵخی ڕەش */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--surface);
+    margin: 5% auto; /* بۆ ناوەڕاستی پەڕە */
+    padding: 25px;
+    border: 1px solid var(--border-light);
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    direction: rtl; /* بۆ کوردی */
+}
+
+.close-modal {
+    color: var(--muted);
+    float: left; /* دەچێتە لای چەپ (چونکە rtl ە) */
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 20px;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: var(--accent-2);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#editModalTitle {
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+/* ستایلی خانەکانی فۆرم */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+.edit-input {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-dark);
+    border-radius: 4px;
+    background-color: var(--bg);
+    color: var(--text-light);
+    font-size: 16px;
+    direction: rtl;
+}
+
+.edit-input:focus {
+    border-color: var(--accent-1);
+    outline: none;
+}
+
+/* ستایلی دوگمەکانی ناو فۆرم */
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start; /* بۆ کوردی لە لای ڕاستەوە دەست پێ دەکات */
+    gap: 10px;
+}
+
+.btn-save, .btn-cancel {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
+
+.btn-save {
+    background-color: var(--accent-1); 
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #004c8c;
+}
+
+.btn-cancel {
+    background-color: var(--muted-light); 
+    color: var(--text-dark);
+}
+
+.btn-cancel:hover {
+    background-color: #d1d1d1;
 }

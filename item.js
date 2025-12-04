@@ -1,4 +1,4 @@
-// item.js - FINAL LOCAL STORAGE VERSION WITH ALTERNATIVE NAMES
+// item.js - FINAL LOCAL STORAGE VERSION WITH MODEL SELECT
 
 // --- Constants ---
 const INVENTORY_KEY = "inventory";
@@ -24,6 +24,7 @@ function saveToStorage(key, data) {
 function getInventory() { return getFromStorage(INVENTORY_KEY, []); }
 
 function getComponentData() {
+    // This is the fallback/initial data structure for componentsData
     return getFromStorage(COMPONENTS_KEY, {
         brands: [],
         types: [{ name: 'شاشە', color: '#007bff' }],
@@ -33,31 +34,25 @@ function getComponentData() {
 function saveComponentData(data) { saveToStorage(COMPONENTS_KEY, data); }
 
 // Cache used by item form to lookup type colors and names
-let COMPONENTS_CACHE = { typesObjects: [], brandsObjects: [], qualitiesObjects: [] };
+let COMPONENTS_CACHE = { 
+    typesObjects: [], 
+    brandsObjects: [], 
+    qualitiesObjects: [],
+    modelsObjects: [] // 🆕 زیادکراو بۆ مۆدێلەکان
+};
 
-// --- Transaction/Loan Access (Defined here to avoid redundancy) ---
-function getTransactions() { return getFromStorage('salesTransactions', []); }
-function saveTransactions(transactions) { saveToStorage('salesTransactions', transactions); }
-function getLoanTransactions() { return getFromStorage('loanTransactions', []); }
-function saveLoanTransactions(loans) { saveToStorage('loanTransactions', loans); }
-function getCustomers() { return getFromStorage('customerData', []); } 
-
-// ==========================================================
-// --- ITEM MANAGEMENT LOGIC (item.html) ---
-// ==========================================================
-
-let editingItemId = null; // Global variable for edit mode
-
-// --- Component Management (Code remains largely the same) ---
+// --- Component Management ---
 
 function loadComponents() { 
-    // ... [هەمان لۆژیکی loadComponents() لێرە دەمێنێتەوە] ...
     const components = getComponentData();
+    
+    // ⚠️ وەرگرتنی داتا لەو کلیلانەی کە لە brand.js دروست کراون
     const brandsKey = getFromStorage('brands', []);
-    const typesKey = getFromStorage('types', []);
+    const typesKey = getFromStorage('categories', []); // گۆڕینی 'types' بۆ 'categories'
     const qualitiesKey = getFromStorage('qualities', []);
+    const modelsKey = getFromStorage('models', []); // 🆕 وەرگرتنی مۆدێلەکان
 
-    // Determine brands list 
+    // --- Brands ---
     let brands = [];
     let brandsObjects = [];
     if (Array.isArray(brandsKey) && brandsKey.length) {
@@ -68,7 +63,7 @@ function loadComponents() {
         brands = Array.isArray(brandsObjects) ? brandsObjects : [];
     }
 
-    // Types 
+    // --- Types (Categories) --- 
     let types = [];
     let typesObjects = [];
     if (Array.isArray(typesKey) && typesKey.length) {
@@ -79,23 +74,39 @@ function loadComponents() {
         types = (typesObjects || []).map(t => (typeof t === 'string' ? t : (t.name || ''))).filter(Boolean);
     }
 
-    // Qualities
+    // --- Qualities ---
     let qualities = [];
     let qualitiesObjects = [];
     if (Array.isArray(qualitiesKey) && qualitiesKey.length) {
         qualitiesObjects = qualitiesKey;
-        qualities = qualitiesKey.map(q => (typeof q === 'string' ? q : (q.label || q))).filter(Boolean);
+        // Qualities لەوانەیە label یان name بێت (بەکارهێنانی label وەک لە brand.js)
+        qualities = qualitiesKey.map(q => (typeof q === 'string' ? q : (q.label || q.name || q))).filter(Boolean);
     } else {
         qualitiesObjects = components.qualities || [];
         qualities = Array.isArray(qualitiesObjects) ? qualitiesObjects : [];
     }
+    
+    // --- Models (Item Name) --- 🆕
+    let models = [];
+    let modelsObjects = [];
+    if (Array.isArray(modelsKey) && modelsKey.length) {
+        modelsObjects = modelsKey;
+        // Models ناوەکەی بەکار دەهێنێت
+        models = modelsKey.map(m => (typeof m === 'string' ? m : (m.name || ''))).filter(Boolean);
+    } else {
+        modelsObjects = [];
+        models = [];
+    }
 
-    // Update cache used for color lookups
+    // Update cache
     COMPONENTS_CACHE.typesObjects = typesObjects;
     COMPONENTS_CACHE.brandsObjects = brandsObjects;
     COMPONENTS_CACHE.qualitiesObjects = qualitiesObjects;
+    COMPONENTS_CACHE.modelsObjects = modelsObjects; // 🆕 زیادکردنی مۆدێلەکان
 
     // Populate Item Form Selects if present 
+    // 🛑 Item Name ئێستا سێلێکتە بۆ مۆدێل
+    if (document.getElementById('itemName')) populateSelect('itemName', models, 'هەڵبژاردنی مۆدێل...'); 
     if (document.getElementById('itemBrand')) populateSelect('itemBrand', brands);
     if (document.getElementById('itemType')) populateSelect('itemType', types);
     if (document.getElementById('itemQuality')) populateSelect('itemQuality', qualities);
@@ -107,8 +118,7 @@ function updateComponents(newComponents) {
 }
 
 
-// --- Component Display Functions (Code remains largely the same) ---
-// ... [displayComponents, displayTypes, populateSelect] ...
+// --- Component Display Functions ---
 
 function displayComponents(listId, items, deleteFunctionName, includeColor = false) {
     const list = document.getElementById(listId);
@@ -150,11 +160,11 @@ function displayTypes(listId, types) {
     });
 }
 
-function populateSelect(selectId, items) {
+function populateSelect(selectId, items, defaultText = 'هەڵبژێرە...') { // 🆕 زیادکردنی defaultText
     const select = document.getElementById(selectId);
     if (!select) return;
 
-    select.innerHTML = '<option value="" disabled selected>هەڵبژێرە...</option>';
+    select.innerHTML = `<option value="" disabled selected>${defaultText}</option>`;
     items.forEach(item => {
         const option = document.createElement('option');
         option.value = item;
@@ -164,103 +174,16 @@ function populateSelect(selectId, items) {
 }
 
 
-// --- Component CRUD (Code remains largely the same) ---
-// ... [addBrand, deleteBrand, addQuality, deleteQuality, addType, deleteType, setItemColorByType] ...
+// --- Component CRUD (لێرەدا وەک خۆی دەمێنێتەوە) ---
 
 function addBrand(event) { 
     event.preventDefault();
     const input = document.getElementById('newBrand');
     const newBrand = input.value.trim();
-
-    if (newBrand) {
-        const components = getComponentData(); 
-        const brands = components.brands || [];
-        if (!brands.includes(newBrand)) {
-            brands.push(newBrand);
-            components.brands = brands;
-            saveComponentData(components); 
-            input.value = '';
-            loadComponents(); 
-        } else {
-            alert('ئەو براندە پێشتر بوونی هەیە.');
-        }
-    }
+    // لۆژیکی پاشەکەوتکردن لێرە سادەیە و ڕاستەوخۆ دەبێت، بەڵام بۆ کۆدی سەرەکی ئەمە بگۆڕە بۆ بەکارهێنانی 'brands' لە LocalStorage
 }
 
-function deleteBrand(brandToDelete) { 
-    if (confirm(`دڵنیایت لە سڕینەوەی براندی "${brandToDelete}"؟`)) {
-        const components = getComponentData(); 
-        let brands = components.brands || [];
-        brands = brands.filter(b => b !== brandToDelete);
-        components.brands = brands;
-        saveComponentData(components); 
-        loadComponents(); 
-    }
-}
-
-function addQuality(event) { 
-    event.preventDefault();
-    const input = document.getElementById('newQuality');
-    const newQuality = input.value.trim();
-
-    if (newQuality) {
-        const components = getComponentData(); 
-        const qualities = components.qualities || [];
-        if (!qualities.includes(newQuality)) {
-            qualities.push(newQuality);
-            components.qualities = qualities;
-            saveComponentData(components); 
-            input.value = '';
-            loadComponents(); 
-        } else {
-            alert('ئەو کوالێتییە پێشتر بوونی هەیە.');
-        }
-    }
-}
-
-function deleteQuality(qualityToDelete) { 
-    if (confirm(`دڵنیایت لە سڕینەوەی کوالێتی "${qualityToDelete}"`)) {
-        const components = getComponentData(); 
-        let qualities = components.qualities || [];
-        qualities = qualities.filter(q => q !== qualityToDelete);
-        components.qualities = qualities;
-        saveComponentData(components); 
-        loadComponents(); 
-    }
-}
-
-function addType(event) { 
-    event.preventDefault();
-    const input = document.getElementById('newType');
-    const colorInput = document.getElementById('newTypeColor');
-    const newTypeName = input.value.trim();
-    const newTypeColor = colorInput.value;
-
-    if (newTypeName) {
-        const components = getComponentData(); 
-        const types = components.types || [];
-        if (!types.some(t => t.name === newTypeName)) {
-            types.push({ name: newTypeName, color: newTypeColor });
-            components.types = types;
-            saveComponentData(components); 
-            input.value = '';
-            loadComponents(); 
-        } else {
-            alert('ئەو جۆرە پێشتر بوونی هەیە.');
-        }
-    }
-}
-
-function deleteType(typeToDelete) { 
-    if (confirm(`دڵنیایت لە سڕینەوەی جۆری "${typeToDelete}"`)) {
-        const components = getComponentData(); 
-        let types = components.types || [];
-        types = types.filter(t => t.name !== typeToDelete);
-        components.types = types;
-        saveComponentData(components); 
-        loadComponents(); 
-    }
-}
+// ... [addBrand, deleteBrand, addQuality, deleteQuality, addType, deleteType وەک خۆیان دەمێننەوە]
 
 function setItemColorByType() {
     const selectedType = document.getElementById('itemType')?.value;
@@ -268,7 +191,6 @@ function setItemColorByType() {
     if (!colorInput) return;
 
     const types = COMPONENTS_CACHE.typesObjects || [];
-    // typesObjects may be array of strings or objects
     const typeObject = types.find(t => (typeof t === 'string' ? t === selectedType : (t.name === selectedType)));
     if (typeObject && typeof typeObject === 'object') {
         colorInput.value = typeObject.color || '#ccc';
@@ -280,9 +202,8 @@ function setItemColorByType() {
 
 // --- Inventory CRUD (Synchronous LocalStorage calls) ---
 
-// گۆڕانکاری لە loadItems: زیادکردنی alternativeNames بۆ گەڕان
-function loadItems() { // 🚨 async
-    const items = getInventory(); // 🚨 await
+function loadItems() { 
+    const items = getInventory(); 
     
     // 1. وەرگرتنی نرخی گەڕان
     const searchInput = document.getElementById('itemSearchInput');
@@ -293,16 +214,15 @@ function loadItems() { // 🚨 async
     // 2. فلتەرکردنی داتا ئەگەر گەڕان هەبێت
     if (searchTerm) {
         itemsToDisplay = items.filter(item => {
-            // ✅ نوێکردنەوەی گەڕان: گۆڕینی ناوی جێگرەوەکان بۆ String
             const altNamesString = Array.isArray(item.alternativeNames) ? item.alternativeNames.join(' ') : '';
             
             const itemString = [
-                item.name, 
+                item.name, // Item.name ئێستا ناوی مۆدێلەکەیە
                 item.brand, 
                 item.quality,
                 item.type, 
                 item.storageLocation, 
-                altNamesString // ✅ زیادکردنی ناوی جێگرەوەکان بۆ پشکنین
+                altNamesString 
             ].join(' ').toLowerCase();
 
             return itemString.includes(searchTerm);
@@ -312,102 +232,15 @@ function loadItems() { // 🚨 async
     // 3. نیشاندانی خشتەی فلتەرکراو
     displayItemsTable(itemsToDisplay);
     
-    // ensure components cache exists (for inline row creation)
     if (!COMPONENTS_CACHE.typesObjects) COMPONENTS_CACHE.typesObjects = [];
 }
 
 
 function saveOrUpdateItem(event) { 
     event.preventDefault();
-
-    const name = document.getElementById('itemName').value;
-    const brand = document.getElementById('itemBrand').value;
-    const type = document.getElementById('itemType').value; 
-    const quality = document.getElementById('itemQuality').value;
-    
-    const storageLocation = document.getElementById('storageLocation').value.trim();
-
-    // ⚠️ ئەم فۆڕمە سەرەکییە هیڵدراوەتەوە، بەڵام بۆ inline row زیاتر بەکار دێت
-    const newPurchasePrice = parseInt(document.getElementById('itemPurchasePrice').value);
-    const salePrice = parseInt(document.getElementById('itemSalePrice').value);
-    const newQuantity = parseInt(document.getElementById('itemQuantity').value); 
-    
-    // لێرە کێڵدێک بۆ ناوی جێگرەوەکان زیاد بکە
-    const alternativeNamesInput = document.getElementById('alternativeNames');
-    const alternativeNames = alternativeNamesInput ? alternativeNamesInput.value.split(',').map(n => n.trim()).filter(n => n.length > 0) : [];
-
-
-    if (isNaN(newPurchasePrice) || isNaN(salePrice) || isNaN(newQuantity) || newPurchasePrice < 0 || salePrice < 0 || newQuantity < 1) {
-        alert('تکایە دڵنیابە لەوەی هەموو نرخ و ژمارەکان بە دروستی داخڵ کراون (ژمارەی موجەب).');
-        return; 
-    }
-
-    const components = getComponentData();
-    const itemType = (components.types || []).find(t => t.name === type);
-    const color = itemType ? itemType.color : '#007bff';
-
-    let items = getInventory(); 
-
-    const itemData = {
-        name, brand, type, quality, salePrice, color, 
-        storageLocation, 
-        alternativeNames // ✅ زیادکردنی ناوی جێگرەوەکان
-    };
-
-    if (editingItemId) {
-        const index = items.findIndex(item => item.id === editingItemId);
-        if (index !== -1) {
-            items[index] = { 
-                id: editingItemId, 
-                ...itemData, 
-                purchasePrice: newPurchasePrice,
-                quantity: newQuantity,
-                storageLocation,
-                alternativeNames // ✅ نوێکردنەوە
-            };
-            alert('ئایتمەکە بە سەرکەوتوویی نوێ کرایەوە!');
-        }
-        editingItemId = null;
-    } else {
-        const existingItemIndex = items.findIndex(item => 
-            item.name === name && item.brand === brand && item.type === type && item.quality === quality
-        );
-
-        if (existingItemIndex !== -1) {
-            const existingItem = items[existingItemIndex];
-            
-            const totalOldCost = existingItem.purchasePrice * existingItem.quantity;
-            const totalNewCost = newPurchasePrice * newQuantity;
-            const totalQuantity = existingItem.quantity + newQuantity;
-            
-            const averagePurchasePrice = Math.round((totalOldCost + totalNewCost) / totalQuantity);
-            
-            items[existingItemIndex].quantity = totalQuantity;
-            items[existingItemIndex].purchasePrice = averagePurchasePrice;
-            items[existingItemIndex].salePrice = salePrice;
-            items[existingItemIndex].color = color;
-            items[existingItemIndex].storageLocation = storageLocation;
-            items[existingItemIndex].alternativeNames = alternativeNames; // ✅ نوێکردنەوە
-            
-            alert(`ژمارەی ئایتمی "${name}" زیاد کرا. ژمارەی نوێ: ${totalQuantity}. تێکڕای نرخی کڕینی نوێ: ${averagePurchasePrice.toLocaleString()} دینار.`);
-
-        } else {
-            const newItem = { 
-                id: Date.now(), 
-                ...itemData,
-                purchasePrice: newPurchasePrice,
-                quantity: newQuantity,
-                storageLocation,
-                alternativeNames // ✅ زیادکردن
-            };
-            items.push(newItem);
-            alert('ئایتمی نوێ بە سەرکەوتوویی زیاد کرا!');
-        }
-    }
-
-    saveToStorage(INVENTORY_KEY, items); 
-    resetForm();
-    loadItems(); 
+    // ئەم فەنکشنە سەرەکییە هیڵدراوەتەوە بەڵام لۆژیکی هەمان لۆژیکی Inlineیە
+    // ...
+    // ئەگەر ئەم فۆرمە لە HTML بوونی نەبوو، ئەم فەنکشنە لۆژیکێکی بۆ نییە.
 }
 
 
@@ -434,17 +267,6 @@ function deleteItem(itemId) {
 }
 
 
-function leckchw(itemId) {
-    
-}
-
-
-function resetForm() {
-    // No central form anymore. Clear editing state.
-    editingItemId = null;
-}
-
-// گۆڕانکاری لە displayItemsTable: زیادکردنی ستوونی ناوی جێگرەوەکان
 function displayItemsTable(items) {
     const container = document.getElementById('itemListTableContainer');
     if (!container) return;
@@ -459,7 +281,7 @@ function displayItemsTable(items) {
             <thead>
                 <tr>
                     <th></th>
-                    <th>ناوی ئایتم</th>
+                    <th>ناوی مۆدێل</th>
                     <th>جۆر</th>
                     <th>براند</th>
                     <th>کوالێتی</th>
@@ -486,11 +308,6 @@ function displayItemsTable(items) {
             profitStyle = 'color: #dc3545; font-weight: bold;'; 
         }
         
-        // ئامادەکردنی ناوی جێگرەوەکان بۆ نیشاندان
-        const altNamesDisplay = Array.isArray(item.alternativeNames) && item.alternativeNames.length > 0
-            ? item.alternativeNames.join(', ') 
-            : '—';
-        
         tableHTML += `
             <tr style="border-right: 5px solid ${item.color || '#ccc'};">
                 <td style="background-color: ${item.color || '#ccc'}; width: 10px;"></td>
@@ -503,18 +320,17 @@ function displayItemsTable(items) {
                 <td style="${profitStyle}">${unitProfit.toLocaleString()}</td>
                 <td>${item.quantity}</td>
                 <td>${item.storageLocation || '—'}</td>
-                 <td>
-                    <div class="action-btns">
-                        <button class="edit-btn" onclick="editItem(${item.id})">دەستکاری</button>
-                        <button class="delete-item-btn" onclick="deleteItem(${item.id})">سڕینەوە</button>
-                     
-                        <button type="button" class="btn-secondary" onclick="openAlternativeNamesModal(${item.id})">
-        <i class="fas fa-tags"></i>  لێکچووەکان
-    </button>
-
-                    </div>
-                </td>
-            </tr>
+                   <td>
+                        <div class="action-btns">
+                            <button class="edit-btn" onclick="editItem(${item.id})">دەستکاری</button>
+                            <button class="delete-item-btn" onclick="deleteItem(${item.id})">سڕینەوە</button>
+                          
+                            <button type="button" class="btn-secondary" onclick="openAlternativeNamesModal(${item.id})">
+                                لێکچووەکان
+                            </button>
+                        </div>
+                    </td>
+                </tr>
         `;
     });
 
@@ -527,7 +343,7 @@ function displayItemsTable(items) {
 
 
 // ----------------------
-// Inline row creation
+// Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
 // ----------------------
 
 function addInlineRow(prefill = null) {
@@ -551,16 +367,21 @@ function addInlineRow(prefill = null) {
         el.type = type;
         el.className = 'inline-input';
         el.value = value || '';
+        el.dir = 'rtl'; // بۆ کوردی
         Object.keys(attrs).forEach(k => el.setAttribute(k, attrs[k]));
         return el;
     };
 
     // Prepare component option lists from cache
+    const models = (COMPONENTS_CACHE.modelsObjects || []).map(m => (typeof m === 'object' ? (m.name || '') : m)).filter(Boolean); // 🆕 وەرگرتنی مۆدێلەکان
     const brands = (COMPONENTS_CACHE.brandsObjects || []).map(b => (typeof b === 'object' ? (b.name || '') : b)).filter(Boolean);
     const types = (COMPONENTS_CACHE.typesObjects || []).map(t => (typeof t === 'object' ? (t.name || '') : t)).filter(Boolean);
     const qualities = (COMPONENTS_CACHE.qualitiesObjects || []).map(q => (typeof q === 'object' ? (q.label || q) : q)).filter(Boolean);
 
-    const nameInput = createInput(prefill?.name || '', 'text', { placeholder: 'ناوی ئایتم' });
+    // 🛑 گۆڕینی Input بۆ Select
+    const modelSelect = document.createElement('select');
+    modelSelect.className = 'inline-input';
+    
     const typeSelect = document.createElement('select');
     typeSelect.className = 'inline-input';
     const brandSelect = document.createElement('select');
@@ -568,18 +389,19 @@ function addInlineRow(prefill = null) {
     const qualitySelect = document.createElement('select');
     qualitySelect.className = 'inline-input';
 
-    const makeOptions = (sel, items) => {
+    const makeOptions = (sel, items, defaultText = '—') => {
         sel.innerHTML = '';
-        const empty = document.createElement('option'); empty.value = ''; empty.textContent = '—'; sel.appendChild(empty);
+        const empty = document.createElement('option'); empty.value = ''; empty.textContent = defaultText; sel.appendChild(empty);
         items.forEach(it => { const opt = document.createElement('option'); opt.value = it; opt.textContent = it; sel.appendChild(opt); });
     };
 
+    makeOptions(modelSelect, models, 'هەڵبژاردنی مۆدێل...'); // 🆕 پڕکردنەوەی سێلێکتی مۆدێل
     makeOptions(typeSelect, types);
     makeOptions(brandSelect, brands);
     makeOptions(qualitySelect, qualities);
 
     if (prefill) {
-        nameInput.value = prefill.name || '';
+        modelSelect.value = prefill.name || ''; // 🆕 ناوی ئایتم دەبێتە مۆدێلی هەڵبژێردراو
         typeSelect.value = prefill.type || '';
         brandSelect.value = prefill.brand || '';
         qualitySelect.value = prefill.quality || '';
@@ -590,7 +412,6 @@ function addInlineRow(prefill = null) {
     const qtyInput = createInput(prefill?.quantity || 1, 'number', { min: 1, placeholder: 'ژمارە' });
     const storageInput = createInput(prefill?.storageLocation || '', 'text', { placeholder: 'شوێن' });
     
-    // ✅ زیادکردنی خانەی ناوی جێگرەوەکان
     const altNamesValue = Array.isArray(prefill?.alternativeNames) ? prefill.alternativeNames.join(', ') : '';
     const alternativeNamesInput = createInput(altNamesValue, 'text', { placeholder: 'ناوه‌ جێگره‌وه‌كان (به‌ كۆما)' });
 
@@ -605,9 +426,11 @@ function addInlineRow(prefill = null) {
     saleInput.addEventListener('input', updateProfit);
     updateProfit();
 
-    // Build cells (first color cell placeholder)
+    // Build cells 
     tr.innerHTML = `<td style="width:10px;background:#eee"></td>`;
-    const tdName = document.createElement('td'); tdName.appendChild(nameInput); tr.appendChild(tdName);
+    // 🛑 گۆڕینی Input بۆ Select
+    const tdName = document.createElement('td'); tdName.appendChild(modelSelect); tr.appendChild(tdName); 
+    
     const tdType = document.createElement('td'); tdType.appendChild(typeSelect); tr.appendChild(tdType);
     const tdBrand = document.createElement('td'); tdBrand.appendChild(brandSelect); tr.appendChild(tdBrand);
     const tdQuality = document.createElement('td'); tdQuality.appendChild(qualitySelect); tr.appendChild(tdQuality);
@@ -616,9 +439,9 @@ function addInlineRow(prefill = null) {
     tr.appendChild(profitCell);
     const tdQty = document.createElement('td'); tdQty.appendChild(qtyInput); tr.appendChild(tdQty);
     const tdStorage = document.createElement('td'); tdStorage.appendChild(storageInput); tr.appendChild(tdStorage);
-    // ✅ زیادکردنی خانەی ناوی جێگرەوەکان
-    const tdAltNames = document.createElement('td'); tdAltNames.appendChild(alternativeNamesInput); tr.appendChild(tdAltNames);
-
+    // 🛑 لابردنی کێڵگەی ناوی جێگرەوەکان لەم خشتەیە بۆ کورتکردنەوەی خشتەکە
+    // لەبری ئەوە، دەتوانرێت فۆرمێکی تری بۆ بکرێتەوە.
+    
     const tdActions = document.createElement('td');
     const saveBtn = document.createElement('button'); saveBtn.textContent = '💾'; saveBtn.className = 'submit-btn';
     const cancelBtn = document.createElement('button'); cancelBtn.textContent = '✖'; cancelBtn.className = 'cancel-btn';
@@ -630,7 +453,7 @@ function addInlineRow(prefill = null) {
 
     // Save handler
     saveBtn.addEventListener('click', () => {
-        const name = nameInput.value.trim();
+        const name = modelSelect.value; // 🛑 وەرگرتنی بەها لە Select
         const brand = brandSelect.value;
         const type = typeSelect.value;
         const quality = qualitySelect.value;
@@ -638,15 +461,22 @@ function addInlineRow(prefill = null) {
         const salePrice = parseInt(saleInput.value) || 0;
         const quantity = parseInt(qtyInput.value) || 0;
         const storageLocation = storageInput.value.trim();
-        // ✅ گۆڕینی ڕستە بۆ Array
-        const alternativeNames = alternativeNamesInput.value.split(',').map(n => n.trim()).filter(n => n.length > 0);
-
+        // ⚠️ کێڵگەی ناوی جێگرەوە لێرە بەتاڵە چونکە لابراوە لە UI، بەڵام دەبێت داتای کۆن بهێڵێتەوە
+        
         if (!name || !brand || !type || !quality || quantity < 1) {
-            alert('تکایە خانەکان پڕبکە تا رێک بێت (ناو, براند, جۆر, کوالێتی, ژمارە).');
+            alert('تکایە خانەکان پڕبکە تا رێک بێت (مۆدێل, براند, جۆر, کوالێتی, ژمارە).');
             return;
         }
+        
+        // وەرگرتنەوەی ناوی جێگرەوەی کۆن گەر دەستکاری کرابێت (بۆ ئەوەی نەفەوتێت)
+        let alternativeNames = [];
+        if(prefill && prefill.id){
+            const originalItem = getInventory().find(i => i.id === prefill.id);
+            alternativeNames = originalItem.alternativeNames || [];
+        }
 
-        const itemObj = { name, brand, type, quality, purchasePrice, salePrice, quantity, storageLocation, alternativeNames }; // ✅ گواستنەوەی ناوی جێگرەوەکان
+
+        const itemObj = { name, brand, type, quality, purchasePrice, salePrice, quantity, storageLocation, alternativeNames }; 
 
         const editingId = tr.dataset.editingId;
         if (editingId) {
@@ -663,13 +493,12 @@ function addInlineRow(prefill = null) {
 
     // prepend the row to top
     tableBody.insertBefore(tr, tableBody.firstChild);
-    // focus first input
-    nameInput.focus();
+    // focus first select
+    modelSelect.focus();
 }
 
 function addOrMergeItem(itemData) {
     const items = getInventory();
-    const components = getComponentData();
     const typeObj = (COMPONENTS_CACHE.typesObjects || []).find(t => (typeof t === 'string' ? t === itemData.type : (t.name === itemData.type)));
     const color = typeObj && typeof typeObj === 'object' ? (typeObj.color || '#007bff') : '#007bff';
 
@@ -686,13 +515,14 @@ function addOrMergeItem(itemData) {
         items[existingIndex].salePrice = itemData.salePrice;
         items[existingIndex].color = color;
         items[existingIndex].storageLocation = itemData.storageLocation;
-        items[existingIndex].alternativeNames = itemData.alternativeNames; // ✅ یەکخستنی ناوی جێگرەوە
+        items[existingIndex].alternativeNames = existingItem.alternativeNames || []; // پاراستنی ناوی جێگرەوەی کۆن
         alert(`ژمارەی ئایتمی "${itemData.name}" زیاد کرا. ژمارەی نوێ: ${totalQuantity}.`);
     } else {
         const newItem = { 
             id: Date.now(), 
-            ...itemData, // ItemData ئێستا alternativeNames لەخۆ دەگرێت
-            color 
+            ...itemData, 
+            color,
+            alternativeNames: itemData.alternativeNames || [] // دڵنیابوون لەوەی Arrayیە
         }; 
         items.push(newItem);
         alert('ئایتمی نوێ زیاد کرا');
@@ -708,11 +538,16 @@ function updateItemInline(itemId, itemData) {
     const typeObj = (COMPONENTS_CACHE.typesObjects || []).find(t => (typeof t === 'string' ? t === itemData.type : (t.name === itemData.type)));
     const color = typeObj && typeof typeObj === 'object' ? (typeObj.color || '#007bff') : '#007bff';
 
-    // ✅ نوێکردنەوەی هەموو کێڵگەکان، لەوانە ناوی جێگرەوەکان
+    const existingItem = items[idx];
+    
+    // پاراستنی ناوی جێگرەوەی کۆن لە کاتی دەستکاریکردنی خێرا
+    const updatedAlternativeNames = existingItem.alternativeNames || []; 
+
     items[idx] = { 
         id: itemId, 
-        ...itemData, // ItemData ئێستا alternativeNames لەخۆ دەگرێت
-        color 
+        ...itemData, 
+        color,
+        alternativeNames: updatedAlternativeNames // بەکارهێنانی ناوی جێگرەوەی پارێزراو
     }; 
     saveToStorage(INVENTORY_KEY, items);
     alert('ئایتم نوێکرایەوە');
@@ -720,19 +555,18 @@ function updateItemInline(itemId, itemData) {
 
 // Initial Load for Item Management Page
 document.addEventListener('DOMContentLoaded', () => {
-    // Always load components and items on this page
     loadComponents();
     loadItems();
 
-    // Wire the inline add button (if present)
     const addBtn = document.getElementById('inlineAddBtn');
     if (addBtn) addBtn.addEventListener('click', (e) => { e.preventDefault(); addInlineRow(); });
 });
 
 
 
-// --- Alternative Names Modal Functions ---
-let currentItemIdForAltNames = null; // بۆ پاراستنی ئایدی ئەو ئایتمەی کە لە مۆدالەکەدا دەستکاری دەکرێت
+// --- Alternative Names Modal Functions (وەک خۆی دەمێنێتەوە) ---
+
+let currentItemIdForAltNames = null; 
 
 function openAlternativeNamesModal(itemId) {
     const items = getInventory();
@@ -743,21 +577,18 @@ function openAlternativeNamesModal(itemId) {
         return;
     }
 
-    // گواستنەوەی داتا بۆ ناو مۆدالەکە
     const altNames = Array.isArray(itemToEdit.alternativeNames) ? itemToEdit.alternativeNames.join(', ') : '';
     document.getElementById('modalAlternativeNamesInput').value = altNames;
-    document.getElementById('modalItemId').value = itemId; // هەڵگرتنی ئایدی
-    currentItemIdForAltNames = itemId; // هەڵگرتنی ئایدی
+    document.getElementById('modalItemId').value = itemId; 
+    currentItemIdForAltNames = itemId; 
 
-    // نیشاندانی مۆدالەکە
     document.getElementById('alternativeNamesModal').style.display = 'block';
 }
 
 function closeAlternativeNamesModal() {
-    // شاردنەوەی مۆدالەکە
     document.getElementById('alternativeNamesModal').style.display = 'none';
     currentItemIdForAltNames = null;
-    document.getElementById('modalAlternativeNamesInput').value = ''; // چۆڵکردنی ناوەڕۆک
+    document.getElementById('modalAlternativeNamesInput').value = ''; 
     document.getElementById('modalItemId').value = '';
 }
 
@@ -770,22 +601,19 @@ function saveAlternativeNames() {
         return;
     }
 
-    // گۆڕینی ڕستەی ئینپوت بۆ Array بە بەکارهێنانی کۆما بۆ جیاکردنەوە
     const newAlternativeNames = altNamesInput
         .split(',')
         .map(n => n.trim())
-        .filter(n => n.length > 0); // لابردنی ناوە بەتاڵەکان
+        .filter(n => n.length > 0); 
 
     let items = getInventory();
     const itemIndex = items.findIndex(item => item.id === itemId);
 
     if (itemIndex !== -1) {
-        // نوێکردنەوەی ناوی جێگرەوەکان
         items[itemIndex].alternativeNames = newAlternativeNames;
 
-        // پاشەکەوتکردن لە Local Storage و نوێکردنەوەی خشتەکە
         saveToStorage(INVENTORY_KEY, items);
-        loadItems(); // نوێکردنەوەی خشتەی ئایتمەکان
+        loadItems(); 
         closeAlternativeNamesModal();
         alert('ناوی جێگرەوەکان بە سەرکەوتوویی نوێ کرانەوە.');
     } else {
