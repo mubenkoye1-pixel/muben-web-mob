@@ -1,209 +1,167 @@
 /* --- REPORTS PAGE STYLES (reports.css) - DARK MODE --- */
+
+/* گۆڕینی ڕەنگەکان بۆ گونجان لەگەڵ شێوازی تاریک */
 :root {
-    --primary-blue: #6a9bd8; /* New Blue: Brighter for Dark Mode */
-    --profit-green: #4caf50; /* New Green: Clearer profit indicator */
-    --expense-red: #ef5350; /* New Red: Clearer expense indicator */
-    --secondary-gray: #a0a0a0; /* Lighter Gray for labels */
-    --background-dark: #1e1e1e; /* Main dark background */
-    --card-dark: #2c2c2c; /* Card/Panel dark background */
-    --text-light: #f0f0f0; /* Light text for readability */
-    --border-dark: #444444; /* Darker borders/dividers */
+    --primary-blue: #6a9bd8;
+    --profit-green: #4caf50;
+    --expense-red: #ef5350;
+    --secondary-gray: #a0a0a0;
+    --background-dark: #1e1e1e;
+    --card-dark: #2c2c2c; /* ڕەنگی پاشخان بۆ کارتەکان */
+    --text-light: #f0f0f0;
+    --border-dark: #444444;
+    --hover-dark: #3a3a3a;
 }
-
-.reports-layout {
+body{
+    overflow-y: auto;
+}
+/* بەشی فلتەرکردن (فلتەر-راپۆرت) */
+.flter-raport {
     display: flex;
-    flex-direction: column;
-    padding: 30px 20px;
-    gap: 30px;
-    background-color: var(--background-dark); /* Dark background */
-    min-height: calc(100vh - 60px);
-    color: var(--text-light); /* Default light text color */
-}
-
-/* --- Filter Panel --- */
-.reports-filter-panel {
-    background-color: var(--card-dark); /* Dark Card Background */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4); /* Darker Shadow */
-}
-
-.filter-header {
-    font-size: 1.3em;
-    color: var(--primary-blue); /* Primary Accent Blue */
-    margin-bottom: 15px;
-    display: flex;
+    gap: 15px;
     align-items: center;
-    gap: 10px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 8px;
+    background-color: var(--card-dark);
+    border: 1px solid var(--border-dark);
+    color: var(--text-light);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.date-inputs-group {
+.flter-raport label {
+    font-weight: bold;
+    color: var(--secondary-gray);
+}
+
+.flter-raport input[type="date"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-dark);
+    background-color: var(--background-dark);
+    color: var(--text-light);
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.flter-raport input[type="date"]:hover {
+    border-color: var(--primary-blue);
+}
+
+/* ---------------------------------------------------- */
+/* بەشی کارتی پێوەرەکان (Key Metrics Grid) */
+/* ---------------------------------------------------- */
+
+.key-metrics-grid {
     display: flex;
     gap: 20px;
-    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+    
 }
 
-.date-inputs-group label {
-    font-weight: 600;
-    color: var(--secondary-gray); /* Lighter gray for labels */
+.metric-card {
+    background-color: var(--card-dark);
+    color: var(--text-light);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    text-align: right;
+    border-right: 5px solid var(--primary-blue); /* سنووری لاوەکی بۆ دیاریکردن */
+    transition: transform 0.3s, background-color 0.3s;
+    position: relative;
+    overflow: hidden;
 }
 
-.date-inputs-group input[type="date"] {
-    padding: 10px;
-    border: 1px solid var(--border-dark); /* Dark border for input */
-    border-radius: 6px;
-    font-size: 1em;
-    background-color: #383838; /* Slightly lighter dark background for input */
+.metric-card:hover {
+    transform: translateY(-5px);
+    background-color: var(--hover-dark);
+}
+
+.metric-card h2 {
+    font-size: 14px;
+    margin: 0 0 5px 0;
+    color: var(--secondary-gray);
+}
+
+.metric-value {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    direction: ltr; /* بۆ ژمارەکان باشتر وایە لای چەپەوە بنووسرێن */
+    text-align: left;
+}
+
+/* ستایلی ئایکۆنەکان */
+.metric-card .icon {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 30px;
+    opacity: 0.3;
+}
+
+/* ستایلی تایبەت بە کارتەکان (ڕەنگی سنووری لای چەپ) */
+.sales-card { border-right-color: var(--primary-blue); }
+.purchase-card { border-right-color: #ff9800; } /* پرتەقاڵی */
+.expenses-card { border-right-color: var(--expense-red); }
+.profit-card { border-right-color: var(--profit-green); }
+.income-card { border-right-color: #00bcd4; } /* شینکی کاڵ */
+.debt-card { border-right-color: #f44336; } /* سووری تۆختر */
+.item-count-card { border-right-color: #9c27b0; } /* مۆر */
+
+
+/* ---------------------------------------------------- */
+/* بەشی لیستی ئایتمە فرۆشراوەکان (Total Item Section) */
+/* ---------------------------------------------------- */
+
+.item-sales-section {
+    background-color: var(--card-dark);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-dark);
+}
+
+.item-sales-section h3 {
+    color: var(--text-light);
+    margin-top: 0;
+    border-bottom: 2px solid var(--border-dark);
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+.sales-table {
+    width: 100%;
+    border-collapse: collapse;
     color: var(--text-light);
 }
 
-/* --- KPI Reports Summary --- */
-.kpi-reports-summary {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-}
-
-.kpi-box {
-    background-color: var(--card-dark); /* Dark Card Background */
-    border-radius: 12px;
-    padding: 20px;
-    flex: 1;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); /* Darker Shadow */
-    border-left: 5px solid;
+.sales-table thead th {
+    background-color: var(--background-dark);
+    color: var(--primary-blue);
+    padding: 12px 15px;
     text-align: right;
+    border-bottom: 2px solid var(--primary-blue);
+    font-size: 15px;
 }
 
-.kpi-box h4 {
-    font-size: 0.9em;
-    color: var(--secondary-gray); /* Lighter gray for headers */
-    margin-bottom: 10px;
+.sales-table tbody td {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-dark);
 }
 
-.report-value {
-    font-size: 2em;
-    font-weight: 900;
-    color: var(--text-light); /* Ensure value text is light */
+.sales-table tbody tr:nth-child(even) {
+    background-color: var(--card-dark);
 }
 
-/* Color Coding - Updated for Dark Mode */
-.total-revenue { border-color: var(--primary-blue); }
-.total-revenue .primary-color { color: var(--primary-blue); }
-
-.net-profit { border-color: var(--profit-green); }
-.net-profit .profit-color { color: var(--profit-green); }
-
-.total-expenses { border-color: var(--expense-red); }
-.total-expenses .expense-color { color: var(--expense-red); }
-
-.avg-profit { border-color: var(--secondary-gray); }
-.avg-profit .secondary-color { color: var(--secondary-gray); }
-
-
-/* --- Detailed Reports Area --- */
-.detailed-reports-area {
-    background-color: var(--card-dark); /* Dark Card Background */
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+.sales-table tbody tr:hover {
+    background-color: var(--hover-dark);
 }
 
-.report-header {
-    font-size: 1.5em;
-    color: var(--text-light); /* Light text for header */
-    border-bottom: 1px solid var(--border-dark); /* Darker separator */
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-}
-
-.no-data-msg {
+.sales-table .no-data {
     text-align: center;
+    padding: 20px;
     color: var(--secondary-gray);
-    padding: 30px;
-}
-
-/* --- گونجاندنی شاشە: مۆبایل (Mobile Responsiveness) --- */
-@media (max-width: 768px) {
-    
-    /* --- گونجاندنی گشتی (Layout) --- */
-    .reports-layout {
-        padding: 15px 10px; /* کەمکردنەوەی پادینگی دەرەوە */
-        gap: 15px; /* کەمکردنەوەی بۆشایی نێوان بەشەکان */
-    }
-
-    /* --- پانێڵی فلتەر (Filter Panel) --- */
-    .reports-filter-panel {
-        padding: 15px; /* کەمکردنەوەی پادینگی ناوەوە */
-        border-radius: 8px; /* بچووککردنەوەی گوشە خڕەکان */
-    }
-    
-    .filter-header {
-        font-size: 1.1em;
-        margin-bottom: 10px;
-    }
-
-    /* گۆڕینی بەشی ڕێکەوت بۆ ستوونی لەسەر مۆبایل */
-    .date-inputs-group {
-        flex-direction: column; /* ڕێکخستنی ستوونی */
-        gap: 15px;
-        align-items: flex-start; /* ڕێکخستنی بۆ لای ڕاست (لە RTL) */
-    }
-
-    .date-inputs-group label {
-        width: 100%; /* لابێڵ تەواوی پانی دەگرێتەوە */
-    }
-
-    .date-inputs-group input[type="date"] {
-        width: 100%; /* input تەواوی پانی دەگرێتەوە */
-        padding: 8px;
-        font-size: 0.95em;
-    }
-
-
-    /* --- پوختەی ڕاپۆرتەکانی KPI (Summary Boxes) --- */
-    .kpi-reports-summary {
-        flex-direction: column; /* گۆڕینی ڕیزەکە بۆ ستوونی (یەک لەسەر یەک) */
-        gap: 15px;
-    }
-
-    .kpi-box {
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* بچووککردنەوەی سێبەر */
-        border-left-width: 3px; /* بچووککردنەوەی ستوونی ڕەنگدار */
-    }
-    
-    .kpi-box h4 {
-        font-size: 0.85em; /* بچووککردنەوەی فۆنتی سەردێڕی KPI */
-        margin-bottom: 5px;
-    }
-
-    .report-value {
-        font-size: 1.7em; /* بچووککردنەوەی فۆنتی بڕەکە */
-    }
-    
-    /* --- بەشی ڕاپۆرتە وردەکان (Detailed Reports Area) --- */
-    .detailed-reports-area {
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-        /* ئەگەر خشتەیەکت لەم بەشەدا هەبێت، پێویستە سکڕۆڵی ئاسۆیی بۆ زیاد بکرێت.
-           بۆ نموونە، ئەگەر خشتەکە لەناو divێک بە ناوی .report-table-container بێت: */
-    }
-
-    .report-table-container { 
-        overflow-x: auto; /* ڕێگەدان بە سکڕۆڵی ئاسۆیی بۆ خشتەی گەورە */
-    }
-
-    .report-header {
-        font-size: 1.3em;
-        padding-bottom: 8px;
-        margin-bottom: 15px;
-    }
-    
-    .no-data-msg {
-        padding: 15px;
-        font-size: 0.9em;
-    }
-
 }

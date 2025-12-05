@@ -22,63 +22,83 @@
                 <a href="qarz.html" class="btn-head">قەرز</a>
                 <a href="expenses.html" class="btn-head">خەرجیەکانم</a>
                 <a href="customer.html" class="btn-head">کریار</a>
+                <a href="purchase.html" class="btn-head">کڕین</a>
+                <a href="purchase_history.html" class="btn-head">وەسڵی کڕین</a>
             </nav>
             <a href="index.html" class="logo-title">
                 <span style="font-size: 30px;">📈</span> شیکاریی دارایی
             </a>
-            <div id="auth-controls" class="auth-control-container">
-                </div>
+
+        </div>
+        <div class="flter-raport">
+                <label for="startDate">بەرواری دەستپێکردن:</label>
+                <input type="date" id="startDate">
+                <label for="endDate">بەرواری کۆتایی:</label>
+                <input type="date" id="endDate">
+            </div>
+          <div class="report-content">
+    <div class="key-metrics-grid">
+        <div class="metric-card sales-card">
+            <i class="fas fa-shopping-cart icon"></i>
+            <h2>کۆی فرۆش</h2>
+            <p class="metric-value" id="total-sales">0</p>
         </div>
 
-        <div class="main-div reports-layout">
-            
-            <div class="reports-filter-panel">
-    <h3 class="filter-header"><i class="fas fa-chart-line"></i> ماوەی شیکاری</h3>
-    <div class="date-inputs-group">
+        <div class="metric-card purchase-card">
+            <i class="fas fa-box-open icon"></i>
+            <h2>کۆی کڕین</h2>
+            <p class="metric-value" id="total-purchase">0</p>
+        </div>
         
-        <label for="datePreset">فلتەر بەپێی ماوەی کاتی:</label>
-        <select id="datePreset" onchange="loadReportData()">
-            <option value="custom">بەرواری تایبەت</option> 
-        </select>
-
-        <div id="customDates" style="display: none; gap: 10px; margin-right: 15px;">
-            <label for="startDate">لەم بەروارەوە:</label>
-            <input type="date" id="startDate" onchange="loadReportData()">
-            
-            <label for="endDate">بۆ ئەم بەروارە:</label>
-            <input type="date" id="endDate" onchange="loadReportData()">
+        <div class="metric-card expenses-card">
+            <i class="fas fa-money-bill-wave icon"></i>
+            <h2>کۆی خەرجی</h2>
+            <p class="metric-value" id="total-expenses">0</p>
         </div>
-    </div>
-</div>
 
-            <div class="kpi-reports-summary">
-                <div class="kpi-box total-revenue">
-                    <h4>کۆی فرۆش (IQD)</h4>
-                    <p id="report-revenue" class="report-value primary-color">0</p>
-                </div>
-                <div class="kpi-box net-profit">
-                    <h4>قازانجی خاوێن (IQD)</h4>
-                    <p id="report-net-profit" class="report-value profit-color">0</p>
-                </div>
-                <div class="kpi-box total-expenses">
-                    <h4>کۆی خەرجییەکان (IQD)</h4>
-                    <p id="report-expenses" class="report-value expense-color">0</p>
-                </div>
-                
-            </div>
+        <div class="metric-card profit-card">
+            <i class="fas fa-chart-line icon"></i>
+            <h2>کۆی قازانج</h2>
+            <p class="metric-value" id="total-profit">0</p>
+        </div>
 
-            <div class="detailed-reports-area">
-                <h2 class="report-header">راپۆرتی مامەڵەکان (Detailed Transactions)</h2>
-                <div id="detailedReportTableContainer" class="table-container">
-                    <p class="no-data-msg">تکایە بەروار هەڵبژێرە.</p>
-                </div>
-            </div>
-            
+        <div class="metric-card income-card">
+            <i class="fas fa-hand-holding-usd icon"></i>
+            <h2>کۆی داهات</h2>
+            <p class="metric-value" id="total-income">0</p>
+        </div>
+
+        <div class="metric-card debt-card">
+            <i class="fas fa-user-friends icon"></i>
+            <h2>کۆی قەرز</h2>
+            <p class="metric-value" id="total-debt">0</p>
+        </div>
+        
+        <div class="metric-card item-count-card">
+            <i class="fas fa-tags icon"></i>
+            <h2>کۆی ئایتم</h2>
+            <p class="metric-value" id="total-items">0</p>
         </div>
     </div>
     
-    <script src="customer.js"></script>
-    <script src="qarz.js"></script>
+    <div class="item-sales-section">
+        <h3>📊 لیستی ئایتمە فرۆشراوەکان لە ماوەی دیاریکراودا</h3>
+        <table class="sales-table">
+            <thead>
+                <tr>
+                    <th>ناوی ئایتم</th>
+                    <th>ژمارەی فرۆشراو</th>
+                </tr>
+            </thead>
+            <tbody id="sold-items-list">
+                <tr><td colspan="3" class="no-data">هیچ ئایتمێک نەفرۆشراوە.</td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>
+        <script src="purchase_history.js"></script>
+        <script src="qarz.js"></script>
     <script src="item.js"></script>
     <script src="data.js"></script>
     <script src="expenses.js"></script> 

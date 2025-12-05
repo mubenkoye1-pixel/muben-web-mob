@@ -318,7 +318,6 @@ function displayItemsTable(items) {
                 <td>${item.storageLocation || '—'}</td>
                    <td>
                         <div class="action-btns">
-                            <button class="edit-btn" onclick="editItem(${item.id})">دەستکاری</button>
                             <button class="delete-item-btn" onclick="deleteItem(${item.id})">سڕینەوە</button>
                           
                             <button type="button" class="btn-secondary" onclick="openAlternativeNamesModal(${item.id})">

@@ -347,7 +347,7 @@ function updateCartDisplay() {
         cartElement.innerHTML = `
         
             <div class="details">
-            <p class="title">${item.name}</p>
+            <p class="title">${item.brand} ${item.name} ${item.type} ${item.quality}</p>
                <span class="qnt">${item.quantity}</span>
                 <span style="font-weight: bold;" class="koygshty"> ${itemTotal.toLocaleString()}</span>
                 

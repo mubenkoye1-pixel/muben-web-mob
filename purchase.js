@@ -16,7 +16,27 @@ function savePurchaseHistory(history) {
     saveToStorage(PURCHASE_HISTORY_KEY, history);
 }
 
-// ...
+// 🆕 لەناو purchase.js (لە هەر شوێنێکی سەرووی handlePurchase)
+
+/**
+ * گۆڕینی Date object بۆ string بە فۆرماتی "DD/MM/YYYY, HH:MM:SS"
+ * @param {Date} dateObject
+ * @returns {string}
+ */
+function formatDateToCustomString(dateObject) {
+    // بۆ دڵنیابوون لەوەی بە شێوەی دوو ژمارە دەردەکەون (بۆ نموونە: 05 لە بری 5)
+    const pad = (num) => String(num).padStart(2, '0');
+
+    const day = pad(dateObject.getDate());
+    const month = pad(dateObject.getMonth() + 1); // +1 چونکە مانگ لە 0 دەست پێ دەکات
+    const year = dateObject.getFullYear();
+
+    const hour = pad(dateObject.getHours());
+    const minute = pad(dateObject.getMinutes());
+    const second = pad(dateObject.getSeconds());
+
+    return `${day}/${month}/${year}, ${hour}:${minute}:${second}`;
+}
 
 // وەرگرتنی داتا لە Local Storage (بەکارهێنانی هەمان لۆژیکی item.js)
 function getFromStorage(key, defaultValue = []) {
@@ -57,7 +77,7 @@ function loadAvailableItems() {
     itemInventoryCache = inventory.map(item => ({
         id: item.id,
         // ناوی ئایتمەکە (مۆدێل + براند + کوالێتی) بۆ نیشاندان
-        fullName: `${item.name} (${item.brand} - ${item.quality})`, 
+        fullName: `${item.brand} ${item.name} ${item.type} ${item.quality}`, 
         purchasePrice: item.purchasePrice || 0 
     }));
 }
@@ -315,22 +335,17 @@ function handlePurchase(e) {
         const receiptId = Date.now(); // وەک ID
         
         const newReceipt = {
-            id: receiptId,
-            date: new Date().toLocaleString('ar-IQ', { // فۆرماتی کوردی بۆ ڕێکەوت
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            }), 
-            items: purchaseItems.map(item => ({ // تۆمارکردنی داتای ئایتمەکان
-                name: item.name,
-                price: item.purchasePrice,
-                qty: item.quantity,
-                total: item.totalCost
-            })),
-            grandTotal: grandTotalCost
-        };
+            id: receiptId,
+            // 💡 لۆجیکی نوێ: دروستکردنی بەروار بە فۆرماتی DD/MM/YYYY, HH:MM:SS
+            date: formatDateToCustomString(new Date()), 
+            items: purchaseItems.map(item => ({ 
+                name: item.name,
+                price: item.purchasePrice,
+                qty: item.quantity,
+                total: item.totalCost
+            })),
+            grandTotal: grandTotalCost
+        };
         
         history.unshift(newReceipt); // زیادکردنی بۆ سەرەتای لیستەکە
         savePurchaseHistory(history);
