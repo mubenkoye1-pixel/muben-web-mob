@@ -45,27 +45,36 @@ let salesCart = []; 
 
 // Function to populate Type and Brand filters on sales page
 function populateSalesFilters() {
-    // ⚠️ گۆڕانکاری: وەرگرتنی شێوازی object بۆ Types بۆ دەستەبەرکردنی ناوی ڕاست
+    // وەرگرتنی دراوەکان لە ستۆڕەیج
     const brands = getFromStorage('brands', []);
     const typesObjects = getFromStorage('types', []);
     
-    // Convert array of objects/strings to array of names for select options
-    const brandNames = brands.map(b => (typeof b === 'object' ? b.name : b)).filter(Boolean);
-    const typeNames = typesObjects.map(t => (typeof t === 'object' ? t.name : t)).filter(Boolean);
+    // دروستکردنی لیستی ناوەکان:
+    // بۆ دڵنیابوون لەوەی کە هەموو توخمێک ناوێکە، 
+    // جا ئەگەر بێت و object بێت (b.name) یان string ی ئاسایی (b).
+    const brandNames = brands.map(b => (typeof b === 'object' && b !== null ? b.name : b)).filter(Boolean);
+    const typeNames = typesObjects.map(t => (typeof t === 'object' && t !== null ? t.name : t)).filter(Boolean);
 
     const filterBrandSelect = document.getElementById('filterBrand');
     const filterTypeSelect = document.getElementById('filterType');
 
     if (filterBrandSelect && filterTypeSelect) {
-        filterBrandSelect.innerHTML = '<option value="all">هەموو براندەکان</option>';
-        brandNames.forEach(b => {
-            filterBrandSelect.innerHTML +=` <option value="${b}">${b}</option>;`
-        });
+        
+        // ⭐️ باشترین شێواز: دروستکردنی هەموو ئۆپشنەکان وەک یەک سترینگ (String Concatenation)
+        // ئەمە ئەدا خێراتر دەکات چونکە تەنها یەکجار DOM نوێ دەکرێتەوە.
 
-        filterTypeSelect.innerHTML = '<option value="all">هەموو جۆرەکان</option>';
-        typeNames.forEach(t => {
-            filterTypeSelect.innerHTML +=` <option value="${t}">${t}</option>`;
-        });
+        // --- ١. پڕکردنەوەی براندەکان ---
+        // دروستکردنی ئۆپشنەکان لە ڕێگەی `map` و پاشان یەکخستنیان بە `join('')`
+        const brandOptions = brandNames.map(b => `<option value="${b}">${b}</option>`).join('');
+        
+        // نوێکردنەوەی DOM تەنها یەکجار
+        filterBrandSelect.innerHTML = `<option value="all">هەموو براندەکان</option>${brandOptions}`;
+
+        // --- ٢. پڕکردنەوەی جۆرەکان (Types) ---
+        const typeOptions = typeNames.map(t => `<option value="${t}">${t}</option>`).join('');
+        
+        // نوێکردنەوەی DOM تەنها یەکجار
+        filterTypeSelect.innerHTML = `<option value="all">هەموو جۆرەکان</option>${typeOptions}`;
     }
 }
 
