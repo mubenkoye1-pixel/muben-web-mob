@@ -259,13 +259,7 @@ body {
     box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.sales-item-card .price-box {
-    background-color: rgba(0, 0, 0, 0.35); /* Slightly darker price box */
-    padding-right: 5px;
-    text-align: right;
-    margin-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
-}
+
 
 .sales-item-card.out-of-stock {
     opacity: 0.5;
@@ -755,11 +749,13 @@ body {
 }
 
 .sales-item-card .price-box {
-    background-color: rgba(0, 0, 0, 0.35); /* Slightly darker price box */
-    padding-right: 5px;
-    text-align: right;
+    background-color: rgb(255, 255, 255); /* Slightly darker price box */
+    text-align: center;
     margin-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    color: #000;
+    font-weight: bold;
+    padding: 5px;
+    
 }
 
 .sales-item-card.out-of-stock {
@@ -1321,4 +1317,25 @@ body {
     border: 3px solid #089b00; /* سنوورێکی شین دابنێ */
     box-shadow: 0 0 10px rgba(36, 155, 0, 0.5); /* سێبەرێکی شین بۆ سەرنجڕاکێشان */
     transition: all 0.2s ease-in-out; /* جووڵەی گۆڕانکارییەکە نەرم بێت */
+}
+
+
+.main-info-group{
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    justify-content: center;
+    padding: 5px;
+    font-weight: bold;
+}
+
+.brand-name ,.type-name,.quality-name{
+    font-size: 1em;
+    margin: 10px;
+}
+.item-model-name{
+    font-size: 0.9em;
+    margin: 8px;
+    font-weight: bold;
 }

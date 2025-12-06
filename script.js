@@ -219,20 +219,21 @@ function displaySalesItems() {
             <p class="item-model-name">${item.name || ' '}</p>
 
 
-<p class="storage-location-text">شوێن:  
-                    <span class="location-name">${item.storageLocation || 'دیاری نەکراوە'}</span>
+<p class="storage-location-text">
+                    <span class="location-name">${item.storageLocation || ''}</span>
                 </p>
 
 
             
             <div class="main-info-group">
-                <p class="detail-line">براند: <span class="brand-name">${item.brand}</span> | جۆر: <span class="type-name">${item.type}</span></p>
-                <p class="detail-line">کوالێتی: <span class="quality-name">${item.quality}</span></p>
+                <p class="detail-line"><span class="brand-name">${item.brand}</span></p>
+                <p><span class="type-name">${item.type}</span></p>
+                <p class="detail-line"><span class="quality-name">${item.quality}</span></p>
             </div>
             
             <div class="price-box">
                 <p class="price-value">${salePrice.toLocaleString()}</p>
-                <p class="currency">دینار</p>
+               
             </div>
         `;
 
