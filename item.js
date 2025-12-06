@@ -271,11 +271,7 @@ function displayItemsTable(items) {
     const container = document.getElementById('itemListTableContainer');
     if (!container) return;
     
-    if (items.length === 0) {
-        container.innerHTML = '<p style="text-align: center; color: #555;">هیچ ئایتمێک تۆمار نەکراوە.</p>';
-        return;
-    }
-
+    // هەمیشە هەیکەلی سەرەکی خشتەکە دروست بکە
     let tableHTML = `
         <table class="item-table">
             <thead>
@@ -288,46 +284,54 @@ function displayItemsTable(items) {
                     <th>نرخی فرۆشتن</th>
                     <th>بەردەست (عدد)</th>
                     <th>شوێنی هەڵگرتن</th>
-                    <th>کرارەکان</th>
+                    <th>کردارەکان</th>
                 </tr>
             </thead>
             <tbody id="itemTableBody">
     `;
 
-    items.forEach(item => {
-        const purchasePrice = item.purchasePrice || 0;
-        const salePrice = item.salePrice || 0;
-
-        const unitProfit = salePrice - purchasePrice;
-        let profitStyle = 'color: black; font-weight: bold;';
-        if (unitProfit > 0) {
-            profitStyle = 'color: #28a745; font-weight: bold;'; 
-        } else if (unitProfit < 0) {
-            profitStyle = 'color: #dc3545; font-weight: bold;'; 
-        }
-        
+    if (items.length === 0) {
+        // ئەگەر هیچ ئایتمێک نەبێت، ڕیزێک بۆ پەیامی بەتاڵ دروست بکە
         tableHTML += `
-            <tr style="border-right: 5px solid ${item.color || '#ccc'};">
-                <td style="background-color: ${item.color || '#ccc'}; width: 10px;"></td>
-                <td>${item.name}</td>
-                <td>${item.type}</td>
-                <td>${item.brand}</td>
-                <td>${item.quality}</td>
-                <td>${salePrice.toLocaleString()}</td>
-                <td>${item.quantity}</td>
-                <td>${item.storageLocation || '—'}</td>
-                   <td>
+            <tr>
+                <td colspan="9" style="text-align: center; color: #555; padding: 20px;">هیچ ئایتمێک تۆمار نەکراوە.</td>
+            </tr>
+        `;
+    } else {
+        // نیشاندانی ئایتمەکان ئەگەر هەبوون
+        items.forEach(item => {
+            const purchasePrice = item.purchasePrice || 0;
+            const salePrice = item.salePrice || 0;
+            const unitProfit = salePrice - purchasePrice;
+            let profitStyle = 'color: black; font-weight: bold;';
+            if (unitProfit > 0) {
+                profitStyle = 'color: #28a745; font-weight: bold;'; 
+            } else if (unitProfit < 0) {
+                profitStyle = 'color: #dc3545; font-weight: bold;'; 
+            }
+            
+            tableHTML += `
+                <tr style="border-right: 5px solid ${item.color || '#ccc'};">
+                    <td style="background-color: ${item.color || '#ccc'}; width: 10px;"></td>
+                    <td>${item.name}</td>
+                    <td>${item.type}</td>
+                    <td>${item.brand}</td>
+                    <td>${item.quality}</td>
+                    <td>${salePrice.toLocaleString()}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.storageLocation || '—'}</td>
+                    <td>
                         <div class="action-btns">
                             <button class="delete-item-btn" onclick="deleteItem(${item.id})">سڕینەوە</button>
-                          
                             <button type="button" class="btn-secondary" onclick="openAlternativeNamesModal(${item.id})">
                                 لێکچووەکان
                             </button>
                         </div>
                     </td>
                 </tr>
-        `;
-    });
+            `;
+        });
+    }
 
     tableHTML += `
             </tbody>
@@ -335,8 +339,6 @@ function displayItemsTable(items) {
     `;
     container.innerHTML = tableHTML;
 }
-
-
 // ----------------------
 // Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
 // ----------------------
