@@ -674,7 +674,7 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(11.57875vw, 1fr));
     gap: 5px;
     justify-items: center; /* Center items horizontally */
-
+overflow-y: auto;
 
 }
 
