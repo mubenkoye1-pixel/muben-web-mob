@@ -205,36 +205,9 @@ body {
     padding-right: 2;
 }
 
-/* --- Items Grid --- */
-.items-grid {
-    gap: 10px;
-    align-items: start;
-    justify-items: center;
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: none;
-    box-sizing: border-box;
-    display: flex;
-    flex-wrap: wrap;
-}
 
-.sales-item-card {
-    padding: 1px;
-    border-radius: 8px;
-    border: 1px solid #333333; /* Add a slight border for definition */
-    width: 11.57875vw;
-    height: 230px;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    color: white;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    position: relative;
-    background-color: #2c2c2c; /* Dark Card Background */
-}
+
+
 
 .sales-item-card:hover {
     transform: translateY(-5px);
@@ -696,23 +669,19 @@ body {
 
 /* --- Items Grid --- */
 .items-grid {
-    gap: 10px;
-    align-items: start;
-    justify-items: center;
-    flex-grow: 1;
-    overflow-y: auto;
-    max-height: none;
-    box-sizing: border-box;
-    display: flex;
-    flex-wrap: wrap;
+  width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(11.57875vw, 1fr));
+    gap: 5px;
+    justify-items: center; /* Center items horizontally */
+
+
 }
 
 .sales-item-card {
-    padding: 1px;
     border-radius: 8px;
-    border: 1px solid #333333; /* Add a slight border for definition */
     width: 11.57875vw;
-    height: 230px;
+    height: 190px;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     color: white;
@@ -723,6 +692,7 @@ body {
     overflow: hidden;
     position: relative;
     background-color: #2c2c2c; /* Dark Card Background */
+    user-select: none;
 }
 
 .sales-item-card:hover {
@@ -1075,10 +1045,7 @@ body {
         padding: 2px;
     }
 
-    .items-grid {
-        justify-content: space-around; /* ڕێکخستنی کەلوپەلەکان بە یەکسانی */
-    }
-
+  
     /* --- فلتەر و گەڕان (Filters & Search) --- */
     .filters-and-search {
         flex-direction: column; /* دانانی فلتەر و گەڕان بە شێوەی ستوونی */
@@ -1242,9 +1209,7 @@ body {
         padding: 2px;
     }
 
-    .items-grid {
-        justify-content: space-around; /* ڕێکخستنی کەلوپەلەکان بە یەکسانی */
-    }
+  
 
     /* --- فلتەر و گەڕان (Filters & Search) --- */
     .filters-and-search {

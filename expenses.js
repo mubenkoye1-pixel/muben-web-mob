@@ -33,7 +33,6 @@ async function addExpense(event) { // 🚨 async
 
     document.getElementById('expenseForm').reset();
     await displayExpenses(); // 🚨 await
-    alert('خەرجی بە سەرکەوتوویی تۆمار کرا.');
 }
 
 // Function to delete an expense

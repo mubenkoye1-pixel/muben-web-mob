@@ -397,9 +397,7 @@ function checkout() { 
     const finalPriceText = document.getElementById('final-total-price').textContent;
     
     // دڵنیابوونەوەی کۆتایی
-    if (!confirm(`دڵنیایت لە تەواوکردنی فرۆشتن بە کۆی گشتی ${finalPriceText} دینار؟\n${isLoan ? '⚠ ئەمە وەک مامەڵەی قەرز تۆمار دەکرێت.' : ''}`)) {
-        return;
-    }
+   
 
     // 1. وەرگرتنی داتای سەرەکی (Sync)
     let items = getFromStorage('inventory');
@@ -481,8 +479,7 @@ function checkout() { 
     saveToStorage('inventory', items); 
     saveTransactions(transactions); 
     
-    // 6. Clear the current cart and update displays
-    alert("فرۆشتن بە سەرکەوتوویی تەواو بوو!");
+   
 
     salesCart = [];
     document.getElementById('discountInput').value = 0; 

@@ -336,7 +336,6 @@ function handlePurchase(e) {
         savePurchaseHistory(history);
         
         // --- 4. پاککردنەوەی فۆرم و دڵنیایی ---
-        alert(`کڕین بە سەرکەوتوویی ئەنجام درا و وەسڵ تۆمار کرا! کۆی نرخ: ${grandTotalCost.toLocaleString()} دینار.`);
         
         mainDiv.innerHTML = ''; 
         loadAvailableItems(); 

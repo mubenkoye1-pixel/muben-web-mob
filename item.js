@@ -534,7 +534,6 @@ function addOrMergeItem(itemData) {
         items[existingIndex].color = color;
         items[existingIndex].storageLocation = itemData.storageLocation;
         items[existingIndex].alternativeNames = existingItem.alternativeNames || []; // پاراستنی ناوی جێگرەوەی کۆن
-        alert(`ژمارەی ئایتمی "${itemData.name}" زیاد کرا. ژمارەی نوێ: ${totalQuantity}.`);
     } else {
         const newItem = { 
             id: Date.now(), 
@@ -543,7 +542,6 @@ function addOrMergeItem(itemData) {
             alternativeNames: itemData.alternativeNames || [] // دڵنیابوون لەوەی Arrayیە
         }; 
         items.push(newItem);
-        alert('ئایتمی نوێ زیاد کرا');
     }
 
     saveToStorage(INVENTORY_KEY, items);
@@ -568,7 +566,6 @@ function updateItemInline(itemId, itemData) {
         alternativeNames: updatedAlternativeNames // بەکارهێنانی ناوی جێگرەوەی پارێزراو
     }; 
     saveToStorage(INVENTORY_KEY, items);
-    alert('ئایتم نوێکرایەوە');
 }
 
 // Initial Load for Item Management Page
@@ -633,7 +630,6 @@ function saveAlternativeNames() {
         saveToStorage(INVENTORY_KEY, items);
         loadItems(); 
         closeAlternativeNamesModal();
-        alert('ناوی جێگرەوەکان بە سەرکەوتوویی نوێ کرانەوە.');
     } else {
         alert('ئایتمەکە نەدۆزرایەوە بۆ نوێکردنەوە.');
     }

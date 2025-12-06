@@ -805,7 +805,6 @@ function saveEditedTransaction(event) {
     
     closeModal();
     analyzeInventory(); // Reload data page
-    alert('مامەڵەکە بە سەرکەوتوویی دەستکاری کرا.');
 }
 
 

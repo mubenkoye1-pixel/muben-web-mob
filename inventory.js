@@ -170,11 +170,9 @@ function saveWarehouseItem(event) {
             items[existingItemIndex].location = location; 
             items[existingItemIndex].note = note; 
             
-            alert(`ژمارەی کاڵای "${name}" لە مەخزەندا زیاد کرا. ژمارەی نوێ: ${totalQuantity}.`);
         } else {
             const newItem = { id: Date.now(), ...newItemData };
             items.push(newItem);
-            alert('کاڵای نوێ بە سەرکەوتوویی بۆ مەخزەن زیاد کرا!');
         }
     }
 
@@ -407,7 +405,6 @@ function transferItemToStore(itemId, transferQuantity) {
     } else {
         // زیادکردنی کاڵای نوێ بۆ دوکان
         storeItems.push(itemToTransfer);
-        alert(`کاڵای "${warehouseItem.name}" بە بڕی ${transferQuantity} بە سەرکەوتوویی گوازراوەتەوە بۆ لیستی فرۆشتنی دوکان.`);
     }
 
     // 4. کەمکردنەوەی بڕ لە مەخزەن و سەیڤکردنی داتا
