@@ -43,40 +43,7 @@ function getCustomers() {
 
 let salesCart = []; 
 
-// Function to populate Type and Brand filters on sales page
-function populateSalesFilters() {
-    // وەرگرتنی دراوەکان لە ستۆڕەیج
-    const brands = getFromStorage('brands', []);
-    const typesObjects = getFromStorage('types', []);
-    
-    // دروستکردنی لیستی ناوەکان:
-    // بۆ دڵنیابوون لەوەی کە هەموو توخمێک ناوێکە، 
-    // جا ئەگەر بێت و object بێت (b.name) یان string ی ئاسایی (b).
-    const brandNames = brands.map(b => (typeof b === 'object' && b !== null ? b.name : b)).filter(Boolean);
-    const typeNames = typesObjects.map(t => (typeof t === 'object' && t !== null ? t.name : t)).filter(Boolean);
 
-    const filterBrandSelect = document.getElementById('filterBrand');
-    const filterTypeSelect = document.getElementById('filterType');
-
-    if (filterBrandSelect && filterTypeSelect) {
-        
-        // ⭐️ باشترین شێواز: دروستکردنی هەموو ئۆپشنەکان وەک یەک سترینگ (String Concatenation)
-        // ئەمە ئەدا خێراتر دەکات چونکە تەنها یەکجار DOM نوێ دەکرێتەوە.
-
-        // --- ١. پڕکردنەوەی براندەکان ---
-        // دروستکردنی ئۆپشنەکان لە ڕێگەی `map` و پاشان یەکخستنیان بە `join('')`
-        const brandOptions = brandNames.map(b => `<option value="${b}">${b}</option>`).join('');
-        
-        // نوێکردنەوەی DOM تەنها یەکجار
-        filterBrandSelect.innerHTML = `<option value="all">هەموو براندەکان</option>${brandOptions}`;
-
-        // --- ٢. پڕکردنەوەی جۆرەکان (Types) ---
-        const typeOptions = typeNames.map(t => `<option value="${t}">${t}</option>`).join('');
-        
-        // نوێکردنەوەی DOM تەنها یەکجار
-        filterTypeSelect.innerHTML = `<option value="all">هەموو جۆرەکان</option>${typeOptions}`;
-    }
-}
 
 // Function to populate the customer list datalist (Auto-Complete)
 function populateCustomerDropdown() {
@@ -94,7 +61,43 @@ function populateCustomerDropdown() {
         datalist.appendChild(option);
     });
 }
-
+// Function to populate the Brand and Type filter dropdowns on the sales page
+function populateSalesFilters() {
+    // 1. وەرگرتنی ئایتمەکانی عەمبار
+    const items = getFromStorage('inventory', []);
+    
+    // 2. دۆزینەوەی براندە ناوازەکان (Unique Brands) و جۆرەکان (Unique Types)
+    const brands = [...new Set(items.map(item => item.brand).filter(b => b))];
+    const types = [...new Set(items.map(item => item.type).filter(t => t))];
+    
+    // 3. دروستکردنەوەی بژاردەکانی فلتەری براند
+    const brandSelect = document.getElementById('filterBrand');
+    if (brandSelect) {
+        brandSelect.innerHTML = '<option value="all">هەموو براندەکان</option>'; // بژاردەی سەرەکی
+        brands.sort().forEach(brand => {
+            const option = document.createElement('option');
+            option.value = brand;
+            option.textContent = brand;
+            brandSelect.appendChild(option);
+        });
+        // زیادکردنی event listener بۆ بانگکردنی فلتەرەکان
+        brandSelect.addEventListener('change', displaySalesItems);
+    }
+    
+    // 4. دروستکردنەوەی بژاردەکانی فلتەری جۆر
+    const typeSelect = document.getElementById('filterType');
+    if (typeSelect) {
+        typeSelect.innerHTML = '<option value="all">هەموو جۆرەکان</option>'; // بژاردەی سەرەکی
+        types.sort().forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            typeSelect.appendChild(option);
+        });
+        // زیادکردنی event listener بۆ بانگکردنی فلتەرەکان
+        typeSelect.addEventListener('change', displaySalesItems);
+    }
+}
 // Function to toggle the customer name input visibility (Loan Checkbox)
 function toggleCustomerInput() {
     const isLoan = document.getElementById('isLoanSale').checked; 
@@ -221,7 +224,7 @@ function displaySalesItems() {
         // ... (HTMLی نێو کاردەکە هەر بەو شێوەیە دەمێنێتەوە)
         
         card.innerHTML = `
-            <span class="stock-count" style="background-color: ${quantity <= 5 ? (quantity === 0 ? '#dc3545' : '#ffc107') : 'rgba(0,0,0,0.4)'}">
+            <span class="stock-count" style="background-color: ${quantity <= 5 ? (quantity === 0 ? '#dc3545' : '#ffc107') : 'rgba(255, 255, 255, 0.4)'}">
                 ${quantity}
             </span>
             
