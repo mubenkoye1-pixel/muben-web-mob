@@ -525,5 +525,102 @@ padding: 0;
 }
 
 
+/* --- Select2 Custom Styling for Dark Mode (گونجاو لەگەڵ VAR-ەکان) --- */
 
+/* 1. ڕێکخستنی Select2 سەرەکی (ناوەوەی خشتەکە) */
+.select2-container--default .select2-selection--single {
+    /* دەکات بە شێوازی Inputی ئاسایی: */
+    height: 40px; 
+    border: 1.5px solid var(--border-dark); /* سنووری Dark Mode */
+    border-radius: 10px; /* وەک Inputەکانی تر */
+    background: var(--input-bg); /* پاشخانی Input */
+    transition: all 0.2s ease;
+}
 
+/* 2. ستایلی تێکستی نمایشکراو */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: var(--text-light) !important; /* تێکستی سەرەکی */
+    line-height: 38px;
+    text-align: right; 
+    padding-right: 15px;
+    padding-left: 30px; /* شوێن بۆ ئارۆ (arrow) */
+}
+
+/* 3. ستایلی Placeholder (گەڕان بۆ مۆدێل...) */
+.select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: var(--muted) !important; /* ڕەنگی کز */
+    font-style: italic;
+}
+
+/* 4. ڕێکخستنی دوگمەی کراوە/داخراو (ئارۆ) */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    background: transparent;
+    height: 38px;
+    width: 25px; 
+    left: 5px; /* گۆڕینی شوێنەکەی بۆ لای چەپ */
+    right: auto;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: var(--muted) transparent transparent transparent; /* ڕەنگی ئارۆ کز */
+}
+
+/* 5. ستایلی کاتی فۆکەس (Focus State) */
+.select2-container--default.select2-container--focus .select2-selection--single {
+    border-color: var(--accent) !important; /* ڕەنگی ئەکسێنت لەکاتی فۆکەس */
+    box-shadow: 0 0 0 3px rgba(106, 155, 216, 0.3); /* سێبەری شین */
+}
+
+/* --- ستایلی سندووقی دەرکەوتوو (Dropdown) --- */
+
+/* پاشخانی درۆپداون و سنوور */
+.select2-container--open .select2-dropdown {
+    background-color: var(--surface); /* وەک کارت/سەرفەیس */
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* تێکستی گەڕان لەناو درۆپداونەکە */
+.select2-search--dropdown {
+    padding: 10px;
+    background-color: var(--surface); /* پاشخانی گەڕان */
+    border-bottom: 1px solid var(--border-dark);
+}
+
+.select2-search--dropdown .select2-search__field {
+    border: 1px solid var(--border-dark);
+    border-radius: 6px;
+    padding: 10px;
+    width: 100%;
+    background: var(--input-bg);
+    color: var(--text-light);
+    direction: rtl; /* دڵنیابوون لە RTL */
+}
+
+/* --- ستایلی بژاردەکان (Options) --- */
+
+.select2-results__option {
+    padding: 10px 15px;
+    color: var(--text-light);
+    text-align: right;
+    direction: rtl; 
+    transition: background-color 0.1s;
+}
+
+/* ستایلی هەڵبژاردنی کاتی (Hover/Highlighted) */
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+    background-color: var(--accent) !important; /* ڕەنگی ئەکسێنتی شین بۆ هەڵبژاردن */
+    color: white !important;
+}
+
+/* بژاردە هەڵبژێردراوەکانی پێشوو (ئەگەر هەبوون) */
+.select2-container--default .select2-results__option--selected {
+    background-color: var(--hover-bg); 
+    color: var(--muted);
+}
+
+/* گونجاندن لەگەڵ ڕیزی Inline (پێویستە) */
+.inline-create-row .select2-container {
+    vertical-align: top;
+    /* دڵنیابوون لەوەی Select2 پێکدادان لەگەڵ heightی ڕیزەکە نەکات */
+}

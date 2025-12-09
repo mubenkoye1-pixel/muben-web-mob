@@ -339,117 +339,108 @@ function displayItemsTable(items) {
     `;
     container.innerHTML = tableHTML;
 }
-// ----------------------
-// Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
-// ----------------------
+
 
 // ----------------------
 // Inline row creation (دروستکردنی ڕیزی ناوخۆیی)
 // ----------------------
 
 function addInlineRow(prefill = null) {
-    const tbody = document.getElementById('itemTableBody');
-    if (!tbody) {
+    // دڵنیابوون لە بوونی tbody
+    const tableBody = document.getElementById('itemTableBody');
+    if (!tableBody) {
         displayItemsTable(getInventory());
+        return; 
     }
 
     const existing = document.querySelector('tr.inline-create-row');
-    if (existing) return existing.querySelector('input')?.focus();
-
-    const tableBody = document.getElementById('itemTableBody');
-    if (!tableBody) return;
+    if (existing) return existing.querySelector('select')?.focus(); 
 
     const tr = document.createElement('tr');
     tr.classList.add('inline-create-row');
 
-    // helper to create inputs/selects
+    // Helper بۆ دروستکردنی ئینپوتەکان
     const createInput = (value = '', type = 'text', attrs = {}) => {
         const el = document.createElement('input');
         el.type = type;
         el.className = 'inline-input';
         el.value = value || '';
-        el.dir = 'rtl'; // بۆ کوردی
+        el.dir = 'rtl'; 
         Object.keys(attrs).forEach(k => el.setAttribute(k, attrs[k]));
         return el;
     };
 
     // Prepare component option lists from cache
-    const models = (COMPONENTS_CACHE.modelsObjects || []).map(m => (typeof m === 'object' ? (m.name || '') : m)).filter(Boolean); // 🆕 وەرگرتنی مۆدێلەکان
+    const models = (COMPONENTS_CACHE.modelsObjects || []).map(m => (typeof m === 'object' ? (m.name || '') : m)).filter(Boolean); 
     const brands = (COMPONENTS_CACHE.brandsObjects || []).map(b => (typeof b === 'object' ? (b.name || '') : b)).filter(Boolean);
     const types = (COMPONENTS_CACHE.typesObjects || []).map(t => (typeof t === 'object' ? (t.name || '') : t)).filter(Boolean);
     const qualities = (COMPONENTS_CACHE.qualitiesObjects || []).map(q => (typeof q === 'object' ? (q.label || q) : q)).filter(Boolean);
 
-    // 🛑 گۆڕینی Input بۆ Select
-    const modelSelect = document.createElement('select');
-    modelSelect.className = 'inline-input';
-    
-    const typeSelect = document.createElement('select');
-    typeSelect.className = 'inline-input';
-    const brandSelect = document.createElement('select');
-    brandSelect.className = 'inline-input';
-    const qualitySelect = document.createElement('select');
-    qualitySelect.className = 'inline-input';
-
-    const makeOptions = (sel, items, defaultText = '—') => {
-        sel.innerHTML = '';
-        const empty = document.createElement('option'); empty.value = ''; empty.textContent = defaultText; sel.appendChild(empty);
-        items.forEach(it => { const opt = document.createElement('option'); opt.value = it; opt.textContent = it; sel.appendChild(opt); });
+    // فەنکشنی دروستکردنی Select و Options
+    const makeSelectAndOptions = (items, defaultText = '—') => {
+        const select = document.createElement('select');
+        select.className = 'inline-input';
+        
+        const empty = document.createElement('option'); empty.value = ''; empty.textContent = defaultText; select.appendChild(empty);
+        items.forEach(it => { const opt = document.createElement('option'); opt.value = it; opt.textContent = it; select.appendChild(opt); });
+        
+        return select;
     };
+    
+    // --- 1. دروستکردنی Selectەرەکان ---
 
-    makeOptions(modelSelect, models, 'هەڵبژاردنی مۆدێل...'); // 🆕 پڕکردنەوەی سێلێکتی مۆدێل
-    makeOptions(typeSelect, types);
-    makeOptions(brandSelect, brands);
-    makeOptions(qualitySelect, qualities);
-
-    if (prefill) {
-        modelSelect.value = prefill.name || ''; // 🆕 ناوی ئایتم دەبێتە مۆدێلی هەڵبژێردراو
-        typeSelect.value = prefill.type || '';
-        brandSelect.value = prefill.brand || '';
-        qualitySelect.value = prefill.quality || '';
-    }
-
-    // 🛑 لابردنی purchaseInput و qtyInput
-    // ⚠️ نرخی فرۆشتن دەمێنێتەوە
+    const modelSelect = makeSelectAndOptions(models, 'هەڵبژاردنی مۆدێل...');
+    // دروستکردنی IDی تایبەت پێش دانانی لەسەر ئیلیمێنتەکە
+    const modelSelectId = 'modelSelect_' + Date.now(); 
+    modelSelect.id = modelSelectId; // دانانی ID لەسەر ئیلیمێنتەکە
+    
+    const typeSelect = makeSelectAndOptions(types);
+    const brandSelect = makeSelectAndOptions(brands);
+    const qualitySelect = makeSelectAndOptions(qualities);
+    
+    // --- 2. دروستکردنی Inputەکان ---
+    
     const saleInput = createInput(prefill?.salePrice || '', 'number', { min: 0, placeholder: 'نرخی فرۆشتن' });
-    
-    // 🛑 لابردنی quantityInput
-    
     const storageInput = createInput(prefill?.storageLocation || '', 'text', { placeholder: 'شوێن' });
-    
-    const altNamesValue = Array.isArray(prefill?.alternativeNames) ? prefill.alternativeNames.join(', ') : '';
-    // 🛑 لابردنی alternativeNamesInput لێرە، چونکە لۆژیکەکە دەڵێت لە فۆرمی جیاوازدا بێت
 
+    // --- 3. دروستکردنی خانەکان (Cells) بۆ دانانی Inputەکان و Selectەکان ---
+
+    const tdName = document.createElement('td'); tdName.appendChild(modelSelect); 
+    const tdType = document.createElement('td'); tdType.appendChild(typeSelect);
+    const tdBrand = document.createElement('td'); tdBrand.appendChild(brandSelect);
+    const tdQuality = document.createElement('td'); tdQuality.appendChild(qualitySelect);
     
-    // 🛑 گۆڕینی حیسابکردنی قازانج: تەنها بە نرخی فرۆشتن حیساب دەکرێت، نرخی کڕین وەک سفر سەیر دەکرێت.
-    const profitCell = document.createElement('td');
+    const purchaseCell = document.createElement('td'); 
+    const tdQty = document.createElement('td'); 
+    const tdSale = document.createElement('td'); tdSale.appendChild(saleInput);
+    const tdStorage = document.createElement('td'); tdStorage.appendChild(storageInput); 
+    
+    const profitCell = document.createElement('td'); 
+    
     const updateProfit = () => {
-        // وادادەنێین نرخی کڕینی سەرەتایی 0 بێت لە پەڕەی ئایتم.
-        const pp = 0; 
+        const pp = prefill?.purchasePrice || 0; 
         const sp = parseInt(saleInput.value) || 0;
+        
+        purchaseCell.textContent = pp.toLocaleString(); 
+        tdQty.textContent = (prefill?.quantity || 0).toLocaleString(); 
         profitCell.textContent = (sp - pp).toLocaleString();
     };
     saleInput.addEventListener('input', updateProfit);
-    updateProfit(); // بانگکردنی بۆ نرخی سەرەتایی
+    updateProfit(); 
 
-    // Build cells 
-    tr.innerHTML = `<td style="width:10px;background:#eee"></td>`;
+    // --- 4. ناردنی خانەکان بۆ ڕیزەکە (Appending to Row) ---
     
-    const tdName = document.createElement('td'); tdName.appendChild(modelSelect); tr.appendChild(tdName); 
-    const tdType = document.createElement('td'); tdType.appendChild(typeSelect); tr.appendChild(tdType);
-    const tdBrand = document.createElement('td'); tdBrand.appendChild(brandSelect); tr.appendChild(tdBrand);
-    const tdQuality = document.createElement('td'); tdQuality.appendChild(qualitySelect); tr.appendChild(tdQuality);
+    tr.innerHTML = `<td style="width:10px;background:#eee"></td>`; 
     
-    // 🛑 لابردنی خانەی نرخی کڕین
-    // tr.appendChild(tdPurchase); 
-
-    const tdSale = document.createElement('td'); tdSale.appendChild(saleInput); tr.appendChild(tdSale);
+    tr.appendChild(tdName); 
+    tr.appendChild(tdType);
+    tr.appendChild(tdBrand);
+    tr.appendChild(tdQuality);
     
-    tr.appendChild(profitCell);
-    
-    // 🛑 لابردنی خانەی ژمارە (Quantity)
-    // tr.appendChild(tdQty); 
-    
-    const tdStorage = document.createElement('td'); tdStorage.appendChild(storageInput); tr.appendChild(tdStorage);
+    tr.appendChild(purchaseCell); 
+    tr.appendChild(tdSale);
+    tr.appendChild(tdQty); 
+    tr.appendChild(tdStorage); 
     
     const tdActions = document.createElement('td');
     const saveBtn = document.createElement('button'); saveBtn.textContent = '💾'; saveBtn.className = 'submit-btn';
@@ -457,64 +448,72 @@ function addInlineRow(prefill = null) {
     tdActions.appendChild(saveBtn); tdActions.appendChild(cancelBtn);
     tr.appendChild(tdActions);
 
-    // If editing, mark the row with data-id
     if (prefill && prefill.id) tr.dataset.editingId = prefill.id;
 
-    // Save handler
+    // prepend the row to top
+    tableBody.insertBefore(tr, tableBody.firstChild);
+    
+    // 🚨 5. چالاککردنی Select2 - لەم کاتەدا Selectەکە لە DOM دایە.
+    // ئەم کۆدە بۆ دڵنیابوون لەوەی کە Select2 بە تەواوی بارکراوە.
+    if (window.jQuery && typeof window.jQuery.fn.select2 === 'function') {
+        // بانگکردنی Select2 بە ID
+        $('#' + modelSelectId).select2({
+            placeholder: "گەڕان بۆ مۆدێل...", 
+            dropdownAutoWidth: true,
+            width: '100%',
+            dir: "rtl"
+           
+
+        });
+        // کردنەوەی ڕاستەوخۆ
+        $('#' + modelSelectId).select2('open');
+    }
+
+    // --- 6. لۆژیکی پاشەکەوتکردن (Save Handler) ---
     saveBtn.addEventListener('click', () => {
-        const name = modelSelect.value; // 🛑 وەرگرتنی بەها لە Select
+        const name = modelSelect.value; 
         const brand = brandSelect.value;
         const type = typeSelect.value;
         const quality = qualitySelect.value;
-        
-        // 🛑 لێرەدا نرخی کڕین و ژمارە بە 0 دادەنرێت بۆ ئەوەی لە پەڕەی کڕینەوە نوێ بکرێتەوە
-        const purchasePrice = prefill?.purchasePrice || 0; 
         const salePrice = parseInt(saleInput.value) || 0;
-        const quantity = prefill?.quantity || 0; // وەک خۆی بهێڵرێتەوە یان بە 0 دابنرێت
-        
         const storageLocation = storageInput.value.trim();
-        
-        // وەرگرتنەوەی ناوی جێگرەوەی کۆن گەر دەستکاری کرابێت (بۆ ئەوەی نەفەوتێت)
-        let alternativeNames = prefill?.alternativeNames || []; 
 
         if (!name || !brand || !type || !quality) {
             alert('تکایە خانە سەرەکییەکان پڕبکە (مۆدێل, براند, جۆر, کوالێتی).');
             return;
         }
         
-        // وەرگرتنەوەی نرخی کڕین و ژمارەی کۆن لە کاتی دەستکاریکردندا
-        if(prefill && prefill.id){
-            const originalItem = getInventory().find(i => i.id === prefill.id);
-            // پاراستنی نرخی کڕین و ژمارە لەکاتی دەستکاریکردنی تەنها زانیاری وەسفی.
-            purchasePrice = originalItem.purchasePrice || 0; 
-            quantity = originalItem.quantity || 0;
+        let purchasePrice = 0;
+        let quantity = 0;
+        let alternativeNames = [];
+        
+        const editingId = tr.dataset.editingId;
+        if(editingId) {
+            const originalItem = getInventory().find(i => i.id === parseInt(editingId));
+            if(originalItem) {
+                purchasePrice = originalItem.purchasePrice || 0; 
+                quantity = originalItem.quantity || 0;
+                alternativeNames = originalItem.alternativeNames || [];
+            }
         }
-
 
         const itemObj = { name, brand, type, quality, purchasePrice, salePrice, quantity, storageLocation, alternativeNames }; 
 
-        const editingId = tr.dataset.editingId;
         if (editingId) {
             updateItemInline(parseInt(editingId), itemObj);
         } else {
-            // لە کاتی زیادکردنی ئایتمی نوێدا، نرخی کڕین و ژمارە بە 0 دادەنرێت
-            itemObj.purchasePrice = 0;
-            itemObj.quantity = 0;
-            addOrMergeItem(itemObj); // ئەگەر ئایتمەکە نەبوو، زیاد دەکرێت.
+            addOrMergeItem(itemObj); 
         }
 
         tr.remove();
         loadItems();
     });
 
-    cancelBtn.addEventListener('click', () => { tr.remove(); });
-
-    // prepend the row to top
-    tableBody.insertBefore(tr, tableBody.firstChild);
-    // focus first select
-    modelSelect.focus();
+    cancelBtn.addEventListener('click', () => { 
+        tr.remove(); 
+        loadItems(); 
+    });
 }
-
 function addOrMergeItem(itemData) {
     const items = getInventory();
     const typeObj = (COMPONENTS_CACHE.typesObjects || []).find(t => (typeof t === 'string' ? t === itemData.type : (t.name === itemData.type)));
