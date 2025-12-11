@@ -221,7 +221,6 @@ function displaySalesItems() {
             stockStatusClass = 'stock-low';
         }
         
-        // ... (HTMLی نێو کاردەکە هەر بەو شێوەیە دەمێنێتەوە)
         
         card.innerHTML = `
             <span class="stock-count" style="background-color: ${quantity <= 5 ? (quantity === 0 ? '#dc3545' : '#ffc107') : 'rgba(255, 255, 255, 0.4)'}">

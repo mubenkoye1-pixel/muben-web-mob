@@ -1,208 +1,325 @@
-*{
-  padding: 0;
-  margin: 0;
+/*
+================================
+Dark Mode & Fullscreen Layout CSS
+================================
+*/
+
+:root {
+    /* Colors */
+    --primary-color: #4CAF50; /* Green - For main actions/buttons */
+    --accent-color: #64B5F6; /* Light Blue - For links/highlights */
+    --bg-dark: #121212; /* Very Dark Gray - Main Background */
+    --bg-medium: #1e1e1e; /* Dark Gray - Div/Container Background */
+    --bg-light: #2c2c2c; /* Slightly Lighter Dark Gray - Input/Hover Background */
+    --text-light: #e0e0e0; /* Off-White - Main Text */
+    --text-medium: #b0b0b0; /* Light Gray - Secondary Text */
+    --border-color: #383838; /* Border/Separator */
+    --positive-variance: #81C784; /* Light Green */
+    --negative-variance: #E57373; /* Light Red */
 }
-/* --- STOCKTAKE PAGE STYLES --- */
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    direction: rtl; /* Ensure Right-to-Left for all elements */
+    font-family: 'Tahoma', sans-serif; /* Use a common, readable RTL font */
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    min-height: 100vh; /* Full screen height */
+}
+
+/* Main Container */
+.all-div {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Header/Navigation */
 .head-div {
-  padding: 0 30px; 
-  background-color: #007bff; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  height: 60px; 
-  display: flex;
-  flex-direction: row; 
-  justify-content: space-between; 
-  align-items: center;
-  color: white;
+    padding: 0 30px;
+    background-color: #1f1f1f; /* Dark Header */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 6.5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #ffffff;
+    flex-shrink: 0;
 }
 
 .logo-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: white;
-  text-decoration: none; 
-  padding: 0 10px;
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffffff; /* White logo */
+    text-decoration: none;
+    padding: 0 10px;
 }
 
 .nav-links {
-  display: flex;
-  gap: 25px; 
-  align-items: center;
+    display: flex;
+    gap: 25px;
+    align-items: center;
 }
 
 .btn-head {
-  font-size: 18px; 
-  font-weight: 500;
-  color: white;
-  text-decoration: none; 
-  padding: 5px 0; 
-  transition: color 0.3s ease; 
-  position: relative;
+    font-size: 18px;
+    font-weight: 500;
+    color: #cccccc; /* Light gray navigation text */
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.3s ease;
+    position: relative;
 }
 
 .btn-head:hover {
-  color: #ffc107; 
+    color: #9d57ff; /* Modern Accent Color (e.g., Violet/Purple) */
 }
 
 .btn-head::after {
-  content: '';
-  position: absolute;
-  right: 0; 
-  bottom: 0;
-  width: 0;
-  height: 2px;
-  background-color: #ffc107;
-  transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #9d57ff; /* Modern Accent Color */
+    transition: width 0.3s ease;
 }
 
 .btn-head:hover::after {
-  width: 100%;
-  right: 0; 
+    width: 100%;
+    right: 0;
 }
 
-/* Layout Container */
-.stocktake-layout {
-    display: block;
-    padding: 35px; /* پانتایی زیاتر */
-    max-width: 1100px; /* پانی زیاتر بۆ خشتە */
-    margin: 30px auto;
-    background-color: white;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* سێبەرێکی دیارتر */
+/* Main Content Area */
+.main-div {
+    padding: 30px;
+    flex-grow: 1;
+    width: 100%;
+    margin: 0 auto;
 }
 
-.stocktake-layout h1 {
-    font-size: 2em;
-    color: #34495e;
-    border-bottom: 3px solid #007bff; /* شین بۆ سەرنجڕاکێشان */
+h1 {
+    color: var(--text-light);
+    margin-bottom: 25px;
+    font-size: 28px;
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
-    margin-bottom: 30px;
-    font-weight: 700;
 }
 
-/* --- Summary Bar (KPIs) --- */
-
+/* Stocktake Summary Bar */
 .stocktake-summary-bar {
+    background-color: var(--bg-medium);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px 20px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: space-around;
-    background-color: #f8f9fa; /* Light background */
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    border: 1px solid #eee;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    gap: 20px;
 }
 
 .stocktake-summary-bar p {
-    text-align: center;
-    font-size: 1.1em;
-    font-weight: 500;
-    flex-basis: 30%;
+    font-size: 18px;
+    color: var(--text-medium);
 }
 
 .stocktake-summary-bar strong {
-    color: #333;
-    display: block;
-    margin-bottom: 5px;
+    color: var(--text-light);
 }
 
 #itemCount {
-    color: #007bff; /* Blue for total count */
-    font-size: 1.8em;
+    color: var(--primary-color);
+    font-weight: bold;
 }
 
 #varianceCount {
-    color: #dc3545; /* Red for variance */
-    font-size: 1.8em;
+    color: var(--accent-color);
+    font-weight: bold;
 }
 
-/* --- Table Styles --- */
+/* Table Styles */
+.stocktake-list-container {
+    overflow-x: auto;
+    background-color: var(--bg-medium);
+    border-radius: 8px;
+    padding: 10px;
+}
+
 .stocktake-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 16px;
 }
 
-.stocktake-table th, .stocktake-table td {
-    padding: 14px 10px;
-    border-bottom: 1px solid #eee;
+.stocktake-table thead th {
+    background-color: var(--bg-light);
+    color: var(--primary-color);
+    padding: 12px 15px;
     text-align: right;
-    font-size: 0.95em;
+    border-bottom: 2px solid var(--border-color);
 }
 
-.stocktake-table th {
-    background-color: #e6f7ff;
-    color: #333;
-    font-weight: 700;
+.stocktake-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s;
 }
 
 .stocktake-table tbody tr:hover {
-    background-color: #fafafa;
+    background-color: var(--bg-light);
 }
 
-/* Input for Stock Count */
+.stocktake-table tbody td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+
+.stocktake-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.stocktake-table small {
+    color: var(--text-medium);
+}
+
+/* Input Fields */
 .stocktake-table input[type="number"] {
-    width: 90px;
+    width: 100px;
     padding: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
+    background-color: var(--bg-light);
+    color: var(--text-light);
     text-align: center;
-    font-weight: 600;
-    transition: border-color 0.2s;
+    transition: border-color 0.3s;
 }
 
 .stocktake-table input[type="number"]:focus {
-    border-color: #28a745; /* Green focus */
-    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.2);
+    border-color: var(--primary-color);
     outline: none;
 }
 
-/* Variance Cells */
+/* Variance Display */
 .variance-positive {
-    color: #1abc9c; /* Teal/Soft Green for Overstocked */
-    font-weight: 700;
-    background-color: #f1fdfb;
+    color: var(--positive-variance);
+    font-weight: bold;
 }
 
 .variance-negative {
-    color: #e74c3c; /* Bright Red for Understocked/Loss */
-    font-weight: 700;
-    background-color: #fef7f7;
+    color: var(--negative-variance);
+    font-weight: bold;
 }
 
-/* --- Action Buttons --- */
+/* Action Buttons */
+.action-btn, .submit-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+/* Individual Update Button */
+.edit-btn {
+    background-color: var(--accent-color);
+    color: var(--bg-dark);
+}
+
+.edit-btn:hover {
+    background-color: #42a5f5; /* Slightly darker accent */
+}
+
+/* Commit Final Button */
+.submit-btn {
+    background-color: var(--primary-color);
+    color: var(--bg-dark);
+    font-size: 18px;
+    width: 300px; /* Make it prominent */
+    max-width: 100%;
+}
+
+.submit-btn:hover {
+    background-color: #43A047; /* Slightly darker primary */
+}
+
 .form-actions {
-    text-align: left; /* Button to the left (end of RTL) */
-    margin-top: 40px;
+    text-align: center;
+    padding: 20px 0;
 }
 
-.form-actions .submit-btn {
-    background-color: #007bff; /* Blue */
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s;
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+    .head-div {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .main-div {
+        padding: 15px;
+    }
+
+    .stocktake-summary-bar {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .stocktake-table input[type="number"] {
+        width: 80px;
+    }
 }
 
-.form-actions .submit-btn:hover {
-    background-color: #0056b3;
+
+
+#search-stock {
+    /* شێوەی سەرەکی */
+    width: 300px; /* دەتوانیت بگۆڕیت */
+    padding: 12px 20px 12px 12px; 
+    margin: 20px 0;
+    
+    /* ڕەنگەکانی دارک مۆد */
+    background-color: #3a3a3a; /* ڕەنگی پاشخانێکی تاریکی شین */
+    color: #ecf0f1; /* ڕەنگی نووسینێکی ڕووناک */
+    border: 1px solid #3a3a3a; /* سنوورێکی تۆختر */
+    
+    /* گۆڕینی شێوە */
+    border-radius: 25px; /* بۆریەکی خڕ */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* سێبەرێکی سووک */
+    transition: all 0.3s ease; /* گواستنەوەی نەرم بۆ Focus */
+
+    /* شێواز بۆ placeholder (گەڕان..) */
+    text-align: right; /* نووسینی ناوەوە بە دەستی ڕاست دێت */
+    
+    /* فۆنت */
+    font-size: 16px;
+    font-family: inherit; /* فۆنتی پڕۆژەکەت بەکاربهێنە */
 }
 
+/* دیزاینی placeholder لە دارک مۆد */
+#search-stock::placeholder {
+    color: #7f8c8d; /* ڕەنگی خۆڵەمێشی سووک */
+    opacity: 0.9;
+}
 
-.action-btn{
-    background-color: #007bff; /* Blue */
-    color: white;
-    padding: 12px 30px;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s;
-  }
-
-  .action-btn:hover{
-    background-color: #1abc9c;
-  }
+/* دیزاین لەسەر Focus (کاتێک بەکارهێنەر کلیکی لەسەر دەکات) */
+#search-stock:focus {
+    border-color: #3498db; /* ڕەنگی شین بۆ سنوور */
+    background-color: #34495e; /* پاشخانەکە تۆختر دەکات */
+    box-shadow: 0 0 10px rgba(52, 152, 219, 0.7); /* سێبەرێکی شینی ڕووناک */
+    outline: none; /* لابردنی سنووری ئاسایی وێبگەڕ */
+}

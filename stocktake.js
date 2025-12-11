@@ -30,7 +30,7 @@ async function loadStocktakeData() {
         const row = tableBody.insertRow();
         row.innerHTML = `
             <td>
-                <strong>${item.name}</strong> (${item.brand} - ${item.quality})
+                <strong>${item.name} ${item.brand} ${item.quality}</strong>
                 <br><small style="color: #6c757d;">جۆر: ${item.type}</small>
             </td>
             <td>${item.quantity}</td>
@@ -163,11 +163,92 @@ async function commitStocktake() {
 
 
 // Initial Load
+// Initial Load and Event Listeners
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initial Data Load
     if (document.getElementById('stocktakeBody')) {
-        // Use an async IIFE to call the async function on load
         (async () => {
             await loadStocktakeData();
+            // After loading initial data, set up the search listener
+            setupSearchListener(); 
         })();
     }
 });
+
+// Function to set up the search input event listener
+function setupSearchListener() {
+    const searchInput = document.getElementById('search-stock');
+    if (searchInput) {
+        // Use 'input' event to filter results instantly as user types
+        searchInput.addEventListener('input', (event) => {
+            const searchTerm = event.target.value;
+            filterStocktake(searchTerm);
+        });
+    }
+}
+
+
+
+
+
+
+// Function to filter and display items based on search term
+function filterStocktake(searchTerm) {
+    const tableBody = document.getElementById('stocktakeBody');
+    if (!tableBody) return;
+
+    // Convert search term to lowercase for case-insensitive search
+    const lowerCaseSearchTerm = searchTerm.toLowerCase().trim();
+    tableBody.innerHTML = ''; // Clear current display
+
+    if (lowerCaseSearchTerm === '') {
+        // If search box is empty, load all data again
+        loadStocktakeData();
+        return;
+    }
+
+    // Filter the global inventoryData array
+    const filteredItems = inventoryData.filter(item => {
+        // Concatenate relevant fields into a single search string
+        const itemText = `${item.name} ${item.brand} ${item.quality} ${item.type}`.toLowerCase();
+        
+        // Check if the search term is included in the item's text
+        return itemText.includes(lowerCaseSearchTerm);
+    });
+
+    if (filteredItems.length === 0) {
+        tableBody.innerHTML = '<tr><td colspan="5" style="text-align: center;">هیچ ئایتمێک بەو وشانەی گەڕان نەدۆزرایەوە.</td></tr>';
+        document.getElementById('itemCount').textContent = 0;
+        updateVarianceSummary();
+        return;
+    }
+
+    // Display the filtered results
+    filteredItems.forEach(item => {
+        const row = tableBody.insertRow();
+        row.innerHTML = `
+            <td>
+                <strong>${item.name} ${item.brand} ${item.quality}</strong>
+                <br><small style="color: #6c757d;">جۆر: ${item.type}</small>
+            </td>
+            <td>${item.quantity}</td>
+            <td>
+                <input type="number" 
+                        id="actual-qty-${item.id}" 
+                        value="${item.quantity}" 
+                        data-item-id="${item.id}" 
+                        data-old-qty="${item.quantity}"
+                        min="0"
+                        oninput="calculateVariance(${item.id})">
+            </td>
+            <td id="variance-${item.id}">0</td>
+            <td>
+                <button class="action-btn edit-btn" onclick="updateSingleStock(${item.id})">نوێکردنەوەی تاکەکەسی</button>
+            </td>
+        `;
+    });
+
+    // Update summary counts based on filtered list (if needed)
+    document.getElementById('itemCount').textContent = filteredItems.length;
+    updateVarianceSummary(); // Recalculate variance count
+}
